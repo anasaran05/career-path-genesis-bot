@@ -82,7 +82,6 @@ const Intake = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      {/* Header */}
       <header className="border-b border-white/10 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/" className="flex items-center space-x-2 text-white hover:text-blue-300 transition-colors">
@@ -99,7 +98,6 @@ const Intake = () => {
       </header>
 
       <div className="container mx-auto px-4 py-8">
-        {/* Progress Section */}
         <div className="max-w-3xl mx-auto mb-8">
           <div className="text-center mb-6">
             <h1 className="text-3xl font-bold text-white mb-2">Student Background Intake</h1>
@@ -114,7 +112,6 @@ const Intake = () => {
             <Progress value={progress} className="h-2" />
           </div>
 
-          {/* Step Indicators */}
           <div className="flex justify-between mt-6">
             {[
               { step: 1, icon: User, label: "Personal Info" },
@@ -134,13 +131,11 @@ const Intake = () => {
           </div>
         </div>
 
-        {/* Form Content */}
         <div className="max-w-3xl mx-auto">
           <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardContent className="p-8">
               {renderStep()}
               
-              {/* Navigation Buttons */}
               <div className="flex justify-between mt-8 pt-6 border-t border-white/10">
                 <Button 
                   variant="outline" 
@@ -165,7 +160,6 @@ const Intake = () => {
   );
 };
 
-// Step Components
 const PersonalInfoStep = ({ formData, updateFormData }: any) => (
   <div className="space-y-6">
     <div className="text-center mb-6">
@@ -229,10 +223,10 @@ const EducationStep = ({ formData, updateFormData }: any) => (
     </div>
     
     <div>
-      <h3 className="text-lg font-semibold text-white mb-4">Undergraduate Degree</h3>
+      <h3 className="text-lg font-semibold text-white mb-4">Undergraduate Degree (Optional)</h3>
       <div className="grid md:grid-cols-3 gap-4">
         <div>
-          <Label className="text-white">Degree *</Label>
+          <Label className="text-white">Degree</Label>
           <Select value={formData.ugDegree} onValueChange={(value) => updateFormData('ugDegree', value)}>
             <SelectTrigger className="bg-white/10 border-white/20 text-white">
               <SelectValue placeholder="Select degree" />
@@ -338,7 +332,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
     </div>
     
     <div>
-      <Label className="text-white">Technical Skills</Label>
+      <Label className="text-white">Technical Skills (Optional)</Label>
       <Textarea 
         value={formData.technicalSkills}
         onChange={(e) => updateFormData('technicalSkills', e.target.value)}
@@ -349,7 +343,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
     </div>
 
     <div>
-      <Label className="text-white">Soft Skills</Label>
+      <Label className="text-white">Soft Skills (Optional)</Label>
       <Textarea 
         value={formData.softSkills}
         onChange={(e) => updateFormData('softSkills', e.target.value)}
@@ -360,7 +354,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
     </div>
 
     <div>
-      <Label className="text-white">Internships & Work Experience</Label>
+      <Label className="text-white">Internships & Work Experience (Optional)</Label>
       <Textarea 
         value={formData.internships}
         onChange={(e) => updateFormData('internships', e.target.value)}
@@ -371,7 +365,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
     </div>
 
     <div>
-      <Label className="text-white">Projects</Label>
+      <Label className="text-white">Projects (Optional)</Label>
       <Textarea 
         value={formData.projects}
         onChange={(e) => updateFormData('projects', e.target.value)}
@@ -382,7 +376,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
     </div>
 
     <div>
-      <Label className="text-white">Certifications</Label>
+      <Label className="text-white">Certifications (Optional)</Label>
       <Textarea 
         value={formData.certifications}
         onChange={(e) => updateFormData('certifications', e.target.value)}

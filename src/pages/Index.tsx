@@ -27,10 +27,6 @@ const Index = () => {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 text-center">
         <div className="max-w-4xl mx-auto">
-          <div className="inline-block px-4 py-2 bg-blue-500/20 text-blue-300 rounded-full text-sm font-medium mb-8 border border-blue-500/30">
-            🚀 Next-Generation Career Intelligence
-          </div>
-          
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             Your AI-Powered
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"> ZaneProEd Career Agent</span>
@@ -58,11 +54,11 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Process Overview */}
+      {/* Process Overview - Complete 7 Steps */}
       <section id="process" className="container mx-auto px-4 py-20">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">How ZANE AI Works</h2>
-          <p className="text-xl text-white/70">7 intelligent steps to career success</p>
+          <h2 className="text-4xl font-bold text-white mb-4">Complete 7-Step Career Intelligence</h2>
+          <p className="text-xl text-white/70">Comprehensive career transformation journey</p>
         </div>
 
         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
