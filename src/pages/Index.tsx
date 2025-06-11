@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,7 +14,7 @@ const Index = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">Z</span>
             </div>
-            <span className="text-white font-bold text-xl">ZANE AI</span>
+            <span className="text-white font-bold text-xl">ZaneProEd Career Agent</span>
           </div>
           <nav className="hidden md:flex space-x-6">
             <a href="#features" className="text-white/80 hover:text-white transition-colors">Features</a>
@@ -34,7 +33,7 @@ const Index = () => {
           
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
             Your AI-Powered
-            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"> Career Agent</span>
+            <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"> ZaneProEd Career Agent</span>
           </h1>
           
           <p className="text-xl text-white/80 mb-12 max-w-2xl mx-auto leading-relaxed">
@@ -158,7 +157,7 @@ const Index = () => {
         <div className="max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold text-white mb-6">Ready to Transform Your Career?</h2>
           <p className="text-xl text-white/80 mb-8">
-            Join thousands of students who've accelerated their career success with ZANE AI
+            Join thousands of students who've accelerated their career success with ZaneProEd Career Agent
           </p>
           <Link to="/intake">
             <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-12 py-4 text-xl font-semibold">
@@ -174,10 +173,10 @@ const Index = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
               <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded"></div>
-              <span className="text-white font-bold">ZANE AI Career Agent</span>
+              <span className="text-white font-bold">ZaneProEd Career Agent</span>
             </div>
             <div className="text-white/60 text-sm">
-              © 2024 ZANE AI. Transforming careers with intelligence.
+              © 2024 ZaneProEd. Transforming careers with intelligence.
             </div>
           </div>
         </div>

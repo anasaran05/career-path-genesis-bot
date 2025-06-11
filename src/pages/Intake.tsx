@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -94,7 +93,7 @@ const Intake = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">Z</span>
             </div>
-            <span className="text-white font-bold text-xl">ZANE AI</span>
+            <span className="text-white font-bold text-xl">ZaneProEd Career Agent</span>
           </div>
         </div>
       </header>
@@ -147,13 +146,13 @@ const Intake = () => {
                   variant="outline" 
                   onClick={handlePrevious}
                   disabled={currentStep === 1}
-                  className="border-white/30 text-white hover:bg-white/10"
+                  className="border-white/30 text-white hover:bg-white/10 hover:text-white"
                 >
                   Previous
                 </Button>
                 <Button 
                   onClick={handleNext}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                 >
                   {currentStep === totalSteps ? 'Analyze Profile' : 'Next Step'}
                 </Button>
@@ -245,6 +244,13 @@ const EducationStep = ({ formData, updateFormData }: any) => (
               <SelectItem value="bcom">B.Com</SelectItem>
               <SelectItem value="ba">B.A.</SelectItem>
               <SelectItem value="bba">BBA</SelectItem>
+              <SelectItem value="bpharm">B.Pharm</SelectItem>
+              <SelectItem value="dpharm">D.Pharm</SelectItem>
+              <SelectItem value="bpt">BPT (Physiotherapy)</SelectItem>
+              <SelectItem value="gnm">GNM (Nursing)</SelectItem>
+              <SelectItem value="bsc-nursing">B.Sc Nursing</SelectItem>
+              <SelectItem value="bmlt">BMLT (Medical Lab Technology)</SelectItem>
+              <SelectItem value="boptom">B.Optom (Optometry)</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -254,7 +260,7 @@ const EducationStep = ({ formData, updateFormData }: any) => (
             value={formData.ugSpecialization}
             onChange={(e) => updateFormData('ugSpecialization', e.target.value)}
             className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-            placeholder="e.g., Computer Science"
+            placeholder="e.g., Clinical Pharmacy, Cardiology"
           />
         </div>
         <div>
@@ -289,6 +295,10 @@ const EducationStep = ({ formData, updateFormData }: any) => (
               <SelectItem value="mcom">M.Com</SelectItem>
               <SelectItem value="ma">M.A.</SelectItem>
               <SelectItem value="mba">MBA</SelectItem>
+              <SelectItem value="mpharm">M.Pharm</SelectItem>
+              <SelectItem value="mpt">MPT (Physiotherapy)</SelectItem>
+              <SelectItem value="msc-nursing">M.Sc Nursing</SelectItem>
+              <SelectItem value="pharm-d">Pharm.D</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -298,7 +308,7 @@ const EducationStep = ({ formData, updateFormData }: any) => (
             value={formData.pgSpecialization}
             onChange={(e) => updateFormData('pgSpecialization', e.target.value)}
             className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-            placeholder="e.g., Data Science"
+            placeholder="e.g., Clinical Research, Pharmacology"
           />
         </div>
         <div>
@@ -328,12 +338,12 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
     </div>
     
     <div>
-      <Label className="text-white">Technical Skills *</Label>
+      <Label className="text-white">Technical Skills</Label>
       <Textarea 
         value={formData.technicalSkills}
         onChange={(e) => updateFormData('technicalSkills', e.target.value)}
         className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-        placeholder="e.g., Python, JavaScript, React, SQL, Machine Learning, Data Analysis..."
+        placeholder="e.g., Clinical data analysis, Pharmaceutical software, Laboratory techniques, Patient care protocols..."
         rows={3}
       />
     </div>
@@ -344,7 +354,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
         value={formData.softSkills}
         onChange={(e) => updateFormData('softSkills', e.target.value)}
         className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-        placeholder="e.g., Leadership, Communication, Problem-solving, Team collaboration..."
+        placeholder="e.g., Patient communication, Team collaboration, Problem-solving, Attention to detail..."
         rows={2}
       />
     </div>
@@ -399,8 +409,11 @@ const CareerGoalsStep = ({ formData, updateFormData }: any) => (
           <SelectValue placeholder="Select industry" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="technology">Technology & Software</SelectItem>
           <SelectItem value="healthcare">Healthcare & Pharmaceuticals</SelectItem>
+          <SelectItem value="pharmacy">Pharmacy & Drug Development</SelectItem>
+          <SelectItem value="clinical-research">Clinical Research</SelectItem>
+          <SelectItem value="hospitals">Hospitals & Medical Centers</SelectItem>
+          <SelectItem value="technology">Technology & Software</SelectItem>
           <SelectItem value="finance">Finance & Banking</SelectItem>
           <SelectItem value="consulting">Consulting</SelectItem>
           <SelectItem value="manufacturing">Manufacturing</SelectItem>

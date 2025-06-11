@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -51,68 +50,68 @@ const Analysis = () => {
 
   const careerPaths = [
     {
-      title: "Software Engineer",
+      title: "Clinical Pharmacist",
       compatibility: 95,
-      description: "Full-stack development with modern technologies",
-      skills: ["JavaScript", "React", "Python", "APIs"],
+      description: "Provide pharmaceutical care in clinical settings",
+      skills: ["Clinical Knowledge", "Patient Counseling", "Drug Interactions", "Medication Therapy Management"],
       growth: "High",
-      salaryRange: "8-15 LPA",
-      companies: ["TCS", "Infosys", "Wipro", "Tech Mahindra"],
+      salaryRange: "6-12 LPA",
+      companies: ["Apollo Hospitals", "Fortis Healthcare", "Max Healthcare", "AIIMS"],
       reasons: [
-        "Strong technical skills match",
-        "Programming experience aligns well",
-        "Growing demand in preferred location"
+        "Strong pharmaceutical background",
+        "Clinical practice experience aligns well",
+        "Growing demand in healthcare sector"
       ]
     },
     {
-      title: "Data Analyst",
+      title: "Regulatory Affairs Specialist",
       compatibility: 88,
-      description: "Transform data into actionable business insights",
-      skills: ["Python", "SQL", "Excel", "Tableau"],
+      description: "Ensure pharmaceutical compliance with regulatory standards",
+      skills: ["Regulatory Guidelines", "Documentation", "Quality Assurance", "Drug Approval Process"],
       growth: "Very High",
-      salaryRange: "6-12 LPA",
-      companies: ["IBM", "Accenture", "Deloitte", "EY"],
+      salaryRange: "8-15 LPA",
+      companies: ["Sun Pharma", "Dr. Reddy's", "Cipla", "Lupin"],
       reasons: [
-        "Analytical thinking skills",
-        "Math/Statistics background",
+        "Attention to detail skills",
+        "Pharmaceutical knowledge",
         "High industry demand"
       ]
     },
     {
-      title: "Product Manager",
+      title: "Medical Affairs Manager",
       compatibility: 82,
-      description: "Drive product strategy and cross-functional collaboration",
-      skills: ["Strategy", "Communication", "Analytics", "Leadership"],
+      description: "Bridge between clinical research and commercial operations",
+      skills: ["Medical Writing", "Clinical Research", "Scientific Communication", "Product Knowledge"],
       growth: "High",
       salaryRange: "10-20 LPA",
-      companies: ["Amazon", "Flipkart", "Paytm", "Zomato"],
+      companies: ["Novartis", "Pfizer", "GSK", "Abbott"],
       reasons: [
-        "Leadership potential",
-        "Strong communication skills",
-        "Business acumen"
+        "Communication skills",
+        "Scientific background",
+        "Leadership potential"
       ]
     },
     {
-      title: "UX/UI Designer",
+      title: "Drug Safety Associate",
       compatibility: 75,
-      description: "Create intuitive and engaging user experiences",
-      skills: ["Figma", "Design Thinking", "Prototyping", "User Research"],
+      description: "Monitor and assess drug safety and adverse events",
+      skills: ["Pharmacovigilance", "Data Analysis", "Medical Coding", "Risk Assessment"],
       growth: "High",
-      salaryRange: "5-12 LPA",
-      companies: ["Adobe", "Zomato", "Swiggy", "PhonePe"],
+      salaryRange: "5-10 LPA",
+      companies: ["Cognizant", "Accenture", "TCS", "Wipro"],
       reasons: [
-        "Creative thinking ability",
+        "Analytical thinking ability",
         "Attention to detail",
-        "User-focused mindset"
+        "Safety-focused mindset"
       ]
     }
   ];
 
   const skillGaps = [
-    { skill: "Cloud Computing (AWS/Azure)", priority: "High", timeToLearn: "3-4 months" },
-    { skill: "Machine Learning", priority: "Medium", timeToLearn: "4-6 months" },
-    { skill: "System Design", priority: "High", timeToLearn: "2-3 months" },
-    { skill: "DevOps Tools", priority: "Medium", timeToLearn: "2-3 months" }
+    { skill: "Good Clinical Practice (GCP)", priority: "High", timeToLearn: "2-3 months" },
+    { skill: "Clinical Data Management", priority: "Medium", timeToLearn: "3-4 months" },
+    { skill: "Pharmacovigilance & Drug Safety", priority: "High", timeToLearn: "2-3 months" },
+    { skill: "Regulatory Writing", priority: "Medium", timeToLearn: "2-3 months" }
   ];
 
   if (isAnalyzing) {
@@ -152,7 +151,7 @@ const Analysis = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">Z</span>
             </div>
-            <span className="text-white font-bold text-xl">ZANE AI</span>
+            <span className="text-white font-bold text-xl">ZaneProEd Career Agent</span>
           </div>
         </div>
       </header>
@@ -262,13 +261,13 @@ const Analysis = () => {
                     
                     <div className="flex flex-col space-y-2 lg:ml-6">
                       <Button 
-                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
                         onClick={() => navigate('/job-scan', { state: { careerPath: path.title, studentData } })}
                       >
                         Find Jobs
                         <ChevronRight className="w-4 h-4 ml-1" />
                       </Button>
-                      <Button variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                      <Button variant="outline" className="border-white/30 text-white hover:bg-white/10 hover:text-white">
                         Learn More
                       </Button>
                     </div>
@@ -321,7 +320,7 @@ const Analysis = () => {
               </p>
               <Button 
                 size="lg" 
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 text-white"
                 onClick={() => navigate('/job-scan', { state: { studentData } })}
               >
                 Scan Job Market
