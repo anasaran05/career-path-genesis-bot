@@ -2,10 +2,26 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowDown, User, Search, FileText, Sparkles, Brain, Target } from "lucide-react";
-import { Link } from "react-router-dom";
+import { ArrowDown, User, Search, FileText, Sparkles, Brain, Target, LogIn, UserPlus } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
+  const { user, userProfile, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    if (user && userProfile) {
+      if (userProfile.user_type === 'recruiter') {
+        navigate('/recruiter-dashboard');
+      } else {
+        navigate('/intake');
+      }
+    } else {
+      navigate('/auth');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
@@ -20,10 +36,46 @@ const Index = () => {
               <p className="text-slate-600 text-sm">by ZaneProEd</p>
             </div>
           </div>
-          <nav className="hidden md:flex space-x-6">
+          <nav className="hidden md:flex space-x-6 items-center">
             <a href="#features" className="text-slate-600 hover:text-navy-600 transition-colors">Features</a>
             <a href="#process" className="text-slate-600 hover:text-navy-600 transition-colors">How it Works</a>
             <a href="#contact" className="text-slate-600 hover:text-navy-600 transition-colors">Contact</a>
+            
+            {user ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-navy-700 font-medium">
+                  Welcome, {userProfile?.full_name || 'User'}
+                </span>
+                <Button
+                  onClick={handleGetStarted}
+                  className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white rounded-xl"
+                >
+                  {userProfile?.user_type === 'recruiter' ? 'Dashboard' : 'Continue Journey'}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={signOut}
+                  className="border-2 border-slate-200 text-navy-700 hover:bg-navy-50 rounded-xl"
+                >
+                  Sign Out
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-3">
+                <Link to="/auth">
+                  <Button variant="outline" className="border-2 border-navy-200 text-navy-700 hover:bg-navy-50 rounded-xl">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white rounded-xl">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
           </nav>
         </div>
       </header>
@@ -52,12 +104,14 @@ const Index = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in">
-              <Link to="/intake">
-                <Button size="lg" className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  Start Your Career Journey
-                  <Target className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
+              <Button 
+                onClick={handleGetStarted}
+                size="lg" 
+                className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+              >
+                {user ? (userProfile?.user_type === 'recruiter' ? 'Go to Dashboard' : 'Continue Your Journey') : 'Start Your Career Journey'}
+                <Target className="w-5 h-5 ml-2" />
+              </Button>
               <Button variant="outline" size="lg" className="border-2 border-navy-200 text-navy-700 hover:bg-navy-50 px-8 py-4 text-lg rounded-xl transition-all duration-300">
                 Watch Demo
               </Button>
@@ -174,11 +228,13 @@ const Index = () => {
             <p className="text-xl text-white/90 mb-8">
               Join thousands of pharmacy graduates who've accelerated their career success with Zane AI
             </p>
-            <Link to="/intake">
-              <Button size="lg" className="bg-white text-navy-700 hover:bg-slate-100 px-12 py-4 text-xl font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                Begin Your Journey with Zane AI
-              </Button>
-            </Link>
+            <Button 
+              onClick={handleGetStarted}
+              size="lg" 
+              className="bg-white text-navy-700 hover:bg-slate-100 px-12 py-4 text-xl font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
+              {user ? (userProfile?.user_type === 'recruiter' ? 'Go to Dashboard' : 'Continue with Zane AI') : 'Begin Your Journey with Zane AI'}
+            </Button>
           </div>
         </div>
       </section>

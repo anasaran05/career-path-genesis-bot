@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,13 +8,29 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, User, BookOpen, Award, Target, Brain, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Intake = () => {
+  const { user, userProfile } = useAuth();
+  const navigate = useNavigate();
+  
+  // Redirect if not logged in or is recruiter
+  useEffect(() => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+    if (userProfile?.user_type === 'recruiter') {
+      navigate('/recruiter-dashboard');
+      return;
+    }
+  }, [user, userProfile, navigate]);
+
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Personal Info
-    fullName: '',
-    email: '',
+    fullName: userProfile?.full_name || '',
+    email: userProfile?.email || '',
     phone: '',
     location: '',
     
@@ -42,17 +57,14 @@ const Intake = () => {
     workStyle: ''
   });
 
-  const navigate = useNavigate();
   const totalSteps = 4;
   const progress = (currentStep / totalSteps) * 100;
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
-      // Smooth scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Navigate to analysis page with form data
       navigate('/analysis', { state: { studentData: formData } });
     }
   };
@@ -60,7 +72,6 @@ const Intake = () => {
   const handlePrevious = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      // Smooth scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -181,7 +192,6 @@ const Intake = () => {
           </Card>
         </div>
 
-        {/* Footer Logo */}
         <div className="text-center mt-16 pb-8">
           <div className="flex items-center justify-center space-x-3 text-slate-400">
             <div className="w-6 h-6 bg-gradient-to-r from-navy-400 to-autumn-400 rounded-lg flex items-center justify-center">
@@ -303,7 +313,7 @@ const EducationStep = ({ formData, updateFormData }: any) => (
               <SelectValue placeholder="Year" />
             </SelectTrigger>
             <SelectContent className="bg-white border-slate-200 rounded-lg">
-              {Array.from({length: 10}, (_, i) => 2024 - i).map(year => (
+              {Array.from({length: 36}, (_, i) => 2025 - i).map(year => (
                 <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
               ))}
             </SelectContent>
@@ -351,7 +361,7 @@ const EducationStep = ({ formData, updateFormData }: any) => (
               <SelectValue placeholder="Year" />
             </SelectTrigger>
             <SelectContent className="bg-white border-slate-200 rounded-lg">
-              {Array.from({length: 10}, (_, i) => 2024 - i).map(year => (
+              {Array.from({length: 36}, (_, i) => 2025 - i).map(year => (
                 <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
               ))}
             </SelectContent>
