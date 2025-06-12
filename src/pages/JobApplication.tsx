@@ -70,7 +70,7 @@ const JobApplication = () => {
             <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">Z</span>
             </div>
-            <span className="text-white font-bold text-xl">ZaneProEd Career Agent</span>
+            <span className="text-white font-bold text-xl">Zane Ai</span>
           </div>
         </div>
       </header>
@@ -198,7 +198,7 @@ const JobApplication = () => {
                       <div>• Matched keywords from job description</div>
                     </div>
                     
-                    <Button variant="outline" className="w-full border-white/30 text-black bg-purple-950 hover:bg-purple-800">
+                    <Button variant="outline" className="w-full border-white/30 text-black bg-emerald-50">
                       <Download className="w-4 h-4 mr-2" />
                       Download Resume
                     </Button>
@@ -222,7 +222,7 @@ const JobApplication = () => {
                       <div>• Professional pharmaceutical industry tone</div>
                     </div>
                     
-                    <Button variant="outline" className="w-full border-white/30 bg-purple-950 hover:bg-purple-800 text-gray-950">
+                    <Button variant="outline" className="w-full border-white/30 text-gray-950 bg-emerald-50">
                       <Download className="w-4 h-4 mr-2" />
                       Download Cover Letter
                     </Button>
@@ -233,8 +233,8 @@ const JobApplication = () => {
               {/* Application Actions */}
               <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-green-500/30 backdrop-blur-sm mb-8">
                 <CardContent className="container mx-auto px-4 py-8">
-                  <h3 className="text-xl font-bold text-white mb-4">Ready to Apply?</h3>
-                  <p className="text-white/80 mb-6">
+                  <h3 className="text-xl font-bold mb-4 text-zinc-950">Ready to Apply?</h3>
+                  <p className="mb-6 text-zinc-950">
                     Your documents are optimized and ready for submission. Choose how you'd like to proceed.
                   </p>
                   
@@ -255,7 +255,7 @@ const JobApplication = () => {
                     </Button>
                   </div>
                   
-                  <p className="text-white/60 text-sm mt-4">
+                  <p className="text-sm mt-4 text-zinc-950">
                     Auto-Apply feature requires premium subscription for automated job applications
                   </p>
                 </CardContent>
