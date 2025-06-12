@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,14 +5,11 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Building, MapPin, Clock, User, FileText, Star, Briefcase, TrendingUp } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
 const JobDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const job = location.state?.job || {};
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Header */}
       <header className="border-b border-white/10 bg-black/20 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -72,19 +68,15 @@ const JobDetails = () => {
                 </div>
                 
                 <div className="flex flex-col space-y-3 lg:ml-8 mt-6 lg:mt-0">
-                  <Button 
-                    size="lg"
-                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8"
-                    onClick={() => navigate(`/job-application/${job.id}`, { state: { job } })}
-                  >
+                  <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8" onClick={() => navigate(`/job-application/${job.id}`, {
+                  state: {
+                    job
+                  }
+                })}>
                     <User className="w-5 h-5 mr-2" />
                     Apply Now
                   </Button>
-                  <Button 
-                    variant="outline" 
-                    size="lg"
-                    className="border-white/30 text-white hover:bg-white/10 px-8"
-                  >
+                  <Button variant="outline" size="lg" className="border-white/30 hover:bg-white/10 px-8 text-zinc-950">
                     <Star className="w-5 h-5 mr-2" />
                     Save Job
                   </Button>
@@ -112,24 +104,20 @@ const JobDetails = () => {
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-3">Key Responsibilities</h3>
                     <ul className="space-y-2">
-                      {job.responsibilities?.map((resp, idx) => (
-                        <li key={idx} className="text-white/80 flex items-start">
+                      {job.responsibilities?.map((resp, idx) => <li key={idx} className="text-white/80 flex items-start">
                           <div className="w-2 h-2 bg-blue-400 rounded-full mr-3 mt-2 flex-shrink-0"></div>
                           {resp}
-                        </li>
-                      ))}
+                        </li>)}
                     </ul>
                   </div>
                   
                   <div>
                     <h3 className="text-lg font-semibold text-white mb-3">Required Qualifications</h3>
                     <ul className="space-y-2">
-                      {job.requirements?.map((req, idx) => (
-                        <li key={idx} className="text-white/80 flex items-start">
+                      {job.requirements?.map((req, idx) => <li key={idx} className="text-white/80 flex items-start">
                           <div className="w-2 h-2 bg-purple-400 rounded-full mr-3 mt-2 flex-shrink-0"></div>
                           {req}
-                        </li>
-                      ))}
+                        </li>)}
                     </ul>
                   </div>
                   
@@ -268,8 +256,6 @@ const JobDetails = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default JobDetails;
