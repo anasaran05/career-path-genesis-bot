@@ -231,7 +231,7 @@ const AdvisoryReport = () => {
                   Schedule Free Consultation
                 </Button>
                 
-                <Button variant="outline" size="lg" className="border-white text-white hover:text-navy-800 px-8 bg-autumn-500 hover:bg-autumn-400">
+                <Button variant="outline" size="lg" className="border-white px-8 bg-gray-400 hover:bg-gray-300 text-zinc-950">
                   Explore Learning Paths
                 </Button>
               </div>
