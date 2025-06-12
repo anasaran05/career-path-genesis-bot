@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, FileText, User, Loader2, CheckCircle, Download, Send } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+
 const JobApplication = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -12,12 +14,22 @@ const JobApplication = () => {
   const [generationComplete, setGenerationComplete] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState('Analyzing job requirements...');
+  
   const job = location.state?.job || {};
   const studentData = location.state?.studentData || {};
-  const generationSteps = ['Analyzing job requirements...', 'Matching your profile...', 'Generating custom resume...', 'Creating cover letter...', 'Optimizing for ATS systems...'];
+
+  const generationSteps = [
+    'Analyzing job requirements...',
+    'Matching your profile...',
+    'Generating custom resume...',
+    'Creating cover letter...',
+    'Optimizing for ATS systems...'
+  ];
+
   const handleGenerateDocuments = () => {
     setIsGenerating(true);
     let step = 0;
+    
     const interval = setInterval(() => {
       setProgress(prev => {
         const newProgress = prev + 4;
@@ -27,18 +39,22 @@ const JobApplication = () => {
           clearInterval(interval);
           return 100;
         }
+        
         if (newProgress > (step + 1) * 20) {
           step++;
           if (step < generationSteps.length) {
             setCurrentStep(generationSteps[step]);
           }
         }
+        
         return newProgress;
       });
     }, 150);
   };
+
   if (isGenerating) {
-    return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center bg-gray-950">
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm max-w-md w-full mx-4">
           <CardContent className="p-8 text-center">
             <div className="mb-6">
@@ -56,18 +72,21 @@ const JobApplication = () => {
             </div>
           </CardContent>
         </Card>
-      </div>;
+      </div>
+    );
   }
-  return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Header */}
       <header className="border-b border-white/10 bg-black/20 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center bg-zinc-950">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link to="/job-scan" className="flex items-center space-x-2 text-white hover:text-blue-300 transition-colors">
             <ArrowLeft className="w-5 h-5" />
             <span>Back to Job Search</span>
           </Link>
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center rounded-md">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-sm">Z</span>
             </div>
             <span className="text-white font-bold text-xl">ZaneProEd Career Agent</span>
@@ -75,9 +94,10 @@ const JobApplication = () => {
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 bg-black">
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          {!generationComplete ? <div className="text-center mb-8">
+          {!generationComplete ? (
+            <div className="text-center mb-8">
               <div className="inline-flex items-center px-4 py-2 bg-blue-500/20 text-blue-300 rounded-full text-sm font-medium mb-6">
                 <FileText className="w-4 h-4 mr-2" />
                 Job Application Setup
@@ -162,11 +182,17 @@ const JobApplication = () => {
                 </CardContent>
               </Card>
 
-              <Button size="lg" onClick={handleGenerateDocuments} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-zinc-300 rounded-md font-light text-base px-[11px] py-[11px] mx-0 bg-[#d9e3e9]/[0.31]">
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3"
+                onClick={handleGenerateDocuments}
+              >
                 Generate Application Documents
                 <FileText className="w-5 h-5 ml-2" />
               </Button>
-            </div> : <div className="text-center">
+            </div>
+          ) : (
+            <div className="text-center">
               <div className="inline-flex items-center px-4 py-2 bg-green-500/20 text-green-300 rounded-full text-sm font-medium mb-6">
                 <CheckCircle className="w-4 h-4 mr-2" />
                 Documents Generated Successfully
@@ -198,7 +224,10 @@ const JobApplication = () => {
                       <div>• Matched keywords from job description</div>
                     </div>
                     
-                    <Button variant="outline" className="w-full border-white/30 hover:bg-white/10 text-zinc-950">
+                    <Button 
+                      variant="outline" 
+                      className="w-full border-white/30 text-white hover:bg-white/10"
+                    >
                       <Download className="w-4 h-4 mr-2" />
                       Download Resume
                     </Button>
@@ -222,7 +251,10 @@ const JobApplication = () => {
                       <div>• Professional pharmaceutical industry tone</div>
                     </div>
                     
-                    <Button variant="outline" className="w-full border-white/30 hover:bg-white/10 text-zinc-950">
+                    <Button 
+                      variant="outline" 
+                      className="w-full border-white/30 text-white hover:bg-white/10"
+                    >
                       <Download className="w-4 h-4 mr-2" />
                       Download Cover Letter
                     </Button>
@@ -232,25 +264,27 @@ const JobApplication = () => {
 
               {/* Application Actions */}
               <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-green-500/30 backdrop-blur-sm mb-8">
-                <CardContent className="p-6 bg-zinc-950">
+                <CardContent className="p-6">
                   <h3 className="text-xl font-bold text-white mb-4">Ready to Apply?</h3>
                   <p className="text-white/80 mb-6">
                     Your documents are optimized and ready for submission. Choose how you'd like to proceed.
                   </p>
                   
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Button size="lg" className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-8">
+                    <Button 
+                      size="lg" 
+                      className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white px-8"
+                    >
                       <Send className="w-5 h-5 mr-2" />
                       Apply Now (Manual)
                     </Button>
                     
-                    <Button variant="outline" size="lg" onClick={() => navigate('/auto-application', {
-                  state: {
-                    job,
-                    studentData,
-                    premium: true
-                  }
-                })} className="border-yellow-500/50 text-yellow-300 px-8 bg-inherit">
+                    <Button 
+                      variant="outline" 
+                      size="lg"
+                      className="border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/10 px-8"
+                      onClick={() => navigate('/auto-application', { state: { job, studentData, premium: true } })}
+                    >
                       Auto-Apply (Premium)
                     </Button>
                   </div>
@@ -260,9 +294,12 @@ const JobApplication = () => {
                   </p>
                 </CardContent>
               </Card>
-            </div>}
+            </div>
+          )}
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default JobApplication;
