@@ -162,7 +162,7 @@ const JobApplication = () => {
                 </CardContent>
               </Card>
 
-              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3" onClick={handleGenerateDocuments}>
+              <Button size="lg" onClick={handleGenerateDocuments} className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-zinc-300 rounded-md font-light text-base px-[11px] py-[11px] mx-0 bg-[#d9e3e9]/[0.31]">
                 Generate Application Documents
                 <FileText className="w-5 h-5 ml-2" />
               </Button>
