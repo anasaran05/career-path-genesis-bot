@@ -38,7 +38,7 @@ const JobApplication = () => {
     }, 150);
   };
   if (isGenerating) {
-    return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+    return <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center bg-gray-950">
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm max-w-md w-full mx-4">
           <CardContent className="p-8 text-center">
             <div className="mb-6">
@@ -198,7 +198,7 @@ const JobApplication = () => {
                       <div>• Matched keywords from job description</div>
                     </div>
                     
-                    <Button variant="outline" className="w-full border-white/30 text-white hover:bg-white/10">
+                    <Button variant="outline" className="w-full border-white/30 hover:bg-white/10 text-zinc-950">
                       <Download className="w-4 h-4 mr-2" />
                       Download Resume
                     </Button>
@@ -222,7 +222,7 @@ const JobApplication = () => {
                       <div>• Professional pharmaceutical industry tone</div>
                     </div>
                     
-                    <Button variant="outline" className="w-full border-white/30 text-white hover:bg-white/10">
+                    <Button variant="outline" className="w-full border-white/30 hover:bg-white/10 text-zinc-950">
                       <Download className="w-4 h-4 mr-2" />
                       Download Cover Letter
                     </Button>
@@ -232,7 +232,7 @@ const JobApplication = () => {
 
               {/* Application Actions */}
               <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-green-500/30 backdrop-blur-sm mb-8">
-                <CardContent className="p-6">
+                <CardContent className="p-6 bg-zinc-950">
                   <h3 className="text-xl font-bold text-white mb-4">Ready to Apply?</h3>
                   <p className="text-white/80 mb-6">
                     Your documents are optimized and ready for submission. Choose how you'd like to proceed.
@@ -244,13 +244,13 @@ const JobApplication = () => {
                       Apply Now (Manual)
                     </Button>
                     
-                    <Button variant="outline" size="lg" className="border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/10 px-8" onClick={() => navigate('/auto-application', {
+                    <Button variant="outline" size="lg" onClick={() => navigate('/auto-application', {
                   state: {
                     job,
                     studentData,
                     premium: true
                   }
-                })}>
+                })} className="border-yellow-500/50 text-yellow-300 px-8 bg-inherit">
                       Auto-Apply (Premium)
                     </Button>
                   </div>
