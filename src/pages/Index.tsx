@@ -1,28 +1,13 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowDown, User, Search, FileText, Sparkles, Brain, Target, LogIn, UserPlus } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { Brain, Target, TrendingUp, Users, ArrowRight, CheckCircle, Star, Zap, GraduationCap, Briefcase, Building } from "lucide-react";
+import { Link } from "react-router-dom";
+
 const Index = () => {
-  const {
-    user,
-    userProfile,
-    signOut
-  } = useAuth();
-  const navigate = useNavigate();
-  const handleGetStarted = () => {
-    if (user && userProfile) {
-      if (userProfile.user_type === 'recruiter') {
-        navigate('/recruiter-dashboard');
-      } else {
-        navigate('/intake');
-      }
-    } else {
-      navigate('/auth');
-    }
-  };
-  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -32,211 +17,216 @@ const Index = () => {
             </div>
             <div>
               <span className="text-navy-700 font-bold text-xl">Zane AI</span>
-              <p className="text-slate-600 text-sm">by ZaneProEd</p>
+              <p className="text-slate-500 text-xs">by ZaneProEd</p>
             </div>
           </div>
-          <nav className="hidden md:flex space-x-6 items-center">
-            <a href="#features" className="text-slate-600 hover:text-navy-600 transition-colors">Features</a>
-            <a href="#process" className="text-slate-600 hover:text-navy-600 transition-colors">How it Works</a>
-            <a href="#contact" className="text-slate-600 hover:text-navy-600 transition-colors">Contact</a>
-            
-            {user ? <div className="flex items-center space-x-4">
-                <span className="text-navy-700 font-medium">
-                  Welcome, {userProfile?.full_name || 'User'}
-                </span>
-                <Button onClick={handleGetStarted} className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white rounded-xl">
-                  {userProfile?.user_type === 'recruiter' ? 'Dashboard' : 'Continue Journey'}
-                </Button>
-                <Button variant="outline" onClick={signOut} className="border-2 border-slate-200 text-navy-700 hover:bg-navy-50 rounded-xl">
-                  Sign Out
-                </Button>
-              </div> : <div className="flex items-center space-x-3">
-                <Link to="/auth">
-                  <Button variant="outline" className="border-2 border-navy-200 text-navy-700 hover:bg-navy-50 rounded-xl">
-                    <LogIn className="w-4 h-4 mr-2" />
-                    Sign In
-                  </Button>
-                </Link>
-                <Link to="/auth">
-                  <Button className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white rounded-xl">
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Sign Up
-                  </Button>
-                </Link>
-              </div>}
-          </nav>
+          <div className="flex items-center space-x-4">
+            <Link to="/auth">
+              <Button variant="outline" className="border-2 border-slate-200 text-navy-700 hover:bg-navy-50 rounded-xl">
+                Sign In
+              </Button>
+            </Link>
+            <Link to="/auth">
+              <Button className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white rounded-xl shadow-lg">
+                Get Started
+              </Button>
+            </Link>
+          </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-20 text-center">
-        <div className="max-w-4xl mx-auto">
-          <div className="animate-fade-in">
-            <div className="inline-flex items-center px-4 py-2 bg-autumn-100 text-autumn-700 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4 mr-2" />
-              AI-Powered Career Intelligence
+      <section className="container mx-auto px-4 py-16">
+        <div className="text-center max-w-4xl mx-auto">
+          <div className="mb-8 animate-fade-in">
+            <div className="inline-flex items-center px-4 py-2 bg-navy-100 text-navy-700 rounded-full text-sm font-medium mb-6">
+              <Zap className="w-4 h-4 mr-2" />
+              AI-Powered Career Guidance for All Graduates
             </div>
-            
-            <h1 className="text-5xl md:text-7xl font-bold text-navy-800 mb-6 leading-tight animate-fade-in">
-              Meet
-              <span className="bg-gradient-to-r from-navy-600 to-autumn-500 bg-clip-text text-transparent"> Zane AI</span>
+            <h1 className="text-5xl md:text-6xl font-bold text-navy-800 mb-6 leading-tight">
+              Shape Your Future with
+              <span className="bg-gradient-to-r from-navy-600 to-autumn-500 bg-clip-text text-transparent"> AI-Driven </span>
+              Career Insights
             </h1>
-            
-            <p className="text-xl text-navy-600 font-medium mb-4 animate-fade-in">Smart Career Mapping for all</p>
-            
-            <p className="text-lg text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed animate-fade-in">Your intelligent career co-pilot that analyzes your background, maps perfect career paths, and guides you to success.</p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in">
-              <Button onClick={handleGetStarted} size="lg" className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                {user ? userProfile?.user_type === 'recruiter' ? 'Go to Dashboard' : 'Continue Your Journey' : 'Start Your Career Journey'}
-                <Target className="w-5 h-5 ml-2" />
-              </Button>
-              <Button variant="outline" size="lg" className="border-2 border-navy-200 text-navy-700 hover:bg-navy-50 px-8 py-4 text-lg rounded-xl transition-all duration-300">
+            <p className="text-xl text-slate-600 mb-8 leading-relaxed">
+              From skill assessment to job market analysis, our intelligent platform provides personalized career recommendations for graduates across all fields and industries.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/auth">
+                <Button size="lg" className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-lg">
+                  Start Your Career Journey
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+              <Button size="lg" variant="outline" className="border-2 border-navy-200 text-navy-700 hover:bg-navy-50 px-8 py-4 rounded-xl text-lg">
                 Watch Demo
               </Button>
             </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="animate-bounce">
-              <ArrowDown className="w-6 h-6 text-slate-400 mx-auto" />
+      {/* Portal Options */}
+      <section className="container mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-navy-800 mb-4">Choose Your Portal</h2>
+          <p className="text-xl text-slate-600">Access specialized dashboards designed for your role</p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <Link to="/student-dashboard">
+            <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer animate-fade-in">
+              <CardContent className="p-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <GraduationCap className="w-8 h-8 text-blue-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-navy-800 mb-3">Student Portal</h3>
+                  <p className="text-slate-600 mb-4">Track your career progress, access assessments, and explore opportunities</p>
+                  <Button className="w-full bg-blue-600 text-white rounded-xl">
+                    Access Dashboard
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/recruiter-dashboard">
+            <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer animate-fade-in" style={{animationDelay: '0.1s'}}>
+              <CardContent className="p-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Briefcase className="w-8 h-8 text-green-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-navy-800 mb-3">Recruiter Portal</h3>
+                  <p className="text-slate-600 mb-4">Manage job postings, review applications, and find top talent</p>
+                  <Button className="w-full bg-green-600 text-white rounded-xl">
+                    Access Dashboard
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="/university-portal">
+            <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer animate-fade-in" style={{animationDelay: '0.2s'}}>
+              <CardContent className="p-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <Building className="w-8 h-8 text-purple-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-navy-800 mb-3">University Portal</h3>
+                  <p className="text-slate-600 mb-4">Monitor student progress, manage campaigns, and track placements</p>
+                  <Button className="w-full bg-purple-600 text-white rounded-xl">
+                    Access Dashboard
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="container mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-navy-800 mb-4">Comprehensive Career Solutions</h2>
+          <p className="text-xl text-slate-600">Everything you need to make informed career decisions</p>
+        </div>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-105 animate-fade-in">
+            <CardContent className="p-6">
+              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                <Target className="w-6 h-6 text-blue-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-navy-800 mb-2">AI Career Analysis</h3>
+              <p className="text-slate-600 text-sm">Get personalized career recommendations based on your skills, interests, and market trends</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-105 animate-fade-in" style={{animationDelay: '0.1s'}}>
+            <CardContent className="p-6">
+              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+                <TrendingUp className="w-6 h-6 text-green-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-navy-800 mb-2">Job Market Insights</h3>
+              <p className="text-slate-600 text-sm">Real-time analysis of job opportunities across all industries and sectors</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-105 animate-fade-in" style={{animationDelay: '0.2s'}}>
+            <CardContent className="p-6">
+              <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                <Users className="w-6 h-6 text-purple-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-navy-800 mb-2">Skills Assessment</h3>
+              <p className="text-slate-600 text-sm">Comprehensive evaluation of your abilities and identification of improvement areas</p>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-105 animate-fade-in" style={{animationDelay: '0.3s'}}>
+            <CardContent className="p-6">
+              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center mb-4">
+                <Star className="w-6 h-6 text-orange-600" />
+              </div>
+              <h3 className="text-lg font-semibold text-navy-800 mb-2">Advisory Reports</h3>
+              <p className="text-slate-600 text-sm">Detailed career guidance reports with actionable recommendations and next steps</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="container mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-navy-800 mb-4">How It Works</h2>
+          <p className="text-xl text-slate-600">Simple steps to unlock your career potential</p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="text-center animate-fade-in">
+            <div className="w-16 h-16 bg-gradient-to-r from-navy-600 to-autumn-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">
+              1
             </div>
+            <h3 className="text-xl font-semibold text-navy-800 mb-2">Complete Assessment</h3>
+            <p className="text-slate-600">Answer questions about your skills, interests, and career goals</p>
           </div>
-        </div>
-      </section>
-
-      {/* Process Overview */}
-      <section id="process" className="bg-white py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-navy-800 mb-4">Complete Career Intelligence in 7 Steps</h2>
-            <p className="text-xl text-slate-600">Comprehensive  career transformation</p>
+          
+          <div className="text-center animate-fade-in" style={{animationDelay: '0.1s'}}>
+            <div className="w-16 h-16 bg-gradient-to-r from-navy-600 to-autumn-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">
+              2
+            </div>
+            <h3 className="text-xl font-semibold text-navy-800 mb-2">AI Analysis</h3>
+            <p className="text-slate-600">Our AI analyzes your profile against market data and trends</p>
           </div>
-
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {[{
-            icon: User,
-            title: "Background Collection",
-            desc: "Complete intake of education, skills, and goals",
-            step: "01",
-            color: "from-blue-500 to-blue-600"
-          }, {
-            icon: Search,
-            title: "Interest Analysis",
-            desc: "AI analyzes your profile for perfect career matches",
-            step: "02",
-            color: "from-navy-500 to-navy-600"
-          }, {
-            icon: Search,
-            title: "Job Market Scan",
-            desc: "Real-time scanning of pharmaceutical opportunities",
-            step: "03",
-            color: "from-autumn-500 to-autumn-600"
-          }, {
-            icon: FileText,
-            title: "Path Building",
-            desc: "Creates personalized career roadmap with action steps",
-            step: "04",
-            color: "from-green-500 to-green-600"
-          }, {
-            icon: FileText,
-            title: "CV Generation",
-            desc: "Tailored resume and cover letter for each application",
-            step: "05",
-            color: "from-purple-500 to-purple-600"
-          }, {
-            icon: Search,
-            title: "Auto Application",
-            desc: "Applies to relevant pharma jobs automatically",
-            step: "06",
-            color: "from-orange-500 to-orange-600"
-          }, {
-            icon: FileText,
-            title: "Advisory Report",
-            desc: "Detailed recommendations for career improvement",
-            step: "07",
-            color: "from-teal-500 to-teal-600"
-          }].map((item, index) => <Card key={index} className="bg-white border border-slate-200 hover:border-navy-300 transition-all duration-300 group hover:shadow-lg rounded-xl">
-                <CardHeader className="text-center pb-3">
-                  <div className={`w-14 h-14 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <item.icon className="w-7 h-7 text-white" />
-                  </div>
-                  <div className="text-xs font-bold text-autumn-600 mb-2 tracking-wider">STEP {item.step}</div>
-                  <CardTitle className="text-navy-800 text-lg font-semibold">{item.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <CardDescription className="text-slate-600 text-center text-sm leading-relaxed">
-                    {item.desc}
-                  </CardDescription>
-                </CardContent>
-              </Card>)}
-          </div>
-        </div>
-      </section>
-
-      {/* Key Features */}
-      <section id="features" className="bg-slate-50 py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-navy-800 mb-4">Why Choose Zane AI</h2>
-            <p className="text-xl text-slate-600">Everything you need for career success</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[{
-            title: "Smart Profile Analysis",
-            desc: "AI analyzes your PharmD/B.Pharm background to identify optimal career paths",
-            gradient: "from-blue-500 to-cyan-500"
-          }, {
-            title: "Real-time Job Scanning",
-            desc: "Continuously monitors pharmaceutical job boards for fresh opportunities",
-            gradient: "from-navy-500 to-blue-500"
-          }, {
-            title: "Custom Resume Generation",
-            desc: "Creates unique, ATS-optimized resumes tailored for pharmaceutical roles",
-            gradient: "from-autumn-500 to-red-500"
-          }, {
-            title: "Automated Applications",
-            desc: "Applies to relevant pharma positions across multiple platforms automatically",
-            gradient: "from-green-500 to-emerald-500"
-          }, {
-            title: "Pharmaceutical Skills Gap Analysis",
-            desc: "Identifies missing skills and recommends learning paths for pharmacy careers",
-            gradient: "from-purple-500 to-indigo-500"
-          }, {
-            title: "Career Progress Tracking",
-            desc: "Monitor application status, interview feedback, and career advancement",
-            gradient: "from-teal-500 to-green-500"
-          }].map((feature, index) => <Card key={index} className="bg-white border border-slate-200 hover:border-navy-300 transition-all duration-300 group hover:shadow-lg rounded-xl">
-                <CardHeader>
-                  <div className={`w-12 h-12 bg-gradient-to-r ${feature.gradient} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
-                    <div className="w-6 h-6 bg-white rounded-sm"></div>
-                  </div>
-                  <CardTitle className="text-navy-800 text-lg font-semibold">{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <CardDescription className="text-slate-600 leading-relaxed">
-                    {feature.desc}
-                  </CardDescription>
-                </CardContent>
-              </Card>)}
+          
+          <div className="text-center animate-fade-in" style={{animationDelay: '0.2s'}}>
+            <div className="w-16 h-16 bg-gradient-to-r from-navy-600 to-autumn-500 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">
+              3
+            </div>
+            <h3 className="text-xl font-semibold text-navy-800 mb-2">Get Recommendations</h3>
+            <p className="text-slate-600">Receive personalized career paths and actionable insights</p>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-navy-600 to-autumn-500 py-20">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-4xl font-bold text-white mb-6">Ready to Transform Your Career?</h2>
-            <p className="text-xl text-white/90 mb-8">Join thousands of  graduates who've accelerated their career success with Zane AI</p>
-            <Button onClick={handleGetStarted} size="lg" className="bg-white text-navy-700 hover:bg-slate-100 px-12 py-4 text-xl font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-              {user ? userProfile?.user_type === 'recruiter' ? 'Go to Dashboard' : 'Continue with Zane AI' : 'Begin Your Journey with Zane AI'}
+      <section className="container mx-auto px-4 py-16">
+        <div className="bg-gradient-to-r from-navy-600 to-autumn-500 rounded-2xl p-12 text-center text-white">
+          <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Career?</h2>
+          <p className="text-xl opacity-90 mb-8">Join thousands of graduates who have found their perfect career path with Zane AI</p>
+          <Link to="/auth">
+            <Button size="lg" variant="secondary" className="bg-white text-navy-700 hover:bg-slate-100 px-8 py-4 rounded-xl shadow-lg text-lg">
+              Start Your Journey Today
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
-          </div>
+          </Link>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-slate-200">
+      <footer className="border-t border-slate-200 bg-white">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
@@ -244,14 +234,18 @@ const Index = () => {
                 <Brain className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="text-navy-700 font-bold text-lg">Zane AI</span>
-                <p className="text-slate-500 text-sm">by ZaneProEd</p>
+                <span className="text-navy-700 font-bold">Zane AI</span>
+                <p className="text-slate-500 text-xs">by ZaneProEd</p>
               </div>
             </div>
-            <div className="text-slate-500 text-sm">© 2024 ZaneProEd. Transforming careers with intelligence.</div>
+            <div className="text-slate-600 text-sm">
+              © 2024 ZaneProEd. All rights reserved.
+            </div>
           </div>
         </div>
       </footer>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
