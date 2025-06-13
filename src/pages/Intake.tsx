@@ -6,13 +6,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, User, BookOpen, Award, Target, Brain, ChevronRight } from "lucide-react";
+import { ArrowLeft, User, BookOpen, Award, Target, Brain, ChevronRight, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/components/ui/use-toast";
 
 const Intake = () => {
   const { user, userProfile } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   // Redirect if not logged in or is recruiter
   useEffect(() => {
@@ -27,6 +29,7 @@ const Intake = () => {
   }, [user, userProfile, navigate]);
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [formData, setFormData] = useState({
     // Personal Info
     fullName: userProfile?.full_name || '',
@@ -60,12 +63,105 @@ const Intake = () => {
   const totalSteps = 4;
   const progress = (currentStep / totalSteps) * 100;
 
+  const handleAnalyzeProfile = async () => {
+    setIsAnalyzing(true);
+    
+    try {
+      // Prepare the data for the webhook
+      const webhookData = {
+        userProfile: {
+          id: user?.id,
+          email: user?.email,
+          fullName: formData.fullName,
+        },
+        personalInfo: {
+          phone: formData.phone,
+          location: formData.location,
+        },
+        education: {
+          undergraduate: {
+            degree: formData.ugDegree,
+            specialization: formData.ugSpecialization,
+            year: formData.ugYear,
+          },
+          postgraduate: {
+            degree: formData.pgDegree,
+            specialization: formData.pgSpecialization,
+            year: formData.pgYear,
+          },
+        },
+        skills: {
+          technical: formData.technicalSkills,
+          soft: formData.softSkills,
+          certifications: formData.certifications,
+        },
+        experience: {
+          internships: formData.internships,
+          projects: formData.projects,
+        },
+        careerGoals: {
+          preferredIndustry: formData.preferredIndustry,
+          goals: formData.careerGoals,
+          locations: formData.jobLocations,
+          salaryExpectation: formData.salaryExpectation,
+          workStyle: formData.workStyle,
+        },
+        timestamp: new Date().toISOString(),
+      };
+
+      // Replace this URL with your actual webhook endpoint
+      const webhookUrl = 'YOUR_WEBHOOK_ENDPOINT_URL_HERE';
+      
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(webhookData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Webhook failed with status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      
+      toast({
+        title: "Profile Analysis Started",
+        description: "Your profile has been sent for AI analysis. You'll receive the results shortly.",
+      });
+
+      // Navigate to analysis page with the webhook response
+      navigate('/analysis', { 
+        state: { 
+          studentData: formData,
+          analysisResult: result,
+          webhookResponse: result
+        } 
+      });
+
+    } catch (error) {
+      console.error('Webhook error:', error);
+      
+      toast({
+        title: "Analysis Failed",
+        description: "There was an error analyzing your profile. Please try again.",
+        variant: "destructive",
+      });
+      
+      // Fallback: navigate to analysis page with just the form data
+      navigate('/analysis', { state: { studentData: formData } });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      navigate('/analysis', { state: { studentData: formData } });
+      handleAnalyzeProfile();
     }
   };
 
@@ -73,7 +169,7 @@ const Intake = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+      }
   };
 
   const updateFormData = (field: string, value: any) => {
@@ -166,16 +262,22 @@ const Intake = () => {
                 <Button 
                   variant="outline" 
                   onClick={handlePrevious}
-                  disabled={currentStep === 1}
+                  disabled={currentStep === 1 || isAnalyzing}
                   className="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-700 px-6 py-2 rounded-xl transition-all duration-300"
                 >
                   Previous
                 </Button>
                 <Button 
                   onClick={handleNext}
-                  className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  disabled={isAnalyzing}
+                  className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {currentStep === totalSteps ? (
+                  {isAnalyzing ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Analyzing Profile...
+                    </>
+                  ) : currentStep === totalSteps ? (
                     <>
                       Analyze My Profile 
                       <Brain className="w-4 h-4 ml-2" />
