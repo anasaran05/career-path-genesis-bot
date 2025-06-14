@@ -110,8 +110,8 @@ const Intake = () => {
         timestamp: new Date().toISOString(),
       };
 
-      // Use the updated webhook URL
-      const webhookUrl = "https://zaneproedcoo.app.n8n.cloud/webhook-test/career-path-analyze";
+      // Use the provided webhook URL
+      const webhookUrl = "https://zaneproedcoo.app.n8n.cloud/webhook/career-path-analyze";
       
       const response = await fetch(webhookUrl, {
         method: 'POST',
