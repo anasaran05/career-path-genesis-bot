@@ -110,8 +110,8 @@ const Intake = () => {
         timestamp: new Date().toISOString(),
       };
 
-      // ---- REPLACE this with your actual webhook endpoint ----
-      const webhookUrl = 'YOUR_WEBHOOK_ENDPOINT_URL_HERE';
+      // Use the provided webhook URL
+      const webhookUrl = "https://zaneproedcoo.app.n8n.cloud/webhook/career-path-analyze";
       
       const response = await fetch(webhookUrl, {
         method: 'POST',
