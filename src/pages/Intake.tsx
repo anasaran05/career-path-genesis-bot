@@ -69,6 +69,7 @@ const Intake = () => {
     try {
       // Prepare the data for the webhook
       const webhookData = {
+        // Pass the relevant form data and user profile for the AI agent
         userProfile: {
           id: user?.id,
           email: user?.email,
@@ -109,7 +110,7 @@ const Intake = () => {
         timestamp: new Date().toISOString(),
       };
 
-      // Replace this URL with your actual webhook endpoint
+      // ---- REPLACE this with your actual webhook endpoint ----
       const webhookUrl = 'YOUR_WEBHOOK_ENDPOINT_URL_HERE';
       
       const response = await fetch(webhookUrl, {
@@ -124,19 +125,19 @@ const Intake = () => {
         throw new Error(`Webhook failed with status: ${response.status}`);
       }
 
-      const result = await response.json();
+      const aiResponse = await response.json();
       
       toast({
         title: "Profile Analysis Started",
-        description: "Your profile has been sent for AI analysis. You'll receive the results shortly.",
+        description: "Your profile has been sent for AI analysis. You'll receive results shortly.",
       });
 
-      // Navigate to analysis page with the webhook response
+      // Navigate with form data and the AI response (as 'analysisResult')
       navigate('/analysis', { 
         state: { 
           studentData: formData,
-          analysisResult: result,
-          webhookResponse: result
+          analysisResult: aiResponse,
+          webhookResponse: aiResponse
         } 
       });
 
@@ -634,3 +635,5 @@ const CareerGoalsStep = ({ formData, updateFormData }: any) => (
 );
 
 export default Intake;
+
+// ... keep helper step components the same ...
