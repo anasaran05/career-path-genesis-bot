@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Brain, TrendingUp, Target, Star, ChevronRight, Loader2, Sparkles, Briefcase, GraduationCap, User } from "lucide-react";
+import { ArrowLeft, Brain, TrendingUp, Target, Star, ChevronRight, Loader2, Sparkles, Briefcase, GraduationCap, User, Zap, Rocket, Award } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -14,9 +14,7 @@ import { Wrench, MessageSquare, Microscope } from "lucide-react";
 const Analysis = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [geminiResponse, setGeminiResponse] = useState('');
@@ -25,6 +23,7 @@ const Analysis = () => {
   const [currentPhase, setCurrentPhase] = useState('Loading your analysis...');
   const studentData = location.state?.studentData || {};
   const analysisResult = location.state?.analysisResult;
+
   useEffect(() => {
     const fetchAnalysis = async () => {
       try {
@@ -128,30 +127,56 @@ const Analysis = () => {
     });
     return structuredData;
   };
+
   const structuredAnalysis = parseGeminiResponse(geminiResult);
+
   if (isAnalyzing || isLoading) {
-    return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
-        <Card className="bg-white border-slate-200 shadow-2xl max-w-md w-full mx-4 animate-scale-in">
-          <CardContent className="p-8 text-center">
-            <div className="mb-6">
-              <div className="relative mb-6">
-                <Brain className="w-16 h-16 text-navy-600 mx-auto animate-pulse" />
-                <Sparkles className="w-6 h-6 text-autumn-500 absolute top-0 right-6 animate-bounce" />
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-navy-900 via-slate-900 to-navy-800 flex items-center justify-center relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-autumn-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gradient-to-r from-navy-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+        
+        <Card className="bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl max-w-lg w-full mx-4 animate-scale-in relative overflow-hidden">
+          {/* Animated border glow */}
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-autumn-500 via-blue-500 to-navy-500 rounded-lg blur opacity-75 animate-pulse"></div>
+          <div className="relative bg-white/10 backdrop-blur-xl rounded-lg">
+            <CardContent className="p-8 text-center">
+              <div className="mb-6">
+                <div className="relative mb-6">
+                  <div className="absolute inset-0 bg-gradient-to-r from-autumn-500 to-blue-500 rounded-full blur-xl opacity-60 animate-pulse"></div>
+                  <Brain className="relative w-20 h-20 text-white mx-auto animate-bounce drop-shadow-2xl" />
+                  <Sparkles className="w-8 h-8 text-autumn-400 absolute -top-2 -right-2 animate-spin" />
+                  <Zap className="w-6 h-6 text-blue-400 absolute -bottom-1 -left-1 animate-ping" />
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-3 bg-gradient-to-r from-autumn-400 via-white to-blue-400 bg-clip-text text-transparent">
+                  🧠 Zane AI Analyzing
+                </h2>
+                <p className="text-white/80 text-lg">Processing your pharmaceutical profile with cutting-edge AI</p>
               </div>
-              <h2 className="text-2xl font-bold text-navy-800 mb-2">Zane AI is Analyzing</h2>
-              <p className="text-slate-600">Processing your pharmaceutical profile to find perfect career matches</p>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="flex justify-between text-sm">
-                <span className="text-navy-700 font-medium">{currentPhase}</span>
-                <span className="text-slate-500">{analysisProgress}%</span>
+              
+              <div className="space-y-6">
+                <div className="flex justify-between text-sm">
+                  <span className="text-white font-medium animate-pulse">{currentPhase}</span>
+                  <span className="text-autumn-300 font-bold">{analysisProgress}%</span>
+                </div>
+                <div className="relative">
+                  <Progress value={analysisProgress} className="h-4 bg-white/20 border border-white/30" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-autumn-500 via-blue-500 to-navy-500 rounded-full opacity-20 animate-pulse"></div>
+                </div>
+                <div className="flex justify-center space-x-2">
+                  <div className="w-3 h-3 bg-autumn-400 rounded-full animate-bounce"></div>
+                  <div className="w-3 h-3 bg-blue-400 rounded-full animate-bounce delay-150"></div>
+                  <div className="w-3 h-3 bg-navy-400 rounded-full animate-bounce delay-300"></div>
+                </div>
               </div>
-              <Progress value={analysisProgress} className="h-3 bg-slate-100" />
-            </div>
-          </CardContent>
+            </CardContent>
+          </div>
         </Card>
-      </div>;
+      </div>
+    );
   }
   
   // Pull degree from user input: prefer PG then UG
@@ -164,7 +189,6 @@ const Analysis = () => {
   const displayedDegree = displayedDegreeRaw ? displayedDegreeRaw.toUpperCase() : "NOT SPECIFIED";
 
   // FAKE DATA: Example parsed (in real use, you would extract these from Gemini response structured as needed)
-  // Mapping parseGeminiResponse output to new fancy component structure (for demo/fake data)
   const parsedData =
     geminiResult && typeof geminiResult === "string"
       ? {
@@ -207,72 +231,89 @@ const Analysis = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-navy-900 via-slate-900 to-navy-800 relative overflow-hidden">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-autumn-500/30 to-blue-500/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-navy-500/30 to-purple-500/30 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-blue-400/20 to-autumn-400/20 rounded-full blur-2xl animate-pulse delay-500"></div>
+      </div>
+
       {/* Header */}
-      <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
+      <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl relative z-10">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link to="/intake" className="flex items-center space-x-2 text-navy-600 hover:text-navy-700 transition-colors">
-            <ArrowLeft className="w-5 h-5" />
+          <Link to="/intake" className="flex items-center space-x-2 text-white hover:text-autumn-300 transition-all duration-300 group">
+            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span>Back to Intake</span>
           </Link>
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-r from-navy-600 to-autumn-500 rounded-lg flex items-center justify-center">
-              <Brain className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 bg-gradient-to-r from-autumn-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+              <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
-              <span className="text-navy-700 font-bold text-lg">Zane AI</span>
-              <p className="text-slate-500 text-xs">by ZaneProEd</p>
+              <span className="text-white font-bold text-xl bg-gradient-to-r from-autumn-400 to-blue-400 bg-clip-text text-transparent">Zane AI</span>
+              <p className="text-white/60 text-xs">by ZaneProEd</p>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         <div className="max-w-6xl mx-auto mb-8">
           {/* Header Section */}
           <div className="text-center mb-8 animate-fade-in">
-            <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium mb-6">
-              <Brain className="w-4 h-4 mr-2" />
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 backdrop-blur-sm text-green-300 rounded-full text-sm font-medium mb-6 border border-green-400/30">
+              <Brain className="w-5 h-5 mr-2 animate-pulse" />
+              <Sparkles className="w-4 h-4 mr-2 animate-spin" />
               🎉 Analysis Complete
             </div>
-            <h1 className="text-4xl font-bold text-navy-800 mb-4">
+            <h1 className="text-5xl font-bold text-white mb-4 bg-gradient-to-r from-autumn-400 via-white to-blue-400 bg-clip-text text-transparent drop-shadow-2xl">
               Your AI Career Analysis
             </h1>
-            <p className="text-xl text-slate-600 mb-2">
-              Welcome, {studentData.fullName || 'Future Professional'}!
+            <p className="text-2xl text-white/80 mb-2">
+              Welcome, <span className="text-autumn-300 font-semibold">{studentData.fullName || 'Future Professional'}</span>!
             </p>
-            <p className="text-lg text-slate-600">Here's your personalized career analysis powered by Zane AI</p>
+            <p className="text-lg text-white/60">Here's your personalized career analysis powered by Zane AI</p>
           </div>
 
           {/* Profile Summary */}
-          <Card className="bg-white border-slate-200 shadow-lg mb-6">
-            <CardHeader>
-              <CardTitle className="flex items-center text-xl text-navy-800">
-                <User className="w-5 h-5 mr-2 text-autumn-500" />
+          <Card className="bg-white/10 backdrop-blur-xl border-white/20 shadow-2xl mb-8 hover:bg-white/15 transition-all duration-500 group relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-autumn-500/10 via-transparent to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <CardHeader className="relative">
+              <CardTitle className="flex items-center text-2xl text-white">
+                <div className="w-8 h-8 bg-gradient-to-r from-autumn-500 to-blue-500 rounded-lg flex items-center justify-center mr-3">
+                  <User className="w-5 h-5 text-white" />
+                </div>
                 Your Profile Summary
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="flex items-center space-x-3">
-                  <GraduationCap className="w-5 h-5 text-blue-500" />
+            <CardContent className="relative">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="flex items-center space-x-4 p-4 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center">
+                    <GraduationCap className="w-6 h-6 text-white" />
+                  </div>
                   <div>
-                    <p className="text-sm text-slate-500">Degree</p>
-                    <p className="font-medium">{displayedDegree}</p>
+                    <p className="text-sm text-white/60">Degree</p>
+                    <p className="font-bold text-white text-lg">{displayedDegree}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Target className="w-5 h-5 text-green-500" />
+                <div className="flex items-center space-x-4 p-4 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
+                    <Target className="w-6 h-6 text-white" />
+                  </div>
                   <div>
-                    <p className="text-sm text-slate-500">Career Goals</p>
-                    <p className="font-medium">{studentData.goals || 'Not specified'}</p>
+                    <p className="text-sm text-white/60">Career Goals</p>
+                    <p className="font-bold text-white text-lg">{studentData.goals || 'Not specified'}</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Star className="w-5 h-5 text-yellow-500" />
+                <div className="flex items-center space-x-4 p-4 bg-white/5 rounded-xl backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center">
+                    <Star className="w-6 h-6 text-white" />
+                  </div>
                   <div>
-                    <p className="text-sm text-slate-500">Skills</p>
-                    <p className="font-medium">{studentData.skills || 'Not specified'}</p>
+                    <p className="text-sm text-white/60">Skills</p>
+                    <p className="font-bold text-white text-lg">{studentData.skills || 'Not specified'}</p>
                   </div>
                 </div>
               </div>
@@ -281,75 +322,90 @@ const Analysis = () => {
 
           {/* NEW: Modern Card-Based Analysis Display */}
           {parsedData ? (
-            <AnalysisResultCards
-              topRoles={parsedData.topRoles}
-              roadmap={parsedData.roadmap}
-              courses={parsedData.courses}
-              skillGaps={parsedData.skillGaps}
-              onReanalyze={handleReanalyze}
-            />
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-autumn-500/5 via-transparent to-blue-500/5 rounded-3xl"></div>
+              <AnalysisResultCards
+                topRoles={parsedData.topRoles}
+                roadmap={parsedData.roadmap}
+                courses={parsedData.courses}
+                skillGaps={parsedData.skillGaps}
+                onReanalyze={handleReanalyze}
+              />
+            </div>
           ) : (
-            // 👇 Enhanced fallback for Gemini response
-            <Card className="relative overflow-hidden border-0 shadow-2xl bg-gradient-to-br from-slate-100/70 via-blue-50/70 to-autumn-100/70 rounded-3xl animate-fade-in-glass backdrop-blur-lg">
-              {/* Animated Glow & Sparkle */}
-              <div className="absolute -top-4 right-6 z-10 animate-pulse">
-                <span className="inline-block p-2 rounded-full bg-gradient-to-br from-autumn-400 via-yellow-200 to-blue-200 opacity-70 shadow-2xl">
-                  <svg className="w-6 h-6 text-autumn-500 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364l-1.414 1.414M6.05 17.95l-1.414 1.414M17.95 17.95l-1.414-1.414M6.05 6.05L4.636 7.464"/>
-                  </svg>
-                </span>
-              </div>
-              <CardHeader className="flex flex-col items-center">
-                <CardTitle className="flex items-center gap-3 text-2xl md:text-3xl font-bold text-navy-800 drop-shadow-xl">
-                  <span className="bg-gradient-to-br from-autumn-500 via-blue-400 to-green-400 bg-clip-text text-transparent pr-2">
-                    <svg className="w-7 h-7 mr-1 inline -mt-1 animate-bounce" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                      <circle cx="12" cy="12" r="10" strokeWidth="2" />
-                      <path d="M8 10h.01M16 10h.01M12 17c2 0 3.8-1.4 4-3h-8c.2 1.6 2 3 4 3z" />
-                    </svg>
-                  </span>
-                  <span>Gemini AI Says...</span>
-                </CardTitle>
-                <CardDescription className="text-lg text-slate-500 mt-1">Your personalized career analysis</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-white/80 border border-slate-100 backdrop-blur-md rounded-2xl p-8 shadow-inner relative">
-                  <div className="whitespace-pre-wrap text-navy-800 font-medium leading-relaxed text-lg md:text-xl animate-typewriter border-l-4 border-autumn-400 pl-6">
-                    {geminiResult}
+            // Enhanced fallback for Gemini response
+            <Card className="relative overflow-hidden border-0 shadow-2xl bg-white/10 backdrop-blur-xl rounded-3xl animate-fade-in group">
+              {/* Animated glow effects */}
+              <div className="absolute -inset-1 bg-gradient-to-r from-autumn-500 via-blue-500 to-navy-500 rounded-3xl blur opacity-25 group-hover:opacity-40 transition-opacity duration-500"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-autumn-400/30 to-transparent rounded-full blur-2xl animate-pulse"></div>
+              
+              <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl border border-white/20">
+                <CardHeader className="flex flex-col items-center relative">
+                  <div className="absolute -top-4 right-6 z-10">
+                    <div className="w-12 h-12 bg-gradient-to-r from-autumn-500 to-blue-500 rounded-full flex items-center justify-center animate-bounce shadow-xl">
+                      <Sparkles className="w-6 h-6 text-white animate-spin" />
+                    </div>
                   </div>
-                  {/* Subtle shine effect */}
-                  <div className="pointer-events-none absolute top-0 left-1/4 w-1/2 h-12 bg-gradient-to-r from-blue-200/40 via-white/70 to-autumn-200/30 rounded-full blur-lg opacity-70 animate-pulse"></div>
-                </div>
-              </CardContent>
+                  <CardTitle className="flex items-center gap-4 text-3xl md:text-4xl font-bold text-white drop-shadow-2xl">
+                    <div className="w-10 h-10 bg-gradient-to-r from-autumn-500 to-blue-500 rounded-xl flex items-center justify-center">
+                      <Brain className="w-6 h-6 text-white animate-pulse" />
+                    </div>
+                    <span className="bg-gradient-to-r from-autumn-400 via-white to-blue-400 bg-clip-text text-transparent">
+                      Gemini AI Analysis
+                    </span>
+                  </CardTitle>
+                  <CardDescription className="text-xl text-white/70 mt-2">Your personalized career insights</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-white/10 border border-white/20 backdrop-blur-xl rounded-2xl p-8 shadow-inner relative overflow-hidden">
+                    {/* Subtle animated background */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-autumn-500/5 animate-pulse"></div>
+                    
+                    <div className="relative whitespace-pre-wrap text-white font-medium leading-relaxed text-lg md:text-xl border-l-4 border-gradient-to-b from-autumn-400 to-blue-400 pl-6 shadow-lg">
+                      {geminiResult}
+                    </div>
+                  </div>
+                </CardContent>
+              </div>
             </Card>
           )}
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button size="lg" className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" onClick={() => navigate('/job-scan', {
-            state: {
-              studentData
-            }
-          })}>
-              Find Jobs Based on Analysis
-              <ChevronRight className="w-5 h-5 ml-2" />
+          {/* Enhanced Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mt-12">
+            <Button 
+              size="lg" 
+              className="bg-gradient-to-r from-autumn-500 via-orange-500 to-red-500 hover:from-autumn-600 hover:via-orange-600 hover:to-red-600 text-white px-10 py-4 rounded-2xl shadow-2xl hover:shadow-autumn-500/50 transition-all duration-500 hover:scale-110 transform group text-lg font-bold"
+              onClick={() => navigate('/job-scan', { state: { studentData } })}
+            >
+              <Rocket className="w-6 h-6 mr-3 group-hover:animate-bounce" />
+              Find Dream Jobs
+              <ChevronRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button variant="outline" size="lg" onClick={() => navigate('/intake')} className="border-2 border-navy-300 hover:bg-navy-50 px-8 rounded-xl">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={() => navigate('/intake')} 
+              className="border-2 border-white/30 hover:bg-white/10 text-white px-10 py-4 rounded-2xl backdrop-blur-sm hover:border-white/50 transition-all duration-300 hover:scale-105 text-lg font-bold"
+            >
+              <Award className="w-6 h-6 mr-3" />
               New Analysis
             </Button>
           </div>
         </div>
 
-        {/* Footer Logo */}
-        <div className="text-center mt-16 pb-8">
-          <div className="flex items-center justify-center space-x-3 text-slate-400">
-            <div className="w-6 h-6 bg-gradient-to-r from-navy-400 to-autumn-400 rounded-lg flex items-center justify-center">
-              <Brain className="w-4 h-4 text-white" />
+        {/* Enhanced Footer Logo */}
+        <div className="text-center mt-20 pb-8">
+          <div className="flex items-center justify-center space-x-4 text-white/60 group">
+            <div className="w-8 h-8 bg-gradient-to-r from-autumn-500 to-blue-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <Brain className="w-5 h-5 text-white" />
             </div>
-            <span className="text-sm">Powered by ZaneProEd &amp; Zane AI</span>
+            <span className="text-lg group-hover:text-white/80 transition-colors">Powered by ZaneProEd & Zane AI</span>
+            <Sparkles className="w-5 h-5 text-autumn-400 animate-pulse" />
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 export default Analysis;

@@ -110,27 +110,40 @@
 }
 
 @layer utilities {
-  /* Animation classes */
+  /* Enhanced Animation classes */
   .animate-fade-in {
-    animation: fade-in 0.6s ease-out forwards;
+    animation: fade-in 0.8s ease-out forwards;
   }
 
   .animate-scale-in {
-    animation: scale-in 0.3s ease-out forwards;
+    animation: scale-in 0.5s ease-out forwards;
+  }
+
+  .animate-fade-in-glass {
+    animation: fade-in-glass 1s ease-out forwards;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite alternate;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
   }
 
   .animate-typewriter {
-    animation: typewriter 2s steps(40) 1s forwards;
+    animation: typewriter 3s steps(60) 1s forwards;
     overflow: hidden;
     white-space: nowrap;
     border-right: 2px solid;
     width: 0;
   }
 
+  /* Enhanced keyframes */
   @keyframes fade-in {
     from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(30px);
     }
     to {
       opacity: 1;
@@ -141,7 +154,7 @@
   @keyframes scale-in {
     from {
       opacity: 0;
-      transform: scale(0.95);
+      transform: scale(0.9);
     }
     to {
       opacity: 1;
@@ -149,9 +162,53 @@
     }
   }
 
+  @keyframes fade-in-glass {
+    from {
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      backdrop-filter: blur(0px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      backdrop-filter: blur(20px);
+    }
+  }
+
+  @keyframes glow {
+    from {
+      box-shadow: 0 0 20px rgba(199, 91, 86, 0.3);
+    }
+    to {
+      box-shadow: 0 0 40px rgba(199, 91, 86, 0.6);
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
   @keyframes typewriter {
     to {
       width: 100%;
     }
+  }
+
+  /* Gradient border animation */
+  .animate-border-gradient {
+    background: linear-gradient(45deg, #C75B56, #3B82F6, #1E293B, #C75B56);
+    background-size: 400% 400%;
+    animation: gradient-shift 3s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 }
