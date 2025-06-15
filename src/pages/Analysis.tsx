@@ -155,11 +155,13 @@ const Analysis = () => {
   }
   
   // Pull degree from user input: prefer PG then UG
-  const displayedDegree = studentData.pgDegree?.trim()
+  const displayedDegreeRaw = studentData.pgDegree?.trim()
     ? studentData.pgDegree
     : studentData.ugDegree?.trim()
       ? studentData.ugDegree
       : "Not specified";
+
+  const displayedDegree = displayedDegreeRaw ? displayedDegreeRaw.toUpperCase() : "NOT SPECIFIED";
 
   // FAKE DATA: Example parsed (in real use, you would extract these from Gemini response structured as needed)
   // Mapping parseGeminiResponse output to new fancy component structure (for demo/fake data)
