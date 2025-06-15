@@ -3,6 +3,15 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 
+// Zane AI brand colors
+const COLORS = {
+  navy: "#002B5B",
+  autumn: "#D63447",
+  beige: "#F5F5F5",
+};
+
+const FONT = "font-sans"; // Matches Inter/Helvetica on home
+
 interface CareerRole {
   title: string;
   description: string;
@@ -15,19 +24,14 @@ interface CareerMatchCardsProps {
   summary?: string;
 }
 
-const COLORS = {
-  navy: "#002B5B",
-  autumn: "#D63447",
-  beige: "#F5F5F5",
-};
-
-const FONT = "font-sans"; // Inter/Helvetica fallback
-
 const CareerMatchCards: React.FC<CareerMatchCardsProps> = ({ roles, summary }) => {
   return (
-    <section className={`w-full py-8 px-2 max-w-3xl mx-auto ${FONT}`}>
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold" style={{ color: COLORS.navy }}>
+    <section className={`w-full py-12 px-2 md:px-0 max-w-4xl mx-auto bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl shadow-none ${FONT}`}>
+      <div className="mb-10 px-2 text-center">
+        <h2
+          className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-navy-600 to-autumn-500"
+          style={{ fontFamily: "Inter, Helvetica, Arial, sans-serif" }}
+        >
           {summary ||
             "Based on your skills and profile, here’s where you shine the most."}
         </h2>
@@ -36,16 +40,30 @@ const CareerMatchCards: React.FC<CareerMatchCardsProps> = ({ roles, summary }) =
         {roles.map((role, i) => (
           <div
             key={role.title}
-            className="bg-white rounded-2xl shadow-xl border-l-8"
+            className="
+              group
+              bg-white/90
+              rounded-2xl 
+              shadow-xl 
+              border border-slate-100
+              transition-transform
+              hover:scale-105
+              hover:shadow-2xl
+              relative
+              overflow-hidden
+            "
             style={{
-              borderColor: COLORS.autumn,
               fontFamily: "Inter, Helvetica, Arial, sans-serif",
             }}
           >
+            {/* Top accent bar like homepage card highlight */}
+            <div
+              className="h-2 w-full bg-gradient-to-r from-navy-600 to-autumn-500"
+            />
             <div className="p-6 flex flex-col gap-2">
               <div className="flex items-center gap-3 mb-2">
                 <span className="text-2xl">{role.emoji}</span>
-                <h3 className="text-xl font-bold" style={{ color: COLORS.navy }}>
+                <h3 className="text-xl font-bold text-navy-700">
                   {role.title}
                 </h3>
               </div>
@@ -69,11 +87,16 @@ const CareerMatchCards: React.FC<CareerMatchCardsProps> = ({ roles, summary }) =
                   "--tw-bg-opacity": "1",
                 } as React.CSSProperties}
               />
-              <div className="pt-4">
+              <div className="pt-4 text-center">
                 <Button
-                  className="bg-gradient-to-r from-[#002B5B] to-[#D63447] text-white font-bold px-6 py-2 rounded-lg hover:scale-105 transition-transform"
+                  className="
+                    bg-gradient-to-r from-navy-600 to-autumn-500
+                    text-white font-bold px-8 py-2 rounded-xl
+                    hover:scale-105
+                    transition-transform
+                    shadow-md
+                    "
                   style={{
-                    background: `linear-gradient(90deg, ${COLORS.navy} 0%, ${COLORS.autumn} 90%)`,
                     fontFamily: "Inter, Helvetica, Arial, sans-serif",
                   }}
                 >
@@ -84,7 +107,13 @@ const CareerMatchCards: React.FC<CareerMatchCardsProps> = ({ roles, summary }) =
           </div>
         ))}
       </div>
-      <div className="mt-10 text-lg text-center font-semibold" style={{ color: COLORS.autumn }}>
+      <div
+        className="mt-12 text-lg text-center font-semibold"
+        style={{
+          color: COLORS.autumn,
+          fontFamily: "Inter, Helvetica, Arial, sans-serif",
+        }}
+      >
         You’re one step closer to your dream role 🔥 Keep exploring.
       </div>
     </section>
@@ -92,4 +121,3 @@ const CareerMatchCards: React.FC<CareerMatchCardsProps> = ({ roles, summary }) =
 };
 
 export default CareerMatchCards;
-
