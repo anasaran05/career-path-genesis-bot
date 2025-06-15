@@ -10,6 +10,7 @@ import { ArrowLeft, User, BookOpen, Award, Target, Brain, ChevronRight, Loader2 
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Intake = () => {
   const { user, userProfile } = useAuth();
@@ -62,6 +63,90 @@ const Intake = () => {
 
   const totalSteps = 4;
   const progress = (currentStep / totalSteps) * 100;
+
+  // New Gemini-based analysis function
+  const handleAnalyseClick = async (profileData) => {
+    setIsAnalyzing(true);
+    
+    try {
+      // Get current user
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        toast({
+          title: "Authentication Error",
+          description: "User not logged in",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Build comprehensive prompt from form data
+      const degree = `${profileData.ugDegree} ${profileData.ugSpecialization} (${profileData.ugYear}) | ${profileData.pgDegree} ${profileData.pgSpecialization} (${profileData.pgYear})`;
+      const skills = `Technical: ${profileData.technicalSkills} | Soft: ${profileData.softSkills} | Certifications: ${profileData.certifications}`;
+      const goals = `Industry: ${profileData.preferredIndustry} | Goals: ${profileData.careerGoals} | Locations: ${profileData.jobLocations} | Salary: ${profileData.salaryExpectation}`;
+
+      const prompt = `You are a career coach. Analyse the following user profile:
+Degree: ${degree}
+Skills: ${skills}
+Career Goals: ${goals}
+Experience: ${profileData.internships}
+Projects: ${profileData.projects}
+Give a detailed career path, job roles, and skill gap recommendations.`;
+
+      // Send to Gemini
+      const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyD8nR33ljcGYsX3Cy9VOsuoZxHWLWHLEtw`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      });
+
+      const geminiJson = await geminiRes.json();
+      const result = geminiJson?.candidates?.[0]?.content?.parts?.[0]?.text || 'No analysis found.';
+
+      // Save to Supabase
+      const { error: insertError } = await supabase.from('career_analysis').insert([{
+        user_id: user.id,
+        degree: degree,
+        skills: skills,
+        goals: goals,
+        analysis_result: result
+      }]);
+
+      if (insertError) {
+        console.error('Insert error:', insertError);
+        toast({
+          title: "Save Error",
+          description: "Failed to save analysis",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Analysis Complete",
+          description: "Career analysis complete! Check your dashboard",
+        });
+        
+        // Navigate to analysis page with results
+        navigate('/analysis', { 
+          state: { 
+            studentData: profileData,
+            analysisResult: { analysis: result }
+          } 
+        });
+      }
+
+    } catch (error) {
+      console.error('Analysis error:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "There was an error analyzing your profile. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
 
   const handleAnalyzeProfile = async () => {
     setIsAnalyzing(true);
@@ -162,7 +247,8 @@ const Intake = () => {
       setCurrentStep(currentStep + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      handleAnalyzeProfile();
+      // Use the new Gemini-based analysis
+      handleAnalyseClick(formData);
     }
   };
 
@@ -635,5 +721,3 @@ const CareerGoalsStep = ({ formData, updateFormData }: any) => (
 );
 
 export default Intake;
-
-// ... keep helper step components the same ...
