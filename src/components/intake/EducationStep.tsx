@@ -26,17 +26,17 @@ export const EducationStep = ({ formData, updateFormData }: StepProps) => (
               <SelectValue placeholder="Select degree" />
             </SelectTrigger>
             <SelectContent className="bg-white border-slate-200 rounded-lg">
-              <SelectItem value="bpharm">B.Pharm</SelectItem>
-              <SelectItem value="dpharm">D.Pharm</SelectItem>
-              <SelectItem value="bsc-nursing">B.Sc Nursing</SelectItem>
-              <SelectItem value="gnm">GNM (Nursing)</SelectItem>
-              <SelectItem value="bpt">BPT (Physiotherapy)</SelectItem>
-              <SelectItem value="bmlt">BMLT (Medical Lab Technology)</SelectItem>
-              <SelectItem value="boptom">B.Optom (Optometry)</SelectItem>
-              <SelectItem value="btech">B.Tech</SelectItem>
+              <SelectItem value="bpharm">B.PHARM</SelectItem>
+              <SelectItem value="dpharm">D.PHARM</SelectItem>
+              <SelectItem value="bsc-nursing">B.SC NURSING</SelectItem>
+              <SelectItem value="gnm">GNM (NURSING)</SelectItem>
+              <SelectItem value="bpt">BPT (PHYSIOTHERAPY)</SelectItem>
+              <SelectItem value="bmlt">BMLT (MEDICAL LAB TECHNOLOGY)</SelectItem>
+              <SelectItem value="boptom">B.OPTOM (OPTOMETRY)</SelectItem>
+              <SelectItem value="btech">B.TECH</SelectItem>
               <SelectItem value="be">B.E.</SelectItem>
-              <SelectItem value="bsc">B.Sc</SelectItem>
-              <SelectItem value="bcom">B.Com</SelectItem>
+              <SelectItem value="bsc">B.SC</SelectItem>
+              <SelectItem value="bcom">B.COM</SelectItem>
               <SelectItem value="ba">B.A.</SelectItem>
               <SelectItem value="bba">BBA</SelectItem>
             </SelectContent>
@@ -77,14 +77,14 @@ export const EducationStep = ({ formData, updateFormData }: StepProps) => (
               <SelectValue placeholder="Select degree" />
             </SelectTrigger>
             <SelectContent className="bg-white border-slate-200 rounded-lg">
-              <SelectItem value="pharm-d">Pharm.D</SelectItem>
-              <SelectItem value="mpharm">M.Pharm</SelectItem>
-              <SelectItem value="msc-nursing">M.Sc Nursing</SelectItem>
-              <SelectItem value="mpt">MPT (Physiotherapy)</SelectItem>
-              <SelectItem value="mtech">M.Tech</SelectItem>
+              <SelectItem value="pharm-d">PHARM.D</SelectItem>
+              <SelectItem value="mpharm">M.PHARM</SelectItem>
+              <SelectItem value="msc-nursing">M.SC NURSING</SelectItem>
+              <SelectItem value="mpt">MPT (PHYSIOTHERAPY)</SelectItem>
+              <SelectItem value="mtech">M.TECH</SelectItem>
               <SelectItem value="me">M.E.</SelectItem>
-              <SelectItem value="msc">M.Sc</SelectItem>
-              <SelectItem value="mcom">M.Com</SelectItem>
+              <SelectItem value="msc">M.SC</SelectItem>
+              <SelectItem value="mcom">M.COM</SelectItem>
               <SelectItem value="ma">M.A.</SelectItem>
               <SelectItem value="mba">MBA</SelectItem>
             </SelectContent>
