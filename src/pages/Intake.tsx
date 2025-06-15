@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -71,6 +70,10 @@ const Intake = () => {
     
     try {
       const analysis = await performGeminiAnalysis(profileData);
+      
+      // Debug logging as requested
+      console.log("Gemini Response:", analysis);
+      console.log("Result:", analysis?.result);
       
       toast({
         title: "Analysis Complete",
