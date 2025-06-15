@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,7 +64,7 @@ const Intake = () => {
   const totalSteps = 4;
   const progress = (currentStep / totalSteps) * 100;
 
-  // Updated Gemini-based analysis function
+  // Gemini-based analysis function
   const handleAnalyseClick = async (profileData) => {
     setIsAnalyzing(true);
     
@@ -153,106 +152,12 @@ Give detailed advice with next steps. Keep it human-friendly.`;
     }
   };
 
-  const handleAnalyzeProfile = async () => {
-    setIsAnalyzing(true);
-    
-    try {
-      // Prepare the data for the webhook
-      const webhookData = {
-        // Pass the relevant form data and user profile for the AI agent
-        userProfile: {
-          id: user?.id,
-          email: user?.email,
-          fullName: formData.fullName,
-        },
-        personalInfo: {
-          phone: formData.phone,
-          location: formData.location,
-        },
-        education: {
-          undergraduate: {
-            degree: formData.ugDegree,
-            specialization: formData.ugSpecialization,
-            year: formData.ugYear,
-          },
-          postgraduate: {
-            degree: formData.pgDegree,
-            specialization: formData.pgSpecialization,
-            year: formData.pgYear,
-          },
-        },
-        skills: {
-          technical: formData.technicalSkills,
-          soft: formData.softSkills,
-          certifications: formData.certifications,
-        },
-        experience: {
-          internships: formData.internships,
-          projects: formData.projects,
-        },
-        careerGoals: {
-          preferredIndustry: formData.preferredIndustry,
-          goals: formData.careerGoals,
-          locations: formData.jobLocations,
-          salaryExpectation: formData.salaryExpectation,
-          workStyle: formData.workStyle,
-        },
-        timestamp: new Date().toISOString(),
-      };
-
-      // Use the provided webhook URL
-      const webhookUrl = "https://zaneproedcoo.app.n8n.cloud/webhook/career-path-analyze";
-      
-      const response = await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(webhookData),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Webhook failed with status: ${response.status}`);
-      }
-
-      const aiResponse = await response.json();
-      
-      toast({
-        title: "Profile Analysis Started",
-        description: "Your profile has been sent for AI analysis. You'll receive results shortly.",
-      });
-
-      // Navigate with form data and the AI response (as 'analysisResult')
-      navigate('/analysis', { 
-        state: { 
-          studentData: formData,
-          analysisResult: aiResponse,
-          webhookResponse: aiResponse
-        } 
-      });
-
-    } catch (error) {
-      console.error('Webhook error:', error);
-      
-      toast({
-        title: "Analysis Failed",
-        description: "There was an error analyzing your profile. Please try again.",
-        variant: "destructive",
-      });
-      
-      // Fallback: navigate to analysis page with just the form data
-      navigate('/analysis', { state: { studentData: formData } });
-    } finally {
-      setIsAnalyzing(false);
-    }
-  };
-
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Use the updated Gemini-based analysis
+      // Use the Gemini-based analysis
       handleAnalyseClick(formData);
     }
   };
