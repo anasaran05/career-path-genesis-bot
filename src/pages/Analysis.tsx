@@ -8,6 +8,8 @@ import { ArrowLeft, Brain, TrendingUp, Target, Star, ChevronRight, Loader2, Spar
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { AnalysisResultCards } from "@/components/AnalysisResultCards";
+
 const Analysis = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -150,7 +152,52 @@ const Analysis = () => {
         </Card>
       </div>;
   }
-  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  
+  // FAKE DATA: Example parsed (in real use, you would extract these from Gemini response structured as needed)
+  // Mapping parseGeminiResponse output to new fancy component structure (for demo/fake data)
+  const parsedData =
+    geminiResult && typeof geminiResult === "string"
+      ? {
+          topRoles: [
+            {
+              title: "Clinical Research Associate",
+              description: "Coordinate clinical trials and bridge research teams with pharma companies.",
+            },
+            {
+              title: "Regulatory Affairs Specialist",
+              description: "Ensure compliance and global documentation for new pharma products.",
+            },
+            {
+              title: "Medical Writer",
+              description: "Craft clinical study reports and clear communication for stakeholders.",
+            },
+          ],
+          roadmap: [
+            "Complete GCP Certification and Clinical Trials training",
+            "Intern with a CRO (Clinical Research Organization)",
+            "Take an online course in pharmacovigilance tools",
+            "Build a LinkedIn profile tailored to the pharma industry",
+          ],
+          courses: [
+            "ICH-GCP Certification",
+            "Regulatory Affairs Masterclass",
+            "Pharmacovigilance Workshop"
+          ],
+          skillGaps: [
+            { gap: "Technical: Advanced GCP & pharmacovigilance tools", icon: <Wrench className="inline w-4 h-4 text-navy-600" /> },
+            { gap: "Soft: Professional communication", icon: <MessageSquare className="inline w-4 h-4 text-autumn-500" /> },
+            { gap: "Scientific: Research methods", icon: <Microscope className="inline w-4 h-4 text-blue-600" /> }
+          ],
+        }
+      : null;
+  
+  // Re-analyze click handler: redirects to intake for new analysis
+  const handleReanalyze = () => {
+    navigate('/intake');
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -222,76 +269,18 @@ const Analysis = () => {
             </CardContent>
           </Card>
 
-          {/* Structured Analysis Results */}
-          {structuredAnalysis ? <div className="space-y-6">
-              {/* Summary */}
-              {structuredAnalysis.summary && <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-xl text-navy-800">
-                      <Brain className="w-5 h-5 mr-2 text-blue-500" />
-                      Executive Summary
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-slate-700 leading-relaxed">{structuredAnalysis.summary}</p>
-                  </CardContent>
-                </Card>}
-
-              {/* Career Recommendations */}
-              {structuredAnalysis.careerRecommendations.length > 0 && <Card className="bg-white border-slate-200 shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-xl text-navy-800">
-                      <Briefcase className="w-5 h-5 mr-2 text-green-500" />
-                      Career Recommendations
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {structuredAnalysis.careerRecommendations.map((recommendation, index) => <div key={index} className="p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
-                          <p className="text-slate-700">{recommendation}</p>
-                        </div>)}
-                    </div>
-                  </CardContent>
-                </Card>}
-
-              {/* Skill Improvements */}
-              {structuredAnalysis.skillImprovements.length > 0 && <Card className="bg-white border-slate-200 shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-xl text-navy-800">
-                      <TrendingUp className="w-5 h-5 mr-2 text-purple-500" />
-                      Skill Development Areas
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {structuredAnalysis.skillImprovements.map((skill, index) => <div key={index} className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
-                          <p className="text-slate-700">{skill}</p>
-                        </div>)}
-                    </div>
-                  </CardContent>
-                </Card>}
-
-              {/* Next Steps */}
-              {structuredAnalysis.nextSteps.length > 0 && <Card className="bg-white border-slate-200 shadow-lg">
-                  <CardHeader>
-                    <CardTitle className="flex items-center text-xl text-navy-800">
-                      <Target className="w-5 h-5 mr-2 text-orange-500" />
-                      Next Steps & Action Plan
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {structuredAnalysis.nextSteps.map((step, index) => <div key={index} className="flex items-start space-x-3">
-                          <div className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
-                            {index + 1}
-                          </div>
-                          <p className="text-slate-700">{step}</p>
-                        </div>)}
-                    </div>
-                  </CardContent>
-                </Card>}
-            </div> : (/* Fallback: Raw Response */
-        <Card className="bg-white border-slate-200 shadow-lg">
+          {/* NEW: Modern Card-Based Analysis Display */}
+          {parsedData ? (
+            <AnalysisResultCards
+              topRoles={parsedData.topRoles}
+              roadmap={parsedData.roadmap}
+              courses={parsedData.courses}
+              skillGaps={parsedData.skillGaps}
+              onReanalyze={handleReanalyze}
+            />
+          ) : (
+            // fallback to old result if no data
+            <Card className="bg-white border-slate-200 shadow-lg">
               <CardHeader>
                 <CardTitle className="flex items-center text-2xl text-navy-800">
                   <Brain className="w-6 h-6 mr-2 text-autumn-500" />
@@ -308,7 +297,8 @@ const Analysis = () => {
                   </div>
                 </div>
               </CardContent>
-            </Card>)}
+            </Card>
+          )}
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
@@ -336,6 +326,7 @@ const Analysis = () => {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default Analysis;
