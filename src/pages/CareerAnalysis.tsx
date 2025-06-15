@@ -8,7 +8,6 @@ import { Brain, Loader2, Target, BookOpen, Wrench, MessageSquare, Microscope, Re
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import CareerMatchCards from "@/components/CareerMatchCards";
-import ThemeToggle from "@/components/ui/ThemeToggle";
 
 interface AnalysisResult {
   topRoles: Array<{
@@ -121,21 +120,19 @@ const CareerAnalysis = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50 dark:from-zinc-950 dark:to-zinc-900">
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-50">
       {/* Header */}
-      <header className="border-b border-amber-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
+      <header className="border-b border-amber-200 bg-white/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-navy-600 to-autumn-500 rounded-xl flex items-center justify-center">
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div className="text-center">
               <h1 className="text-2xl font-bold text-autumn-500">🎯 Career Analysis</h1>
-              <p className="text-navy-600 dark:text-navy-300">Powered by Zane AI</p>
+              <p className="text-navy-600">Powered by Zane AI</p>
             </div>
           </div>
-          {/* Theme toggle button here */}
-          <ThemeToggle />
         </div>
       </header>
 
