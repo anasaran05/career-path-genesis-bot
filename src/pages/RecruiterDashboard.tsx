@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,11 +7,14 @@ import { Badge } from "@/components/ui/badge";
 import { Brain, Users, FileText, TrendingUp, Plus, Search, User, Eye, CheckCircle, X, MapPin, Clock, DollarSign, Building, Calendar, Star } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import ResumeViewer from "@/components/ResumeViewer";
 
 const RecruiterDashboard = () => {
   const { userProfile, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedJob, setSelectedJob] = useState(null);
+  const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null);
+  const [isResumeViewerOpen, setIsResumeViewerOpen] = useState(false);
 
   const mockJobs = [
     {
@@ -176,7 +178,20 @@ const RecruiterDashboard = () => {
           description: `Interview scheduled with ${application?.candidateName}`,
         });
         break;
+      case 'view-resume':
+        setSelectedResumeId(applicationId);
+        setIsResumeViewerOpen(true);
+        toast({
+          title: "Opening Resume",
+          description: `Loading resume for ${application?.candidateName}`,
+        });
+        break;
     }
+  };
+
+  const handleCloseResumeViewer = () => {
+    setIsResumeViewerOpen(false);
+    setSelectedResumeId(null);
   };
 
   const getStatusColor = (status) => {
@@ -486,6 +501,7 @@ const RecruiterDashboard = () => {
                           variant="outline" 
                           size="sm" 
                           className="rounded-xl hover:scale-105 transition-all"
+                          onClick={() => handleApplicationAction('view-resume', application.id)}
                         >
                           <Eye className="w-4 h-4 mr-2" />
                           View Resume
@@ -623,6 +639,15 @@ const RecruiterDashboard = () => {
           </div>
         )}
       </div>
+
+      {/* Resume Viewer Modal */}
+      {selectedResumeId && (
+        <ResumeViewer
+          isOpen={isResumeViewerOpen}
+          onClose={handleCloseResumeViewer}
+          applicationId={selectedResumeId}
+        />
+      )}
     </div>
   );
 };
