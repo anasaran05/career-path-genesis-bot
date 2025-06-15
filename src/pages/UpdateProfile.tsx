@@ -36,11 +36,11 @@ const UpdateProfile = () => {
   const { register, handleSubmit, setValue, control, watch } = useForm({
     defaultValues: {
       full_name: userProfile?.full_name ?? "",
-      bio: "",
-      location: "",
-      dob: "",
-      skills: [],
-      profile_url: "",
+      bio: userProfile?.bio ?? "",
+      location: userProfile?.location ?? "",
+      dob: userProfile?.dob ?? "",
+      skills: userProfile?.student_profiles?.skills ?? [],
+      profile_url: userProfile?.profile_url ?? "",
       profile_image: userProfile?.profile_image ?? "",
     }
   });
@@ -52,7 +52,6 @@ const UpdateProfile = () => {
     profile_image: imgUrl || watchAll.profile_image
   });
 
-  // Show friendly nudge if incomplete
   const isIncomplete = completeness < 60;
 
   const onProfileImgUpload = async (file: File) => {
@@ -61,7 +60,6 @@ const UpdateProfile = () => {
     const filePath = `avatars/${user.id}.${file.name.split(".").pop()}`;
     const { data, error } = await supabase.storage.from("avatars").upload(filePath, file, { upsert: true });
     if (!error && data) {
-      // Get public url
       const { data: pub } = supabase.storage.from("avatars").getPublicUrl(filePath);
       setImgUrl(pub?.publicUrl);
       setValue("profile_image", pub?.publicUrl, { shouldValidate: true });
@@ -78,24 +76,28 @@ const UpdateProfile = () => {
     const { full_name, bio, location, dob, skills, profile_url, profile_image } = data;
     let errMsg = "";
     try {
-      // Profiles table
+      // Update profiles table with profile fields
       await supabase
         .from("profiles")
         .update({
           full_name,
-          // We'll add a new profile_image column if needed, for now "profile_image" can be saved in extended/user meta table if present
+          bio,
+          location,
+          dob,
+          profile_url,
+          profile_image,
+          last_profile_update: new Date().toISOString(),
         })
         .eq("id", user.id);
-      // Student profile table
+
+      // Update skills in student_profiles table
       await supabase
         .from("student_profiles")
         .update({
-          // Map fields according to schema
           skills,
-          // Add extended fields if needed, e.g. dob, bio, etc., if table is modified in the future
         })
         .eq("id", user.id);
-      // For extended fields, you might want to store to a custom table or as user_meta
+
       toast({
         title: "Profile updated! Your career journey just got clearer 🚀",
         description: "You're not just updating data. You're upgrading your future 💼"
@@ -212,3 +214,4 @@ function DetailsSection({ title, children }: { title: string, children: React.Re
 }
 
 export default UpdateProfile;
+
