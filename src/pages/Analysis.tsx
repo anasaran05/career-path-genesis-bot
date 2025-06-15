@@ -8,20 +8,49 @@ import { ArrowLeft, Brain, TrendingUp, Target, Star, ChevronRight, Loader2, Spar
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+
 const Analysis = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [geminiResponse, setGeminiResponse] = useState('');
   const [geminiResult, setGeminiResult] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPhase, setCurrentPhase] = useState('Loading your analysis...');
+  
+  // New state and function
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleAnalyse = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("https://rtbbeulmvojlvvfgfgpb.supabase.co/functions/v1/smart-processor", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          degree: "Pharm.D",
+          skills: "Pharmacovigilance, Research, ICH-GCP",
+          goal: "Get into a top MNC clinical research role"
+        })
+      });
+
+      const data = await response.json();
+      console.log("📦 Gemini Response:", data);
+      setResult(data.result);
+    } catch (error) {
+      console.error("❌ Error fetching analysis:", error);
+      setResult("Something went wrong. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const studentData = location.state?.studentData || {};
   const analysisResult = location.state?.analysisResult;
+
   useEffect(() => {
     const fetchAnalysis = async () => {
       try {
@@ -187,6 +216,49 @@ const Analysis = () => {
             <p className="text-lg text-slate-600">Here's your personalized career analysis powered by Zane AI</p>
           </div>
 
+          {/* New Analysis Test Section */}
+          <Card className="bg-white border-slate-200 shadow-lg mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center text-xl text-navy-800">
+                <Sparkles className="w-5 h-5 mr-2 text-purple-500" />
+                Test New Analysis
+              </CardTitle>
+              <CardDescription>
+                Test the smart processor with sample data
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <Button 
+                  onClick={handleAnalyse} 
+                  disabled={loading}
+                  className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Analyzing...
+                    </>
+                  ) : (
+                    <>
+                      <Brain className="w-4 h-4 mr-2" />
+                      Run Test Analysis
+                    </>
+                  )}
+                </Button>
+                
+                {result && (
+                  <div className="bg-slate-50 rounded-lg p-4 mt-4">
+                    <h4 className="font-medium text-slate-800 mb-2">Test Result:</h4>
+                    <div className="whitespace-pre-wrap text-slate-700 text-sm">
+                      {result}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Profile Summary */}
           <Card className="bg-white border-slate-200 shadow-lg mb-6">
             <CardHeader>
@@ -338,4 +410,5 @@ const Analysis = () => {
       </div>
     </div>;
 };
+
 export default Analysis;
