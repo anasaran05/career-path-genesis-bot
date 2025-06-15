@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,7 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, User, BookOpen, Award, Target, Brain, ChevronRight, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 const Intake = () => {
@@ -97,8 +98,8 @@ Projects: ${profileData.projects}
 
 Give detailed advice with next steps. Keep it human-friendly.`;
 
-      // Call Gemini API
-      const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyD8nR33ljcGYsX3Cy9VOsuoZxHWLWHLEtw`, {
+      // Call Gemini API with the provided API key
+      const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDaopAycZPL2XEDnUVWL9Gc6cLtL42G5D4`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
