@@ -1,13 +1,18 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Users, FileText, TrendingUp, Plus, Search, User, Eye, CheckCircle, X, MapPin, Clock, DollarSign, Building, Calendar, Star } from "lucide-react";
+import { Brain, Users, FileText, TrendingUp, Plus, Search } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import ResumeViewer from "@/components/ResumeViewer";
+import StatsCard from "@/components/dashboard/StatsCard";
+import ActivityFeed from "@/components/dashboard/ActivityFeed";
+import JobCard from "@/components/dashboard/JobCard";
+import ApplicationCard from "@/components/dashboard/ApplicationCard";
 
 const RecruiterDashboard = () => {
   const { userProfile, signOut } = useAuth();
@@ -194,26 +199,12 @@ const RecruiterDashboard = () => {
     setSelectedResumeId(null);
   };
 
-  const getStatusColor = (status) => {
-    switch(status) {
-      case 'active': return 'bg-green-100 text-green-800 border-green-200';
-      case 'draft': return 'bg-gray-100 text-gray-800 border-gray-200';
-      case 'paused': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'shortlisted': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'interviewed': return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'rejected': return 'bg-red-100 text-red-800 border-red-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
-  const getUrgencyColor = (urgency) => {
-    switch(urgency) {
-      case 'high': return 'border-l-4 border-red-500';
-      case 'medium': return 'border-l-4 border-yellow-500';
-      case 'low': return 'border-l-4 border-green-500';
-      default: return 'border-l-4 border-gray-300';
-    }
-  };
+  const statsData = [
+    { title: "Active Jobs", value: "8", icon: FileText, change: "+2 this week", color: "from-blue-500 to-blue-600" },
+    { title: "Total Applications", value: "247", icon: Users, change: "+45 this month", color: "from-green-500 to-green-600" },
+    { title: "Interviews Scheduled", value: "15", icon: TrendingUp, change: "Next 7 days", color: "from-purple-500 to-purple-600" },
+    { title: "Successful Hires", value: "12", icon: Brain, change: "This quarter", color: "from-orange-500 to-orange-600" }
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -293,61 +284,11 @@ const RecruiterDashboard = () => {
         {activeTab === 'overview' && (
           <div className="space-y-8">
             <div className="grid md:grid-cols-4 gap-6">
-              {[
-                { title: "Active Jobs", value: "8", icon: FileText, change: "+2 this week", color: "from-blue-500 to-blue-600" },
-                { title: "Total Applications", value: "247", icon: Users, change: "+45 this month", color: "from-green-500 to-green-600" },
-                { title: "Interviews Scheduled", value: "15", icon: Calendar, change: "Next 7 days", color: "from-purple-500 to-purple-600" },
-                { title: "Successful Hires", value: "12", icon: CheckCircle, change: "This quarter", color: "from-orange-500 to-orange-600" }
-              ].map((stat, index) => (
-                <Card key={index} className="bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all hover:scale-105 cursor-pointer">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-navy-800 text-sm font-medium">{stat.title}</CardTitle>
-                      <div className={`w-10 h-10 bg-gradient-to-r ${stat.color} rounded-xl flex items-center justify-center`}>
-                        <stat.icon className="w-5 h-5 text-white" />
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-navy-700 mb-1">{stat.value}</div>
-                    <p className="text-slate-600 text-xs">{stat.change}</p>
-                  </CardContent>
-                </Card>
+              {statsData.map((stat, index) => (
+                <StatsCard key={index} {...stat} />
               ))}
             </div>
-
-            {/* Recent Activity */}
-            <Card className="bg-white border border-slate-200 shadow-lg rounded-2xl">
-              <CardHeader>
-                <CardTitle className="text-navy-800 flex items-center space-x-2">
-                  <TrendingUp className="w-5 h-5" />
-                  <span>Recent Activity</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { action: "New application received", candidate: "Dr. Priya Sharma", position: "Clinical Research Associate", time: "2 hours ago", type: "application" },
-                    { action: "Interview completed", candidate: "Dr. Anjali Verma", position: "Sales Manager", time: "4 hours ago", type: "interview" },
-                    { action: "Job posting activated", candidate: null, position: "Pharmacovigilance Specialist", time: "1 day ago", type: "job" }
-                  ].map((activity, index) => (
-                    <div key={index} className="flex items-center space-x-4 p-3 rounded-xl hover:bg-slate-50 transition-colors">
-                      <div className={`w-3 h-3 rounded-full ${
-                        activity.type === 'application' ? 'bg-green-500' : 
-                        activity.type === 'interview' ? 'bg-blue-500' : 'bg-orange-500'
-                      }`} />
-                      <div className="flex-1">
-                        <p className="text-navy-700 font-medium">{activity.action}</p>
-                        <p className="text-slate-600 text-sm">
-                          {activity.candidate ? `${activity.candidate} - ${activity.position}` : activity.position}
-                        </p>
-                      </div>
-                      <span className="text-slate-500 text-xs">{activity.time}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <ActivityFeed />
           </div>
         )}
 
@@ -366,72 +307,7 @@ const RecruiterDashboard = () => {
 
             <div className="grid gap-6">
               {mockJobs.map((job) => (
-                <Card key={job.id} className={`bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all hover:scale-[1.02] ${getUrgencyColor(job.urgency)}`}>
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <CardTitle className="text-navy-800 text-xl mb-2">{job.title}</CardTitle>
-                        <div className="flex items-center space-x-4 text-slate-600 text-sm mb-3">
-                          <div className="flex items-center space-x-1">
-                            <Building className="w-4 h-4" />
-                            <span>{job.company}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <MapPin className="w-4 h-4" />
-                            <span>{job.location}</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <DollarSign className="w-4 h-4" />
-                            <span>{job.salary}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="outline" className={getStatusColor(job.status)}>
-                            {job.status}
-                          </Badge>
-                          <Badge variant="outline" className="text-slate-600">
-                            {job.type}
-                          </Badge>
-                          <Badge variant="outline" className="text-slate-600">
-                            {job.experience}
-                          </Badge>
-                        </div>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center space-x-4">
-                        <span className="text-navy-700 font-medium flex items-center space-x-1">
-                          <Users className="w-4 h-4" />
-                          <span>{job.applications} applications</span>
-                        </span>
-                        <span className="text-slate-600 text-sm flex items-center space-x-1">
-                          <Clock className="w-4 h-4" />
-                          <span>Posted {job.postedDate}</span>
-                        </span>
-                      </div>
-                      <div className="space-x-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="rounded-xl hover:scale-105 transition-all"
-                          onClick={() => handleJobAction('view', job.id)}
-                        >
-                          <Eye className="w-4 h-4 mr-2" />
-                          View Details
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          className="bg-navy-600 text-white rounded-xl hover:scale-105 transition-all"
-                          onClick={() => handleJobAction('edit', job.id)}
-                        >
-                          Manage
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <JobCard key={job.id} job={job} onJobAction={handleJobAction} />
               ))}
             </div>
           </div>
@@ -454,91 +330,11 @@ const RecruiterDashboard = () => {
             
             <div className="grid gap-4">
               {mockApplications.map((application) => (
-                <Card key={application.id} className="bg-white border border-slate-200 shadow-lg rounded-2xl hover:shadow-xl transition-all hover:scale-[1.01]">
-                  <CardHeader>
-                    <div className="flex justify-between items-start">
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-navy-500 to-autumn-500 rounded-xl flex items-center justify-center">
-                          <User className="w-6 h-6 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <CardTitle className="text-navy-800 text-lg">{application.candidateName}</CardTitle>
-                          <CardDescription className="text-slate-600">
-                            Applied for {application.position} • {application.experience} experience
-                          </CardDescription>
-                          <div className="flex items-center space-x-4 mt-2 text-sm">
-                            <span className="text-slate-600">{application.degree} • {application.university}</span>
-                            <div className="flex items-center space-x-1">
-                              <Star className="w-4 h-4 text-yellow-500" />
-                              <span className="text-slate-600">{application.rating}</span>
-                            </div>
-                            <span className="text-slate-600">{application.location}</span>
-                          </div>
-                          <div className="flex space-x-2 mt-2">
-                            {application.skills.map((skill, index) => (
-                              <Badge key={index} variant="secondary" className="text-xs">
-                                {skill}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <Badge 
-                        variant="outline"
-                        className={`capitalize ${getStatusColor(application.status)}`}
-                      >
-                        {application.status}
-                      </Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex justify-between items-center">
-                      <span className="text-slate-600 text-sm">
-                        Applied on {application.appliedDate}
-                      </span>
-                      <div className="space-x-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="rounded-xl hover:scale-105 transition-all"
-                          onClick={() => handleApplicationAction('view-resume', application.id)}
-                        >
-                          <Eye className="w-4 h-4 mr-2" />
-                          View Resume
-                        </Button>
-                        {application.status === 'applied' && (
-                          <Button 
-                            size="sm" 
-                            className="bg-green-600 text-white rounded-xl hover:scale-105 transition-all"
-                            onClick={() => handleApplicationAction('shortlist', application.id)}
-                          >
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            Shortlist
-                          </Button>
-                        )}
-                        {application.status === 'shortlisted' && (
-                          <Button 
-                            size="sm" 
-                            className="bg-blue-600 text-white rounded-xl hover:scale-105 transition-all"
-                            onClick={() => handleApplicationAction('schedule', application.id)}
-                          >
-                            <Calendar className="w-4 h-4 mr-2" />
-                            Schedule Interview
-                          </Button>
-                        )}
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="text-red-600 border-red-200 rounded-xl hover:scale-105 transition-all"
-                          onClick={() => handleApplicationAction('reject', application.id)}
-                        >
-                          <X className="w-4 h-4 mr-2" />
-                          Reject
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <ApplicationCard 
+                  key={application.id} 
+                  application={application} 
+                  onApplicationAction={handleApplicationAction} 
+                />
               ))}
             </div>
           </div>
