@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, Brain, TrendingUp, Target, Star, ChevronRight, Loader2, Sparkles, Briefcase, GraduationCap, User } from "lucide-react";
+import { ArrowLeft, Brain, TrendingUp, Target, Star, ChevronRight, Loader2, Sparkles, Briefcase, GraduationCap, User, CheckCircle, Circle, ChevronDown, ChevronUp, Clock, Award } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -14,17 +14,19 @@ import { Wrench, MessageSquare, Microscope } from "lucide-react";
 const Analysis = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [geminiResponse, setGeminiResponse] = useState('');
   const [geminiResult, setGeminiResult] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPhase, setCurrentPhase] = useState('Loading your analysis...');
+  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
+  const [expandedSteps, setExpandedSteps] = useState<Set<number>>(new Set());
+  
   const studentData = location.state?.studentData || {};
   const analysisResult = location.state?.analysisResult;
+
   useEffect(() => {
     const fetchAnalysis = async () => {
       try {
@@ -206,6 +208,79 @@ const Analysis = () => {
     navigate('/intake');
   };
 
+  // Interactive roadmap data
+  const roadmapSteps = [
+    {
+      id: 1,
+      title: "Complete GCP Certification",
+      description: "Master Good Clinical Practice guidelines essential for pharmaceutical careers",
+      duration: "2-3 weeks",
+      priority: "High",
+      resources: ["ICH-GCP E6 Guidelines", "Online certification course", "Practice tests"],
+      details: "This certification is mandatory for clinical research roles and demonstrates your understanding of ethical and scientific quality standards."
+    },
+    {
+      id: 2,
+      title: "Learn Pharmacovigilance Tools",
+      description: "Gain expertise in drug safety monitoring and adverse event reporting",
+      duration: "3-4 weeks",
+      priority: "High",
+      resources: ["Argus Safety training", "CIOMS forms practice", "PvPI certification"],
+      details: "Pharmacovigilance is a growing field with excellent career prospects in both pharma companies and regulatory bodies."
+    },
+    {
+      id: 3,
+      title: "Build Professional Network",
+      description: "Connect with industry professionals and join relevant associations",
+      duration: "Ongoing",
+      priority: "Medium",
+      resources: ["LinkedIn optimization", "Industry conferences", "Professional associations"],
+      details: "Networking is crucial for uncovering hidden job opportunities and staying updated with industry trends."
+    },
+    {
+      id: 4,
+      title: "Apply for CRO Internships",
+      description: "Gain hands-on experience with Clinical Research Organizations",
+      duration: "1-2 months",
+      priority: "High",
+      resources: ["Company research", "Application strategy", "Interview preparation"],
+      details: "CRO experience provides excellent foundation for pharmaceutical careers and often leads to full-time opportunities."
+    }
+  ];
+
+  const toggleStepCompletion = (stepId: number) => {
+    const newCompleted = new Set(completedSteps);
+    if (newCompleted.has(stepId)) {
+      newCompleted.delete(stepId);
+    } else {
+      newCompleted.add(stepId);
+    }
+    setCompletedSteps(newCompleted);
+  };
+
+  const toggleStepExpansion = (stepId: number) => {
+    const newExpanded = new Set(expandedSteps);
+    if (newExpanded.has(stepId)) {
+      newExpanded.delete(stepId);
+    } else {
+      newExpanded.add(stepId);
+    }
+    setExpandedSteps(newExpanded);
+  };
+
+  const getProgressPercentage = () => {
+    return (completedSteps.size / roadmapSteps.length) * 100;
+  };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'High': return 'bg-red-100 text-red-700 border-red-200';
+      case 'Medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+      case 'Low': return 'bg-green-100 text-green-700 border-green-200';
+      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
@@ -276,6 +351,134 @@ const Analysis = () => {
                   </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+
+          {/* Interactive Roadmap Section */}
+          <Card className="bg-white border-slate-200 shadow-lg mb-6">
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between text-xl text-navy-800">
+                <div className="flex items-center">
+                  <Target className="w-5 h-5 mr-2 text-autumn-500" />
+                  Your Personalized Roadmap
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm text-slate-500">{completedSteps.size}/{roadmapSteps.length} completed</span>
+                  <Award className="w-4 h-4 text-yellow-500" />
+                </div>
+              </CardTitle>
+              <CardDescription>
+                Track your progress and unlock your pharmaceutical career potential
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {/* Progress Overview */}
+              <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium text-navy-700">Overall Progress</span>
+                  <span className="text-sm text-slate-600">{Math.round(getProgressPercentage())}%</span>
+                </div>
+                <Progress value={getProgressPercentage()} className="h-3" />
+              </div>
+
+              {/* Roadmap Steps */}
+              <div className="space-y-4">
+                {roadmapSteps.map((step, index) => (
+                  <div
+                    key={step.id}
+                    className={`border rounded-lg transition-all duration-300 hover:shadow-md ${
+                      completedSteps.has(step.id) ? 'bg-green-50 border-green-200' : 'bg-white border-slate-200'
+                    }`}
+                  >
+                    <div className="p-4">
+                      <div className="flex items-start space-x-4">
+                        {/* Step Number & Checkbox */}
+                        <div className="flex flex-col items-center space-y-2">
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                            completedSteps.has(step.id) 
+                              ? 'bg-green-500 text-white' 
+                              : 'bg-navy-100 text-navy-600'
+                          }`}>
+                            {completedSteps.has(step.id) ? '✓' : index + 1}
+                          </div>
+                          <button
+                            onClick={() => toggleStepCompletion(step.id)}
+                            className="p-1 hover:bg-slate-100 rounded transition-colors"
+                          >
+                            {completedSteps.has(step.id) ? (
+                              <CheckCircle className="w-5 h-5 text-green-500" />
+                            ) : (
+                              <Circle className="w-5 h-5 text-slate-400 hover:text-slate-600" />
+                            )}
+                          </button>
+                        </div>
+
+                        {/* Step Content */}
+                        <div className="flex-1">
+                          <div className="flex items-start justify-between mb-2">
+                            <div>
+                              <h3 className={`font-semibold text-lg ${
+                                completedSteps.has(step.id) ? 'text-green-700' : 'text-navy-800'
+                              }`}>
+                                {step.title}
+                              </h3>
+                              <p className="text-slate-600 mt-1">{step.description}</p>
+                            </div>
+                            <button
+                              onClick={() => toggleStepExpansion(step.id)}
+                              className="ml-4 p-2 hover:bg-slate-100 rounded-full transition-colors"
+                            >
+                              {expandedSteps.has(step.id) ? (
+                                <ChevronUp className="w-4 h-4 text-slate-500" />
+                              ) : (
+                                <ChevronDown className="w-4 h-4 text-slate-500" />
+                              )}
+                            </button>
+                          </div>
+
+                          <div className="flex items-center space-x-4 mb-3">
+                            <Badge className={getPriorityColor(step.priority)}>
+                              {step.priority} Priority
+                            </Badge>
+                            <div className="flex items-center text-sm text-slate-500">
+                              <Clock className="w-4 h-4 mr-1" />
+                              {step.duration}
+                            </div>
+                          </div>
+
+                          {/* Expanded Content */}
+                          {expandedSteps.has(step.id) && (
+                            <div className="mt-4 p-4 bg-slate-50 rounded-lg animate-fade-in">
+                              <p className="text-slate-700 mb-4">{step.details}</p>
+                              
+                              <div>
+                                <h4 className="font-medium text-navy-700 mb-2">Resources & Tools:</h4>
+                                <ul className="space-y-1">
+                                  {step.resources.map((resource, resourceIndex) => (
+                                    <li key={resourceIndex} className="flex items-center text-sm text-slate-600">
+                                      <div className="w-1.5 h-1.5 bg-autumn-400 rounded-full mr-2"></div>
+                                      {resource}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Completion Celebration */}
+              {completedSteps.size === roadmapSteps.length && (
+                <div className="mt-6 p-6 bg-gradient-to-r from-green-100 to-blue-100 rounded-lg text-center animate-scale-in">
+                  <div className="text-4xl mb-2">🎉</div>
+                  <h3 className="text-xl font-bold text-green-700 mb-2">Congratulations!</h3>
+                  <p className="text-green-600">You've completed your personalized roadmap. You're ready for your pharmaceutical career!</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
