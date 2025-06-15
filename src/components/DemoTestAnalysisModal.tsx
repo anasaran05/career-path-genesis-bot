@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Dialog,
@@ -125,6 +124,11 @@ export default function DemoTestAnalysisModal({
         className="max-w-lg rounded-2xl bg-gradient-to-br from-navy-900 to-autumn-50 shadow-2xl px-0 overflow-hidden w-full animate-fade-in"
         style={{ minHeight: 390 }}
       >
+        {/* Accessibility (Visually Hidden Title and Description) */}
+        <DialogTitle className="sr-only">Demo Career Test Modal</DialogTitle>
+        <DialogDescription className="sr-only">
+          A fun demo to preview AI-powered career analysis.
+        </DialogDescription>
         <div className="relative w-full pt-6 pb-1 px-2">
           {/* Progress Bar */}
           <Progress value={progress} className="h-2 mb-5 bg-navy-100" />
@@ -152,7 +156,7 @@ export default function DemoTestAnalysisModal({
                   Experience a quick, interactive career analysis powered by AI. No login required!
                 </p>
               </div>
-              <div className="flex w-full gap-3 justify-center mt-6">
+              <div className="flex w-full gap-3 justify-center mt-6 flex-col sm:flex-row">
                 <Button
                   onClick={handleStart}
                   className="bg-gradient-to-r from-autumn-500 to-navy-700 text-white px-8 py-3 rounded-xl font-semibold text-lg hover:scale-105 hover:from-autumn-600 hover:to-navy-800 hover:shadow-lg transition-all duration-300"
@@ -162,7 +166,7 @@ export default function DemoTestAnalysisModal({
                 <Button
                   onClick={handleSkipDemo}
                   variant="outline"
-                  className="border border-navy-200 text-navy-700 px-6 py-3 rounded-xl hover:bg-navy-100 transition-colors"
+                  className="border border-navy-200 text-navy-700 px-6 py-3 rounded-xl hover:bg-navy-100 transition-colors mt-2 sm:mt-0"
                 >
                   Skip Demo
                 </Button>
@@ -178,17 +182,19 @@ export default function DemoTestAnalysisModal({
           {/* QUESTIONS */}
           {!isIntro && !isLoadingStep && !isResultStep && step >= 1 && step <= questionsLength && (
             <div className="animate-fade-in">
-              <div className="flex flex-col gap-4 items-center">
-                <div className="w-full flex justify-center">
+              <div className="flex flex-col gap-6 items-center w-full">
+                <div className="w-full flex justify-center mb-2">
                   {demoQuestions[step - 1].icon}
                 </div>
-                <h3 className="text-xl font-bold text-navy-700 mb-2">{demoQuestions[step - 1].question}</h3>
-                <div className="flex flex-col gap-3 w-full mt-2">
+                <h3 className="text-lg sm:text-xl font-bold text-navy-700 mb-1 break-words max-w-full">
+                  {demoQuestions[step - 1].question}
+                </h3>
+                <div className="flex flex-col gap-3 w-full max-w-sm mx-auto mt-2">
                   {demoQuestions[step - 1].options.map((option, idx) => (
                     <Button
                       key={option}
                       onClick={() => handleAnswer(idx)}
-                      className="w-full bg-gradient-to-r from-navy-700 to-autumn-500 text-white px-8 py-3 rounded-xl font-semibold hover:scale-105 hover:from-navy-800 hover:to-autumn-600 hover:shadow-lg transition-all duration-150"
+                      className="w-full bg-gradient-to-r from-navy-700 to-autumn-500 text-white px-8 py-3 rounded-xl font-semibold hover:scale-105 hover:from-navy-800 hover:to-autumn-600 hover:shadow-lg transition-all duration-150 break-words"
                     >
                       {option}
                     </Button>
@@ -271,3 +277,6 @@ export default function DemoTestAnalysisModal({
     </Dialog>
   );
 }
+
+// Note: This component is over 270 lines long.
+// Consider refactoring DemoTestAnalysisModal into smaller focused components for maintainability.
