@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Brain, Loader2, Target, BookOpen, Wrench, MessageSquare, Microscope, RefreshCw } from "lucide-react";
+import { Brain, Loader2, Target, BookOpen, Wrench, MessageSquare, Microscope, RefreshCw, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -36,21 +36,26 @@ const CareerAnalysis = () => {
   const [goal, setGoal] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
+  const [userProfile, setUserProfile] = useState<{degree: string, skills: string, goal: string} | null>(null);
   const { toast } = useToast();
 
   const handleAnalyze = async () => {
     if (!degree.trim()) {
       toast({
         title: "Degree Required",
-        description: "Please enter your degree to get career analysis",
+        description: "Please enter your degree to get personalized career analysis",
         variant: "destructive"
       });
       return;
     }
 
     setIsAnalyzing(true);
+    setAnalysisResult(null);
+    setUserProfile(null);
     
     try {
+      console.log('Analyzing profile:', { degree: degree.trim(), skills: skills.trim(), goal: goal.trim() });
+
       const { data, error } = await supabase.functions.invoke('analysis', {
         body: {
           degree: degree.trim(),
@@ -59,10 +64,20 @@ const CareerAnalysis = () => {
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase function error:', error);
+        throw error;
+      }
+
+      console.log('Analysis response:', data);
 
       if (data.success) {
         setAnalysisResult(data.analysis);
+        setUserProfile(data.userProfile);
+        toast({
+          title: "✅ Analysis Complete",
+          description: `Personalized career analysis generated for ${degree.trim()}`,
+        });
       } else {
         throw new Error(data.error || 'Analysis failed');
       }
@@ -70,7 +85,7 @@ const CareerAnalysis = () => {
       console.error('Analysis error:', error);
       toast({
         title: "❌ Analysis Failed",
-        description: "Gemini couldn't generate a result. Please try again.",
+        description: "Could not generate personalized analysis. Please check your inputs and try again.",
         variant: "destructive"
       });
     } finally {
@@ -83,6 +98,7 @@ const CareerAnalysis = () => {
     setSkills('');
     setGoal('');
     setAnalysisResult(null);
+    setUserProfile(null);
   };
 
   const getSkillIcon = (category: string) => {
@@ -173,7 +189,7 @@ const CareerAnalysis = () => {
               {isAnalyzing ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  🔍 Analyzing Career Path...
+                  🔍 Analyzing Your Career Path...
                 </>
               ) : (
                 '🔍 Analyze Career Path'
@@ -181,6 +197,23 @@ const CareerAnalysis = () => {
             </Button>
           </CardContent>
         </Card>
+
+        {/* User Profile Display */}
+        {userProfile && (
+          <Card className="bg-blue-50 border-blue-200 mb-6">
+            <CardContent className="pt-4">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertCircle className="w-4 h-4 text-blue-600" />
+                <span className="text-sm font-medium text-blue-800">Analysis Based On:</span>
+              </div>
+              <div className="text-sm text-blue-700">
+                <strong>Degree:</strong> {userProfile.degree} | 
+                <strong> Skills:</strong> {userProfile.skills || 'Not specified'} | 
+                <strong> Goal:</strong> {userProfile.goal || 'Open to opportunities'}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Analysis Results */}
         {analysisResult && (
