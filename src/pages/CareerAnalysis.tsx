@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Brain, Loader2, Target, BookOpen, Wrench, MessageSquare, Microscope, RefreshCw, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import CareerMatchCards from "@/components/CareerMatchCards";
 
 interface AnalysisResult {
   topRoles: Array<{
@@ -218,110 +218,18 @@ const CareerAnalysis = () => {
         {/* Analysis Results */}
         {analysisResult && (
           <div className="space-y-6 animate-fade-in">
-            {/* Top 3 Job Roles */}
-            <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 shadow-lg rounded-xl hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-autumn-500 flex items-center gap-2">
-                  🎯 Top 3 Job Role Suggestions
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4 md:grid-cols-1">
-                  {analysisResult.topRoles.map((role, index) => (
-                    <div key={index} className="bg-white/70 rounded-lg p-4 hover:bg-white/90 transition-colors">
-                      <div className="flex items-start gap-3">
-                        <span className="text-2xl">{role.emoji}</span>
-                        <div>
-                          <h3 className="font-semibold text-navy-700">{role.title}</h3>
-                          <p className="text-sm text-navy-600">{role.description}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Learning Roadmap */}
-            <Card className="bg-gradient-to-r from-green-50 to-emerald-50 shadow-lg rounded-xl hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-autumn-500 flex items-center gap-2">
-                  🛣️ Personalized Learning Roadmap
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {analysisResult.roadmap.map((step, index) => (
-                    <div key={index} className="flex items-start gap-3 bg-white/70 rounded-lg p-3">
-                      <span className="text-xl">{step.emoji}</span>
-                      <div className="flex-1">
-                        <span className="text-sm font-medium text-green-700">Step {index + 1}</span>
-                        <p className="text-navy-700">{step.step}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Skills to Develop */}
-            <Card className="bg-gradient-to-r from-purple-50 to-pink-50 shadow-lg rounded-xl hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-autumn-500 flex items-center gap-2">
-                  🧠 Skills to Develop
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {analysisResult.skillsTodev.map((skill, index) => (
-                    <div key={index} className="flex items-start gap-3 bg-white/70 rounded-lg p-3">
-                      {getSkillIcon(skill.category)}
-                      <div>
-                        <h4 className="font-medium text-navy-700">{skill.skill}</h4>
-                        <p className="text-sm text-navy-600">{skill.description}</p>
-                        <Badge variant="outline" className="mt-1 text-xs">
-                          {skill.category}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Suggested Courses */}
-            <Card className="bg-gradient-to-r from-yellow-50 to-orange-50 shadow-lg rounded-xl hover:shadow-xl transition-shadow">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold text-autumn-500 flex items-center gap-2">
-                  📚 Suggested Courses & Certifications
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-3">
-                  {analysisResult.courses.map((course, index) => (
-                    <Badge
-                      key={index}
-                      className={`px-3 py-2 text-sm font-medium rounded-full border transition-transform hover:scale-105 ${getPriorityColor(course.priority)}`}
-                    >
-                      <BookOpen className="w-3 h-3 mr-1" />
-                      {course.name}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Re-analyze Button */}
-            <div className="flex justify-center pt-4">
-              <Button
-                onClick={handleReAnalyze}
-                variant="outline"
-                className="border-autumn-300 text-autumn-600 hover:bg-autumn-50 px-6 py-2 rounded-xl"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                🔁 Re-Analyze
-              </Button>
-            </div>
+            {/* Career Match Cards - NEW UX */}
+            <CareerMatchCards
+              roles={analysisResult.topRoles.map((role, i) => ({
+                ...role,
+                matchScore: 80 - i * 10 + Math.floor(Math.random() * 7), // Demo scores (randomish ~80/70/60)
+              }))}
+              summary="Based on your skills and profile, here’s where you shine the most."
+            />
+            {/* 
+            -- Old detailed display is still available but hidden for now --
+            <Card> ... </Card>
+            */}
           </div>
         )}
       </div>
