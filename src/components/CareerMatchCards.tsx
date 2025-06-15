@@ -26,7 +26,7 @@ interface CareerMatchCardsProps {
 
 const CareerMatchCards: React.FC<CareerMatchCardsProps> = ({ roles, summary }) => {
   return (
-    <section className={`w-full py-12 px-2 md:px-0 max-w-4xl mx-auto bg-gradient-to-br from-slate-50 to-blue-50 rounded-2xl shadow-none ${FONT}`}>
+    <section className={`w-full py-12 px-2 md:px-0 max-w-4xl mx-auto bg-white rounded-2xl shadow-none ${FONT}`}>
       <div className="mb-10 px-2 text-center">
         <h2
           className="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-navy-600 to-autumn-500"
@@ -45,7 +45,7 @@ const CareerMatchCards: React.FC<CareerMatchCardsProps> = ({ roles, summary }) =
               bg-white/90
               rounded-2xl 
               shadow-xl 
-              border border-slate-100
+              border border-black
               transition-transform
               hover:scale-105
               hover:shadow-2xl
