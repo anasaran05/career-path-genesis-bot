@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +32,7 @@ export const AnalysisResultCards: React.FC<Props> = ({
   roadmap,
   courses,
   skillGaps,
-  onReanalyze,
+  // onReanalyze, // No longer used
 }) => {
   // Helper for icons
   const jobRoleIcon = (title: string) => {
@@ -136,6 +135,7 @@ export const AnalysisResultCards: React.FC<Props> = ({
       )}
 
       {/* === RE-ANALYZE BUTTON === */}
+      {/*
       <div className="flex justify-end">
         <Button
           onClick={onReanalyze}
@@ -145,6 +145,7 @@ export const AnalysisResultCards: React.FC<Props> = ({
           Re-analyze
         </Button>
       </div>
+      */}
     </div>
   );
 };
