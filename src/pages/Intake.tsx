@@ -64,17 +64,17 @@ const Intake = () => {
   const totalSteps = 4;
   const progress = (currentStep / totalSteps) * 100;
 
-  // New Gemini-based analysis function
+  // Updated Gemini-based analysis function
   const handleAnalyseClick = async (profileData) => {
     setIsAnalyzing(true);
     
     try {
-      // Get current user
+      // Get logged-in user
       const { data: { user }, error: authError } = await supabase.auth.getUser();
       if (authError || !user) {
         toast({
           title: "Authentication Error",
-          description: "User not logged in",
+          description: "You must be logged in.",
           variant: "destructive",
         });
         return;
@@ -85,15 +85,19 @@ const Intake = () => {
       const skills = `Technical: ${profileData.technicalSkills} | Soft: ${profileData.softSkills} | Certifications: ${profileData.certifications}`;
       const goals = `Industry: ${profileData.preferredIndustry} | Goals: ${profileData.careerGoals} | Locations: ${profileData.jobLocations} | Salary: ${profileData.salaryExpectation}`;
 
-      const prompt = `You are a career coach. Analyse the following user profile:
+      // Build dynamic prompt
+      const prompt = `You are an expert career advisor.
+Analyze this profile and recommend suitable job roles, ideal career paths, and skill improvements:
+
 Degree: ${degree}
 Skills: ${skills}
 Career Goals: ${goals}
 Experience: ${profileData.internships}
 Projects: ${profileData.projects}
-Give a detailed career path, job roles, and skill gap recommendations.`;
 
-      // Send to Gemini
+Give detailed advice with next steps. Keep it human-friendly.`;
+
+      // Call Gemini API
       const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyD8nR33ljcGYsX3Cy9VOsuoZxHWLWHLEtw`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -103,7 +107,7 @@ Give a detailed career path, job roles, and skill gap recommendations.`;
       });
 
       const geminiJson = await geminiRes.json();
-      const result = geminiJson?.candidates?.[0]?.content?.parts?.[0]?.text || 'No analysis found.';
+      const analysis = geminiJson?.candidates?.[0]?.content?.parts?.[0]?.text || 'No result from Gemini.';
 
       // Save to Supabase
       const { error: insertError } = await supabase.from('career_analysis').insert([{
@@ -111,27 +115,27 @@ Give a detailed career path, job roles, and skill gap recommendations.`;
         degree: degree,
         skills: skills,
         goals: goals,
-        analysis_result: result
+        analysis_result: analysis
       }]);
 
       if (insertError) {
-        console.error('Insert error:', insertError);
+        console.error('DB Error:', insertError);
         toast({
           title: "Save Error",
-          description: "Failed to save analysis",
+          description: "Failed to save analysis.",
           variant: "destructive",
         });
       } else {
         toast({
           title: "Analysis Complete",
-          description: "Career analysis complete! Check your dashboard",
+          description: "AI Analysis complete! Go check your dashboard 🚀",
         });
         
         // Navigate to analysis page with results
         navigate('/analysis', { 
           state: { 
             studentData: profileData,
-            analysisResult: { analysis: result }
+            analysisResult: { analysis: analysis }
           } 
         });
       }
@@ -247,7 +251,7 @@ Give a detailed career path, job roles, and skill gap recommendations.`;
       setCurrentStep(currentStep + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Use the new Gemini-based analysis
+      // Use the updated Gemini-based analysis
       handleAnalyseClick(formData);
     }
   };
