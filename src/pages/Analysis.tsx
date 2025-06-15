@@ -8,21 +8,20 @@ import { ArrowLeft, Brain, TrendingUp, Target, Star, ChevronRight, Loader2, Spar
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
 const Analysis = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [geminiResponse, setGeminiResponse] = useState('');
   const [geminiResult, setGeminiResult] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPhase, setCurrentPhase] = useState('Loading your analysis...');
-  
   const studentData = location.state?.studentData || {};
   const analysisResult = location.state?.analysisResult;
-
   useEffect(() => {
     const fetchAnalysis = async () => {
       try {
@@ -339,5 +338,4 @@ const Analysis = () => {
       </div>
     </div>;
 };
-
 export default Analysis;
