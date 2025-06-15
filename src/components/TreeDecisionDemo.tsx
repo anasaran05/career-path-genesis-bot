@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Brain, ChevronRight, ChevronDown, LucideIcon, Circle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -121,7 +122,7 @@ function TreeNodeDisplay({
         <span className="font-bold text-2xl text-navy-900">{node.label}</span>
       </div>
       <div className="w-full max-w-md bg-gradient-to-br from-navy-800 to-autumn-100 p-6 rounded-2xl flex flex-col items-center shadow-2xl border border-navy-200 animate-scale-in">
-        <span className="text-xl sm:text-2xl font-semibold text-white text-center mb-2 [text-shadow:0_2px_4px_rgba(0,0,0,0.4)]">
+        <span className="text-xl sm:text-2xl font-semibold text-autumn-700 text-center mb-2">
           {node.suggestion}
         </span>
         <Button
@@ -159,13 +160,13 @@ export const TreeDecisionDemo = () => {
       {/* Progress Bar */}
       <div className="w-full max-w-2xl pt-7 pb-2 px-2">
         <Progress value={progressValue} className="h-2 bg-navy-100" />
-        <div className="text-right text-xs text-slate-500 pr-1">{Math.round(progressValue)}% completed</div>
+        <div className="text-right text-xs text-slate-500 pr-1">{progressValue}% completed</div>
       </div>
       {/* Card */}
       <div className="bg-white bg-opacity-90 rounded-3xl max-w-2xl w-full shadow-2xl px-8 py-12 sm:px-10 flex flex-col gap-7 animate-fade-in">
         <TreeNodeDisplay node={currentNode} onSelect={handleSelect} />
       </div>
-      {path.length > 1 && !currentNode.suggestion && (
+      {path.length > 1 && (
         <Button
           onClick={handleBack}
           variant="outline"
