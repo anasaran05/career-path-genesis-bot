@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   Card, CardHeader, CardTitle, CardContent, CardDescription
@@ -72,12 +71,17 @@ const UpdateProfile = () => {
 
   const onSubmit = async (data: any) => {
     setSaving(true);
-    // Save profile info to public.profiles and student_profiles
     const { full_name, bio, location, dob, skills, profile_url, profile_image } = data;
     let errMsg = "";
     try {
-      // Update profiles table with profile fields
-      await supabase
+      if (!user?.id) {
+        throw new Error('User not logged in or missing ID (user.id not found)');
+      }
+      // Verbose: Log sent data
+      console.log("[Profile Save] Submitting data:", data);
+
+      // -- Update profiles table
+      const { error: profileError, data: profileUpdate } = await supabase
         .from("profiles")
         .update({
           full_name,
@@ -88,22 +92,36 @@ const UpdateProfile = () => {
           profile_image,
           last_profile_update: new Date().toISOString(),
         })
-        .eq("id", user.id);
+        .eq("id", user.id)
+        .select();
 
-      // Update skills in student_profiles table
-      await supabase
+      if (profileError) {
+        console.error("[Profile Save] Error updating profiles:", profileError);
+        throw new Error(profileError.message);
+      }
+      console.log("[Profile Save] Profiles update response:", profileUpdate);
+
+      // -- Update skills in student_profiles table
+      const { error: skillError, data: skillUpdate } = await supabase
         .from("student_profiles")
         .update({
           skills,
         })
-        .eq("id", user.id);
+        .eq("id", user.id)
+        .select();
+
+      if (skillError) {
+        console.error("[Profile Save] Error updating skills:", skillError);
+        throw new Error(skillError.message);
+      }
+      console.log("[Profile Save] Skills update response:", skillUpdate);
 
       toast({
         title: "Profile updated! Your career journey just got clearer 🚀",
         description: "You're not just updating data. You're upgrading your future 💼"
       });
     } catch (err: any) {
-      errMsg = err.message || "Unknown Error";
+      errMsg = err.message || JSON.stringify(err);
       toast({ title: "Failed to save profile", description: errMsg, variant: "destructive" });
     }
     setSaving(false);
@@ -214,4 +232,3 @@ function DetailsSection({ title, children }: { title: string, children: React.Re
 }
 
 export default UpdateProfile;
-
