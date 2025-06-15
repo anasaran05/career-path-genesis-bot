@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { Activity, Question } from "lucide-react";
+import { Activity, HelpCircle } from "lucide-react";
 
 type QuestionType = {
   id: number;
@@ -25,25 +25,25 @@ const demoQuestions: QuestionType[] = [
     id: 1,
     question: "Which skill excites you most?",
     options: ["Pharmacovigilance", "Research", "Clinical Trials"],
-    icon: <Question className="text-autumn-500 w-6 h-6" />,
+    icon: <HelpCircle className="text-autumn-500 w-6 h-6" />,
   },
   {
     id: 2,
     question: "Preferred work environment?",
     options: ["Corporate", "Hospital", "Startup"],
-    icon: <Question className="text-autumn-500 w-6 h-6" />,
+    icon: <HelpCircle className="text-autumn-500 w-6 h-6" />,
   },
   {
     id: 3,
     question: "Your biggest career goal?",
     options: ["Top MNC", "Leadership Role", "Innovation"],
-    icon: <Question className="text-autumn-500 w-6 h-6" />,
+    icon: <HelpCircle className="text-autumn-500 w-6 h-6" />,
   },
   {
     id: 4,
     question: "Which soft skill defines you best?",
     options: ["Teamwork", "Resilience", "Communication"],
-    icon: <Question className="text-autumn-500 w-6 h-6" />,
+    icon: <HelpCircle className="text-autumn-500 w-6 h-6" />,
   }
 ];
 
