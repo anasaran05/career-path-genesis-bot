@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, User, BookOpen, Award, Target, Brain, ChevronRight } from "lucide-react";
+import { ArrowLeft, User, BookOpen, Award, Target, Brain, ChevronRight, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { FormData } from "@/types/intake";
+import { performGeminiAnalysis } from "@/utils/geminiAnalysis";
+import { PersonalInfoStep } from "@/components/intake/PersonalInfoStep";
+import { EducationStep } from "@/components/intake/EducationStep";
+import { SkillsExperienceStep } from "@/components/intake/SkillsExperienceStep";
+import { CareerGoalsStep } from "@/components/intake/CareerGoalsStep";
 
 const Intake = () => {
   const { user, userProfile } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   // Redirect if not logged in or is recruiter
   useEffect(() => {
@@ -27,7 +31,8 @@ const Intake = () => {
   }, [user, userProfile, navigate]);
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState({
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [formData, setFormData] = useState<FormData>({
     // Personal Info
     fullName: userProfile?.full_name || '',
     email: userProfile?.email || '',
@@ -60,12 +65,47 @@ const Intake = () => {
   const totalSteps = 4;
   const progress = (currentStep / totalSteps) * 100;
 
+  const handleAnalyseClick = async (profileData: FormData) => {
+    setIsAnalyzing(true);
+    
+    try {
+      const analysis = await performGeminiAnalysis(profileData);
+      
+      // Debug logging as requested
+      console.log("Gemini Response:", analysis);
+      console.log("Result:", analysis?.result);
+      
+      toast({
+        title: "Analysis Complete",
+        description: "AI Analysis complete! Go check your dashboard 🚀",
+      });
+      
+      // Navigate to analysis page with results
+      navigate('/analysis', { 
+        state: { 
+          studentData: profileData,
+          analysisResult: { analysis: analysis }
+        } 
+      });
+
+    } catch (error) {
+      console.error('Analysis error:', error);
+      toast({
+        title: "Analysis Failed",
+        description: "There was an error analyzing your profile. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const handleNext = () => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      navigate('/analysis', { state: { studentData: formData } });
+      handleAnalyseClick(formData);
     }
   };
 
@@ -166,16 +206,22 @@ const Intake = () => {
                 <Button 
                   variant="outline" 
                   onClick={handlePrevious}
-                  disabled={currentStep === 1}
+                  disabled={currentStep === 1 || isAnalyzing}
                   className="border-2 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-700 px-6 py-2 rounded-xl transition-all duration-300"
                 >
                   Previous
                 </Button>
                 <Button 
                   onClick={handleNext}
-                  className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                  disabled={isAnalyzing}
+                  className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 py-2 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {currentStep === totalSteps ? (
+                  {isAnalyzing ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Analyzing Profile...
+                    </>
+                  ) : currentStep === totalSteps ? (
                     <>
                       Analyze My Profile 
                       <Brain className="w-4 h-4 ml-2" />
@@ -204,331 +250,5 @@ const Intake = () => {
     </div>
   );
 };
-
-const PersonalInfoStep = ({ formData, updateFormData }: any) => (
-  <div className="space-y-6 animate-fade-in">
-    <div className="text-center mb-8">
-      <div className="w-16 h-16 bg-gradient-to-r from-navy-500 to-autumn-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-        <User className="w-8 h-8 text-white" />
-      </div>
-      <h2 className="text-2xl font-bold text-navy-800 mb-2">Personal Information</h2>
-      <p className="text-slate-600">👤 Let's start with your basic details</p>
-    </div>
-    
-    <div className="grid md:grid-cols-2 gap-6">
-      <div className="space-y-2">
-        <Label htmlFor="fullName" className="text-navy-700 font-medium">Full Name *</Label>
-        <Input 
-          id="fullName"
-          value={formData.fullName}
-          onChange={(e) => updateFormData('fullName', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="Enter your full name"
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="email" className="text-navy-700 font-medium">Email Address *</Label>
-        <Input 
-          id="email"
-          type="email"
-          value={formData.email}
-          onChange={(e) => updateFormData('email', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="your.email@example.com"
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="phone" className="text-navy-700 font-medium">Phone Number</Label>
-        <Input 
-          id="phone"
-          value={formData.phone}
-          onChange={(e) => updateFormData('phone', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="+91 9876543210"
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="location" className="text-navy-700 font-medium">Current Location *</Label>
-        <Input 
-          id="location"
-          value={formData.location}
-          onChange={(e) => updateFormData('location', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="City, State"
-        />
-      </div>
-    </div>
-  </div>
-);
-
-const EducationStep = ({ formData, updateFormData }: any) => (
-  <div className="space-y-8 animate-fade-in">
-    <div className="text-center mb-8">
-      <div className="w-16 h-16 bg-gradient-to-r from-navy-500 to-autumn-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-        <BookOpen className="w-8 h-8 text-white" />
-      </div>
-      <h2 className="text-2xl font-bold text-navy-800 mb-2">Education Background</h2>
-      <p className="text-slate-600">🎓 Tell me about your academic journey in pharmacy</p>
-    </div>
-    
-    <div className="bg-slate-50 rounded-xl p-6 border-l-4 border-navy-400">
-      <h3 className="text-lg font-semibold text-navy-700 mb-4">Undergraduate Degree (Optional)</h3>
-      <div className="grid md:grid-cols-3 gap-4">
-        <div className="space-y-2">
-          <Label className="text-navy-700 font-medium">Degree</Label>
-          <Select value={formData.ugDegree} onValueChange={(value) => updateFormData('ugDegree', value)}>
-            <SelectTrigger className="bg-white border-slate-200 text-navy-800 focus:border-navy-400 rounded-lg">
-              <SelectValue placeholder="Select degree" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border-slate-200 rounded-lg">
-              <SelectItem value="bpharm">B.Pharm</SelectItem>
-              <SelectItem value="dpharm">D.Pharm</SelectItem>
-              <SelectItem value="bsc-nursing">B.Sc Nursing</SelectItem>
-              <SelectItem value="gnm">GNM (Nursing)</SelectItem>
-              <SelectItem value="bpt">BPT (Physiotherapy)</SelectItem>
-              <SelectItem value="bmlt">BMLT (Medical Lab Technology)</SelectItem>
-              <SelectItem value="boptom">B.Optom (Optometry)</SelectItem>
-              <SelectItem value="btech">B.Tech</SelectItem>
-              <SelectItem value="be">B.E.</SelectItem>
-              <SelectItem value="bsc">B.Sc</SelectItem>
-              <SelectItem value="bcom">B.Com</SelectItem>
-              <SelectItem value="ba">B.A.</SelectItem>
-              <SelectItem value="bba">BBA</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label className="text-navy-700 font-medium">Specialization</Label>
-          <Input 
-            value={formData.ugSpecialization}
-            onChange={(e) => updateFormData('ugSpecialization', e.target.value)}
-            className="bg-white border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 rounded-lg"
-            placeholder="e.g., Clinical Pharmacy"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-navy-700 font-medium">Year of Completion</Label>
-          <Select value={formData.ugYear} onValueChange={(value) => updateFormData('ugYear', value)}>
-            <SelectTrigger className="bg-white border-slate-200 text-navy-800 focus:border-navy-400 rounded-lg">
-              <SelectValue placeholder="Year" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border-slate-200 rounded-lg">
-              {Array.from({length: 36}, (_, i) => 2025 - i).map(year => (
-                <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-    </div>
-
-    <div className="bg-autumn-50 rounded-xl p-6 border-l-4 border-autumn-500">
-      <h3 className="text-lg font-semibold text-navy-700 mb-4">Postgraduate Degree</h3>
-      <div className="grid md:grid-cols-3 gap-4">
-        <div className="space-y-2">
-          <Label className="text-navy-700 font-medium">Degree</Label>
-          <Select value={formData.pgDegree} onValueChange={(value) => updateFormData('pgDegree', value)}>
-            <SelectTrigger className="bg-white border-slate-200 text-navy-800 focus:border-navy-400 rounded-lg">
-              <SelectValue placeholder="Select degree" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border-slate-200 rounded-lg">
-              <SelectItem value="pharm-d">Pharm.D</SelectItem>
-              <SelectItem value="mpharm">M.Pharm</SelectItem>
-              <SelectItem value="msc-nursing">M.Sc Nursing</SelectItem>
-              <SelectItem value="mpt">MPT (Physiotherapy)</SelectItem>
-              <SelectItem value="mtech">M.Tech</SelectItem>
-              <SelectItem value="me">M.E.</SelectItem>
-              <SelectItem value="msc">M.Sc</SelectItem>
-              <SelectItem value="mcom">M.Com</SelectItem>
-              <SelectItem value="ma">M.A.</SelectItem>
-              <SelectItem value="mba">MBA</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label className="text-navy-700 font-medium">Specialization</Label>
-          <Input 
-            value={formData.pgSpecialization}
-            onChange={(e) => updateFormData('pgSpecialization', e.target.value)}
-            className="bg-white border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 rounded-lg"
-            placeholder="e.g., Clinical Research, Pharmacology"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-navy-700 font-medium">Year of Completion</Label>
-          <Select value={formData.pgYear} onValueChange={(value) => updateFormData('pgYear', value)}>
-            <SelectTrigger className="bg-white border-slate-200 text-navy-800 focus:border-navy-400 rounded-lg">
-              <SelectValue placeholder="Year" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border-slate-200 rounded-lg">
-              {Array.from({length: 36}, (_, i) => 2025 - i).map(year => (
-                <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
-  <div className="space-y-6 animate-fade-in">
-    <div className="text-center mb-8">
-      <div className="w-16 h-16 bg-gradient-to-r from-navy-500 to-autumn-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-        <Award className="w-8 h-8 text-white" />
-      </div>
-      <h2 className="text-2xl font-bold text-navy-800 mb-2">Skills & Experience</h2>
-      <p className="text-slate-600">💡 Share your pharmaceutical skills, projects, and experiences</p>
-    </div>
-    
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <Label className="text-navy-700 font-medium">Technical Skills (Optional)</Label>
-        <Textarea 
-          value={formData.technicalSkills}
-          onChange={(e) => updateFormData('technicalSkills', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="e.g., Clinical data analysis, Pharmaceutical software, Laboratory techniques, Patient care protocols, Drug information systems..."
-          rows={3}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label className="text-navy-700 font-medium">Soft Skills (Optional)</Label>
-        <Textarea 
-          value={formData.softSkills}
-          onChange={(e) => updateFormData('softSkills', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="e.g., Patient communication, Team collaboration, Problem-solving, Attention to detail, Leadership..."
-          rows={2}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label className="text-navy-700 font-medium">Internships & Work Experience (Optional)</Label>
-        <Textarea 
-          value={formData.internships}
-          onChange={(e) => updateFormData('internships', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="Describe your pharmacy internships, hospital rotations, clinical experience, or part-time pharmaceutical work..."
-          rows={3}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label className="text-navy-700 font-medium">Projects (Optional)</Label>
-        <Textarea 
-          value={formData.projects}
-          onChange={(e) => updateFormData('projects', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="Describe your pharmaceutical research projects, case studies, drug analysis, or clinical projects..."
-          rows={3}
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label className="text-navy-700 font-medium">Certifications (Optional)</Label>
-        <Textarea 
-          value={formData.certifications}
-          onChange={(e) => updateFormData('certifications', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="List any pharmaceutical certifications, GCP training, drug safety courses, or specialized learning..."
-          rows={2}
-        />
-      </div>
-    </div>
-  </div>
-);
-
-const CareerGoalsStep = ({ formData, updateFormData }: any) => (
-  <div className="space-y-6 animate-fade-in">
-    <div className="text-center mb-8">
-      <div className="w-16 h-16 bg-gradient-to-r from-navy-500 to-autumn-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-        <Target className="w-8 h-8 text-white" />
-      </div>
-      <h2 className="text-2xl font-bold text-navy-800 mb-2">Career Goals & Preferences</h2>
-      <p className="text-slate-600">🎯 Help me understand your pharmaceutical career aspirations</p>
-    </div>
-    
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <Label className="text-navy-700 font-medium">Preferred Industry *</Label>
-        <Select value={formData.preferredIndustry} onValueChange={(value) => updateFormData('preferredIndustry', value)}>
-          <SelectTrigger className="bg-slate-50 border-slate-200 text-navy-800 focus:border-navy-400 focus:bg-white rounded-lg">
-            <SelectValue placeholder="Select your preferred pharmaceutical industry" />
-          </SelectTrigger>
-          <SelectContent className="bg-white border-slate-200 rounded-lg">
-            <SelectItem value="clinical-pharmacy">🏥 Clinical Pharmacy & Hospitals</SelectItem>
-            <SelectItem value="pharma-industry">🧪 Pharmaceutical Industry</SelectItem>
-            <SelectItem value="clinical-research">🔬 Clinical Research & CROs</SelectItem>
-            <SelectItem value="regulatory">📋 Regulatory Affairs</SelectItem>
-            <SelectItem value="pharma-tech">💻 Pharmaceutical Technology</SelectItem>
-            <SelectItem value="academic">🎓 Academia & Teaching</SelectItem>
-            <SelectItem value="medical-writing">📝 Medical Writing</SelectItem>
-            <SelectItem value="consulting">💼 Pharmaceutical Consulting</SelectItem>
-            <SelectItem value="international">🌍 International Opportunities</SelectItem>
-            <SelectItem value="entrepreneurship">🚀 Pharmaceutical Entrepreneurship</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="space-y-2">
-        <Label className="text-navy-700 font-medium">Career Goals & Aspirations *</Label>
-        <Textarea 
-          value={formData.careerGoals}
-          onChange={(e) => updateFormData('careerGoals', e.target.value)}
-          className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="Describe your pharmaceutical career goals, dream job, or what you want to achieve in the next 2-5 years in the pharmacy field..."
-          rows={4}
-        />
-      </div>
-
-      <div className="grid md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <Label className="text-navy-700 font-medium">Preferred Job Locations</Label>
-          <Textarea 
-            value={formData.jobLocations}
-            onChange={(e) => updateFormData('jobLocations', e.target.value)}
-            className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-            placeholder="e.g., Bangalore, Mumbai, Remote, Hyderabad, International..."
-            rows={2}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-navy-700 font-medium">Expected Salary Range</Label>
-          <Select value={formData.salaryExpectation} onValueChange={(value) => updateFormData('salaryExpectation', value)}>
-            <SelectTrigger className="bg-slate-50 border-slate-200 text-navy-800 focus:border-navy-400 focus:bg-white rounded-lg">
-              <SelectValue placeholder="Select range" />
-            </SelectTrigger>
-            <SelectContent className="bg-white border-slate-200 rounded-lg">
-              <SelectItem value="3-5">₹3-5 LPA</SelectItem>
-              <SelectItem value="5-8">₹5-8 LPA</SelectItem>
-              <SelectItem value="8-12">₹8-12 LPA</SelectItem>
-              <SelectItem value="12-18">₹12-18 LPA</SelectItem>
-              <SelectItem value="18+">₹18+ LPA</SelectItem>
-              <SelectItem value="international">International Opportunities</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label className="text-navy-700 font-medium">Work Style Preference</Label>
-        <Select value={formData.workStyle} onValueChange={(value) => updateFormData('workStyle', value)}>
-          <SelectTrigger className="bg-slate-50 border-slate-200 text-navy-800 focus:border-navy-400 focus:bg-white rounded-lg">
-            <SelectValue placeholder="Select work style" />
-          </SelectTrigger>
-          <SelectContent className="bg-white border-slate-200 rounded-lg">
-            <SelectItem value="clinical-onsite">🏥 Clinical/Hospital - On-site</SelectItem>
-            <SelectItem value="hybrid">🏢 Hybrid (2-3 days office)</SelectItem>
-            <SelectItem value="remote">💻 Fully Remote</SelectItem>
-            <SelectItem value="flexible">⚡ Flexible</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
-  </div>
-);
 
 export default Intake;

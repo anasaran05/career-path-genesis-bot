@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Intake from "./pages/Intake";
 import Analysis from "./pages/Analysis";
+import CareerAnalysis from "./pages/CareerAnalysis";
 import JobScan from "./pages/JobScan";
 import JobApplication from "./pages/JobApplication";
 import JobDetails from "./pages/JobDetails";
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/auth" element={<Auth />} />
             <Route path="/intake" element={<Intake />} />
             <Route path="/analysis" element={<Analysis />} />
+            <Route path="/career-analysis" element={<CareerAnalysis />} />
             <Route path="/job-scan" element={<JobScan />} />
             <Route path="/job-application/:jobId" element={<JobApplication />} />
             <Route path="/job-details/:jobId" element={<JobDetails />} />
