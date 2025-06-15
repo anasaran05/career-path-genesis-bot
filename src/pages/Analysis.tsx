@@ -8,31 +8,35 @@ import { ArrowLeft, Brain, TrendingUp, Target, Star, ChevronRight, Loader2, Spar
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
 const Analysis = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [geminiResponse, setGeminiResponse] = useState('');
   const [geminiResult, setGeminiResult] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPhase, setCurrentPhase] = useState('Loading your analysis...');
-  
   const studentData = location.state?.studentData || {};
   const analysisResult = location.state?.analysisResult;
-
   useEffect(() => {
     const fetchAnalysis = async () => {
       try {
         // Get current user
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        const {
+          data: {
+            user
+          },
+          error: authError
+        } = await supabase.auth.getUser();
         if (authError || !user) {
           toast({
             title: "Authentication Error",
             description: "Please log in to view your analysis",
-            variant: "destructive",
+            variant: "destructive"
           });
           navigate('/auth');
           return;
@@ -47,20 +51,18 @@ const Analysis = () => {
         }
 
         // Otherwise, fetch the latest analysis from database
-        const { data: analysisData, error: fetchError } = await supabase
-          .from('career_analysis')
-          .select('analysis_result')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(1)
-          .single();
-
+        const {
+          data: analysisData,
+          error: fetchError
+        } = await supabase.from('career_analysis').select('analysis_result').eq('user_id', user.id).order('created_at', {
+          ascending: false
+        }).limit(1).single();
         if (fetchError) {
           console.error('Fetch error:', fetchError);
           toast({
             title: "Error",
             description: "Failed to load your analysis. Please try again.",
-            variant: "destructive",
+            variant: "destructive"
           });
           setGeminiResponse('No analysis found. Please complete the intake form first.');
           setGeminiResult('No analysis found. Please complete the intake form first.');
@@ -91,17 +93,15 @@ const Analysis = () => {
         return prev + 2;
       });
     }, 50);
-
     return () => clearInterval(progressInterval);
   }, [analysisResult, navigate, toast]);
 
   // Function to parse and structure the Gemini response
-  const parseGeminiResponse = (response) => {
+  const parseGeminiResponse = response => {
     if (!response) return null;
 
     // Split response into sections
     const sections = response.split('\n\n').filter(section => section.trim());
-    
     const structuredData = {
       summary: '',
       careerRecommendations: [],
@@ -109,10 +109,8 @@ const Analysis = () => {
       nextSteps: [],
       industryInsights: []
     };
-
     sections.forEach(section => {
       const lowerSection = section.toLowerCase();
-      
       if (lowerSection.includes('career') && lowerSection.includes('recommend')) {
         structuredData.careerRecommendations.push(section);
       } else if (lowerSection.includes('skill') || lowerSection.includes('improve')) {
@@ -125,15 +123,11 @@ const Analysis = () => {
         structuredData.summary = section;
       }
     });
-
     return structuredData;
   };
-
   const structuredAnalysis = parseGeminiResponse(geminiResult);
-
   if (isAnalyzing || isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+    return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <Card className="bg-white border-slate-200 shadow-2xl max-w-md w-full mx-4 animate-scale-in">
           <CardContent className="p-8 text-center">
             <div className="mb-6">
@@ -154,12 +148,9 @@ const Analysis = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -193,9 +184,7 @@ const Analysis = () => {
             <p className="text-xl text-slate-600 mb-2">
               Welcome, {studentData.fullName || 'Future Professional'}!
             </p>
-            <p className="text-lg text-slate-600">
-              Here's your personalized career analysis powered by Gemini AI
-            </p>
+            <p className="text-lg text-slate-600">Here's your personalized career analysis powered by Zane AI</p>
           </div>
 
           {/* Profile Summary */}
@@ -234,11 +223,9 @@ const Analysis = () => {
           </Card>
 
           {/* Structured Analysis Results */}
-          {structuredAnalysis ? (
-            <div className="space-y-6">
+          {structuredAnalysis ? <div className="space-y-6">
               {/* Summary */}
-              {structuredAnalysis.summary && (
-                <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+              {structuredAnalysis.summary && <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl text-navy-800">
                       <Brain className="w-5 h-5 mr-2 text-blue-500" />
@@ -248,12 +235,10 @@ const Analysis = () => {
                   <CardContent>
                     <p className="text-slate-700 leading-relaxed">{structuredAnalysis.summary}</p>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
 
               {/* Career Recommendations */}
-              {structuredAnalysis.careerRecommendations.length > 0 && (
-                <Card className="bg-white border-slate-200 shadow-lg">
+              {structuredAnalysis.careerRecommendations.length > 0 && <Card className="bg-white border-slate-200 shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl text-navy-800">
                       <Briefcase className="w-5 h-5 mr-2 text-green-500" />
@@ -262,19 +247,15 @@ const Analysis = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {structuredAnalysis.careerRecommendations.map((recommendation, index) => (
-                        <div key={index} className="p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
+                      {structuredAnalysis.careerRecommendations.map((recommendation, index) => <div key={index} className="p-4 bg-green-50 rounded-lg border-l-4 border-green-400">
                           <p className="text-slate-700">{recommendation}</p>
-                        </div>
-                      ))}
+                        </div>)}
                     </div>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
 
               {/* Skill Improvements */}
-              {structuredAnalysis.skillImprovements.length > 0 && (
-                <Card className="bg-white border-slate-200 shadow-lg">
+              {structuredAnalysis.skillImprovements.length > 0 && <Card className="bg-white border-slate-200 shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl text-navy-800">
                       <TrendingUp className="w-5 h-5 mr-2 text-purple-500" />
@@ -283,19 +264,15 @@ const Analysis = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {structuredAnalysis.skillImprovements.map((skill, index) => (
-                        <div key={index} className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
+                      {structuredAnalysis.skillImprovements.map((skill, index) => <div key={index} className="p-4 bg-purple-50 rounded-lg border-l-4 border-purple-400">
                           <p className="text-slate-700">{skill}</p>
-                        </div>
-                      ))}
+                        </div>)}
                     </div>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
 
               {/* Next Steps */}
-              {structuredAnalysis.nextSteps.length > 0 && (
-                <Card className="bg-white border-slate-200 shadow-lg">
+              {structuredAnalysis.nextSteps.length > 0 && <Card className="bg-white border-slate-200 shadow-lg">
                   <CardHeader>
                     <CardTitle className="flex items-center text-xl text-navy-800">
                       <Target className="w-5 h-5 mr-2 text-orange-500" />
@@ -304,22 +281,17 @@ const Analysis = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {structuredAnalysis.nextSteps.map((step, index) => (
-                        <div key={index} className="flex items-start space-x-3">
+                      {structuredAnalysis.nextSteps.map((step, index) => <div key={index} className="flex items-start space-x-3">
                           <div className="flex-shrink-0 w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-medium">
                             {index + 1}
                           </div>
                           <p className="text-slate-700">{step}</p>
-                        </div>
-                      ))}
+                        </div>)}
                     </div>
                   </CardContent>
-                </Card>
-              )}
-            </div>
-          ) : (
-            /* Fallback: Raw Response */
-            <Card className="bg-white border-slate-200 shadow-lg">
+                </Card>}
+            </div> : (/* Fallback: Raw Response */
+        <Card className="bg-white border-slate-200 shadow-lg">
               <CardHeader>
                 <CardTitle className="flex items-center text-2xl text-navy-800">
                   <Brain className="w-6 h-6 mr-2 text-autumn-500" />
@@ -336,25 +308,19 @@ const Analysis = () => {
                   </div>
                 </div>
               </CardContent>
-            </Card>
-          )}
+            </Card>)}
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
-              onClick={() => navigate('/job-scan', { state: { studentData } })}
-            >
+            <Button size="lg" className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" onClick={() => navigate('/job-scan', {
+            state: {
+              studentData
+            }
+          })}>
               Find Jobs Based on Analysis
               <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
-            <Button 
-              variant="outline" 
-              size="lg"
-              onClick={() => navigate('/intake')}
-              className="border-2 border-navy-300 hover:bg-navy-50 px-8 rounded-xl"
-            >
+            <Button variant="outline" size="lg" onClick={() => navigate('/intake')} className="border-2 border-navy-300 hover:bg-navy-50 px-8 rounded-xl">
               New Analysis
             </Button>
           </div>
@@ -366,12 +332,10 @@ const Analysis = () => {
             <div className="w-6 h-6 bg-gradient-to-r from-navy-400 to-autumn-400 rounded-lg flex items-center justify-center">
               <Brain className="w-4 h-4 text-white" />
             </div>
-            <span className="text-sm">Powered by ZaneProEd & Gemini AI</span>
+            <span className="text-sm">Powered by ZaneProEd &amp; Zane AI</span>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Analysis;
