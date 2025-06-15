@@ -130,34 +130,28 @@ const Analysis = () => {
   };
   const structuredAnalysis = parseGeminiResponse(geminiResult);
   if (isAnalyzing || isLoading) {
-    return (
-      <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-navy-800 via-blue-900 to-autumn-800 overflow-hidden">
-        {/* Animated Gradient Blobs */}
-        <div className="absolute top-28 left-[-100px] w-[420px] h-[420px] bg-gradient-to-br from-autumn-400 to-orange-400 rounded-[50%] blur-3xl opacity-20 animate-spin-slow z-0" />
-        <div className="absolute bottom-[-80px] right-[-80px] w-[300px] h-[300px] bg-gradient-to-br from-blue-400 via-blue-600 to-navy-800 rounded-[50%] blur-2xl opacity-25 animate-spin-reverse z-0" />
-        <Card className="bg-white/70 backdrop-blur-xl border-0 shadow-2xl max-w-md w-full mx-4 animate-scale-in relative z-10">
-          <CardContent className="p-10 text-center">
+    return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <Card className="bg-white border-slate-200 shadow-2xl max-w-md w-full mx-4 animate-scale-in">
+          <CardContent className="p-8 text-center">
             <div className="mb-6">
               <div className="relative mb-6">
-                <Brain className="w-20 h-20 text-navy-600 mx-auto animate-[bounce_2s_infinite]" />
-                <Sparkles className="w-7 h-7 text-autumn-500 absolute top-2 left-[65%] animate-pulse" />
+                <Brain className="w-16 h-16 text-navy-600 mx-auto animate-pulse" />
+                <Sparkles className="w-6 h-6 text-autumn-500 absolute top-0 right-6 animate-bounce" />
               </div>
-              <h2 className="text-3xl font-extrabold text-navy-800 mb-2 tracking-wide drop-shadow-md animate-fade-in">
-                Analyzing with Zane AI...
-              </h2>
-              <p className="text-lg text-slate-600/80 font-medium">Revolutionizing your career journey—hang tight!</p>
+              <h2 className="text-2xl font-bold text-navy-800 mb-2">Zane AI is Analyzing</h2>
+              <p className="text-slate-600">Processing your pharmaceutical profile to find perfect career matches</p>
             </div>
+            
             <div className="space-y-4">
-              <div className="flex justify-between text-base font-mono">
-                <span className="text-navy-700 font-semibold animate-fade-in">{currentPhase}</span>
+              <div className="flex justify-between text-sm">
+                <span className="text-navy-700 font-medium">{currentPhase}</span>
                 <span className="text-slate-500">{analysisProgress}%</span>
               </div>
-              <Progress value={analysisProgress} className="h-3 bg-slate-200 rounded-2xl shadow-inner shadow-navy-300/30" />
+              <Progress value={analysisProgress} className="h-3 bg-slate-100" />
             </div>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
   
   // Pull degree from user input: prefer PG then UG
@@ -213,74 +207,72 @@ const Analysis = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-tr from-navy-900 via-blue-800 to-autumn-800 overflow-hidden">
-      {/* Background Floating Gradient Blobs */}
-      <div className="absolute top-0 left-0 w-[760px] h-[760px] bg-gradient-to-br from-autumn-600/30 via-autumn-300/40 to-blue-300/30 rounded-full blur-3xl opacity-40 -z-10 animate-spin-slow" />
-      <div className="absolute bottom-[-160px] right-[-180px] w-[400px] h-[400px] bg-gradient-to-tr from-blue-400/20 via-navy-600/40 to-navy-800/5 rounded-full blur-2xl opacity-20 -z-10 animate-spin-reverse" />
-
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
-      <header className="border-b border-slate-200/30 bg-white/10 backdrop-blur-lg shadow-md">
-        <div className="container mx-auto px-4 py-5 flex justify-between items-center">
-          <Link to="/intake" className="flex items-center space-x-2 text-navy-100 hover:text-autumn-300 transition-colors font-medium">
-            <ArrowLeft className="w-6 h-6" />
+      <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+          <Link to="/intake" className="flex items-center space-x-2 text-navy-600 hover:text-navy-700 transition-colors">
+            <ArrowLeft className="w-5 h-5" />
             <span>Back to Intake</span>
           </Link>
-          <div className="flex items-center space-x-3 select-none">
-            <div className="w-10 h-10 bg-gradient-to-r from-navy-700 to-autumn-500 rounded-lg flex items-center justify-center shadow-lg animate-glow">
-              <Brain className="w-6 h-6 text-white animate-pulse" />
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-navy-600 to-autumn-500 rounded-lg flex items-center justify-center">
+              <Brain className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="text-white font-bold text-2xl tracking-wide">Zane AI</span>
-              <p className="text-autumn-200 text-xs">by ZaneProEd</p>
+              <span className="text-navy-700 font-bold text-lg">Zane AI</span>
+              <p className="text-slate-500 text-xs">by ZaneProEd</p>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-10 animate-fade-in">
-        <div className="max-w-6xl mx-auto mb-12">
-          {/* Modern Shine Section */}
-          <div className="text-center mb-12 ">
-            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-autumn-300 via-green-100 to-blue-100 text-navy-800 rounded-full text-lg font-bold mb-7 shadow-lg animate-scale-in tracking-wider animate-fade-in">
-              <Brain className="w-7 h-7 mr-2 animate-spin-slow" />
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto mb-8">
+          {/* Header Section */}
+          <div className="text-center mb-8 animate-fade-in">
+            <div className="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium mb-6">
+              <Brain className="w-4 h-4 mr-2" />
               🎉 Analysis Complete
             </div>
-            <h1 className="text-5xl font-extrabold text-white drop-shadow-md mb-4 tracking-wide animate-fade-in animate-scale-in">
-              Your <span className="text-autumn-300 animate-glow">AI Career Analysis</span>
+            <h1 className="text-4xl font-bold text-navy-800 mb-4">
+              Your AI Career Analysis
             </h1>
-            <p className="text-2xl text-navy-100/90 mb-2 font-medium">Welcome, <span className="font-bold">{studentData.fullName || "Future Professional"}!</span></p>
-            <p className="text-xl text-blue-100/90 drop-shadow mb-2">Your personalized journey, decoded by <span className="font-semibold text-autumn-200">Zane AI</span></p>
+            <p className="text-xl text-slate-600 mb-2">
+              Welcome, {studentData.fullName || 'Future Professional'}!
+            </p>
+            <p className="text-lg text-slate-600">Here's your personalized career analysis powered by Zane AI</p>
           </div>
 
-          {/* Profile Glass Card */}
-          <Card className="bg-gradient-to-tr from-white/80 to-blue-50/80 border-0 shadow-xl backdrop-blur-2xl mb-10 animate-fade-in">
+          {/* Profile Summary */}
+          <Card className="bg-white border-slate-200 shadow-lg mb-6">
             <CardHeader>
-              <CardTitle className="flex items-center text-2xl text-navy-800/90 font-extrabold tracking-wider">
-                <User className="w-8 h-8 mr-2 text-autumn-500 animate-bounce" />
+              <CardTitle className="flex items-center text-xl text-navy-800">
+                <User className="w-5 h-5 mr-2 text-autumn-500" />
                 Your Profile Summary
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="flex items-center space-x-3">
-                  <GraduationCap className="w-6 h-6 text-blue-500 animate-wiggle" />
+                  <GraduationCap className="w-5 h-5 text-blue-500" />
                   <div>
-                    <p className="text-base text-navy-700/70 font-medium">Degree</p>
-                    <p className="font-extrabold tracking-wider text-lg">{displayedDegree}</p>
+                    <p className="text-sm text-slate-500">Degree</p>
+                    <p className="font-medium">{displayedDegree}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Target className="w-6 h-6 text-green-400 animate-pulse" />
+                  <Target className="w-5 h-5 text-green-500" />
                   <div>
-                    <p className="text-base text-navy-700/70 font-medium">Career Goals</p>
-                    <p className="font-semibold text-lg">{studentData.goals || 'Not specified'}</p>
+                    <p className="text-sm text-slate-500">Career Goals</p>
+                    <p className="font-medium">{studentData.goals || 'Not specified'}</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Star className="w-6 h-6 text-yellow-400 animate-bounce" />
+                  <Star className="w-5 h-5 text-yellow-500" />
                   <div>
-                    <p className="text-base text-navy-700/70 font-medium">Skills</p>
-                    <p className="font-semibold text-lg">{studentData.skills || 'Not specified'}</p>
+                    <p className="text-sm text-slate-500">Skills</p>
+                    <p className="font-medium">{studentData.skills || 'Not specified'}</p>
                   </div>
                 </div>
               </div>
@@ -297,17 +289,20 @@ const Analysis = () => {
               onReanalyze={handleReanalyze}
             />
           ) : (
-            <Card className="bg-white/80 shadow-2xl border-0 backdrop-blur-lg animate-scale-in">
+            // fallback to old result if no data
+            <Card className="bg-white border-slate-200 shadow-lg">
               <CardHeader>
-                <CardTitle className="flex items-center text-3xl text-navy-800 font-extrabold tracking-wide animate-fade-in">
-                  <Brain className="w-8 h-8 mr-3 text-autumn-500 animate-spin-slow" />
+                <CardTitle className="flex items-center text-2xl text-navy-800">
+                  <Brain className="w-6 h-6 mr-2 text-autumn-500" />
                   AI Analysis Results
                 </CardTitle>
-                <CardDescription className="text-base text-blue-700/70">Personalized career guidance powered by Gemini AI</CardDescription>
+                <CardDescription>
+                  Personalized career guidance generated by Gemini AI
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-slate-50/80 rounded-xl p-8">
-                  <div className="whitespace-pre-wrap text-navy-900 leading-relaxed font-medium">
+                <div className="bg-slate-50 rounded-lg p-6">
+                  <div className="whitespace-pre-wrap text-slate-700 leading-relaxed">
                     {geminiResult}
                   </div>
                 </div>
@@ -316,54 +311,31 @@ const Analysis = () => {
           )}
 
           {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mt-12 animate-fade-in">
-            <Button
-              size="lg"
-              className="bg-gradient-to-br from-navy-700 via-blue-600 to-autumn-500 hover:from-navy-500 hover:to-autumn-400 text-white px-9 py-4 rounded-2xl shadow-2xl text-xl font-bold tracking-wide hover:shadow-blue-300/40 animate-glow transition-all duration-300 hover:scale-110"
-              onClick={() =>
-                navigate('/job-scan', {
-                  state: {
-                    studentData
-                  }
-                })
-              }
-            >
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+            <Button size="lg" className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105" onClick={() => navigate('/job-scan', {
+            state: {
+              studentData
+            }
+          })}>
               Find Jobs Based on Analysis
-              <ChevronRight className="w-6 h-6 ml-2 animate-bounce" />
+              <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => navigate('/intake')}
-              className="border-2 border-navy-200 bg-navy-50/70 text-navy-700 font-bold px-9 py-4 rounded-2xl text-xl hover:bg-navy-100 hover:scale-105 shadow-md transition-all"
-            >
+            <Button variant="outline" size="lg" onClick={() => navigate('/intake')} className="border-2 border-navy-300 hover:bg-navy-50 px-8 rounded-xl">
               New Analysis
             </Button>
           </div>
         </div>
 
         {/* Footer Logo */}
-        <div className="text-center mt-20 pb-10">
-          <div className="flex items-center justify-center space-x-3 text-slate-200/70">
-            <div className="w-8 h-8 bg-gradient-to-r from-navy-400 to-autumn-400 rounded-lg flex items-center justify-center shadow-lg">
-              <Brain className="w-5 h-5 text-white animate-spin-slow" />
+        <div className="text-center mt-16 pb-8">
+          <div className="flex items-center justify-center space-x-3 text-slate-400">
+            <div className="w-6 h-6 bg-gradient-to-r from-navy-400 to-autumn-400 rounded-lg flex items-center justify-center">
+              <Brain className="w-4 h-4 text-white" />
             </div>
-            <span className="text-lg">Powered by <span className="font-bold text-autumn-200 tracking-wide">ZaneProEd & Zane AI</span></span>
+            <span className="text-sm">Powered by ZaneProEd &amp; Zane AI</span>
           </div>
         </div>
       </div>
-
-      {/* Extra Keyframe Animations */}
-      <style>{`
-        @keyframes spin-slow { 0%{transform:rotate(0deg);} 100%{transform:rotate(360deg);} }
-        .animate-spin-slow { animation: spin-slow 9s linear infinite !important; }
-        @keyframes spin-reverse { 0%{transform:rotate(360deg);} 100%{transform:rotate(0deg);} }
-        .animate-spin-reverse { animation: spin-reverse 12s linear infinite !important; }
-        @keyframes wiggle { 0%,100%{transform:rotate(-5deg);} 50%{transform:rotate(7deg);} }
-        .animate-wiggle { animation: wiggle 1.3s ease-in-out infinite; }
-        @keyframes glow { 0% { box-shadow: 0 0 12px #fbbf24, 0 0 0px #fff;} 50% { box-shadow: 0 0 24px #fbbf24, 0 0 8px #fff;} }
-        .animate-glow { animation: glow 2.5s alternate infinite;}
-      `}</style>
     </div>
   );
 };
