@@ -4,6 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowDown, User, Search, FileText, Sparkles, Brain, Target, LogIn, UserPlus } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import TestAnalysisDemo from "@/components/TestAnalysisDemo";
+
 const Index = () => {
   const {
     user,
@@ -22,7 +24,8 @@ const Index = () => {
       navigate('/auth');
     }
   };
-  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
@@ -102,6 +105,11 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Insert Demo TestAnalysis Component below hero for prominence */}
+      <div className="container mx-auto px-4">
+        <TestAnalysisDemo />
+      </div>
 
       {/* Process Overview */}
       <section id="process" className="bg-white py-20">
@@ -252,6 +260,7 @@ const Index = () => {
           </div>
         </div>
       </footer>
-    </div>;
+    </div>
+  );
 };
 export default Index;
