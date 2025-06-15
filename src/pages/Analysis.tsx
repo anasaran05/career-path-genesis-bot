@@ -16,6 +16,7 @@ const Analysis = () => {
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [geminiResponse, setGeminiResponse] = useState('');
+  const [geminiResult, setGeminiResult] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [currentPhase, setCurrentPhase] = useState('Loading your analysis...');
   
@@ -40,6 +41,7 @@ const Analysis = () => {
         // If we have analysis result from navigation state, use it
         if (analysisResult?.analysis) {
           setGeminiResponse(analysisResult.analysis);
+          setGeminiResult(analysisResult.analysis);
           setIsLoading(false);
           return;
         }
@@ -61,12 +63,17 @@ const Analysis = () => {
             variant: "destructive",
           });
           setGeminiResponse('No analysis found. Please complete the intake form first.');
+          setGeminiResult('No analysis found. Please complete the intake form first.');
         } else {
-          setGeminiResponse(analysisData.analysis_result || 'No analysis data available.');
+          const result = analysisData.analysis_result || 'No analysis data available.';
+          setGeminiResponse(result);
+          setGeminiResult(result);
         }
       } catch (error) {
         console.error('Error fetching analysis:', error);
-        setGeminiResponse('Error loading analysis. Please try again.');
+        const errorMsg = 'Error loading analysis. Please try again.';
+        setGeminiResponse(errorMsg);
+        setGeminiResult(errorMsg);
       } finally {
         setIsLoading(false);
       }
@@ -122,7 +129,7 @@ const Analysis = () => {
     return structuredData;
   };
 
-  const structuredAnalysis = parseGeminiResponse(geminiResponse);
+  const structuredAnalysis = parseGeminiResponse(geminiResult);
 
   if (isAnalyzing || isLoading) {
     return (
@@ -325,7 +332,7 @@ const Analysis = () => {
               <CardContent>
                 <div className="bg-slate-50 rounded-lg p-6">
                   <div className="whitespace-pre-wrap text-slate-700 leading-relaxed">
-                    {geminiResponse}
+                    {geminiResult}
                   </div>
                 </div>
               </CardContent>
