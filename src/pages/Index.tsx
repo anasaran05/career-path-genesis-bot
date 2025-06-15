@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,7 +22,7 @@ const Index = () => {
         navigate('/intake');
       }
     } else {
-      navigate('/auth');
+      navigate('/demo-test');
     }
   };
   return (
@@ -94,7 +95,7 @@ const Index = () => {
                 {user ? userProfile?.user_type === 'recruiter' ? 'Go to Dashboard' : 'Continue Your Journey' : 'Start Your Career Journey'}
                 <Target className="w-5 h-5 ml-2" />
               </Button>
-              <Button variant="outline" size="lg" className="border-2 border-navy-200 text-navy-700 hover:bg-navy-50 px-8 py-4 text-lg rounded-xl transition-all duration-300">
+              <Button onClick={() => navigate('/demo-test')} variant="outline" size="lg" className="border-2 border-navy-200 text-navy-700 hover:bg-navy-50 px-8 py-4 text-lg rounded-xl transition-all duration-300">
                 Watch Demo
               </Button>
             </div>
