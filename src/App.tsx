@@ -17,36 +17,39 @@ import RecruiterDashboard from "./pages/RecruiterDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import NotFound from "./pages/NotFound";
 import UpdateProfile from "./pages/UpdateProfile";
+import { ThemeProvider } from "next-themes";
 
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/intake" element={<Intake />} />
-            <Route path="/analysis" element={<Analysis />} />
-            <Route path="/career-analysis" element={<CareerAnalysis />} />
-            <Route path="/job-scan" element={<JobScan />} />
-            <Route path="/job-application/:jobId" element={<JobApplication />} />
-            <Route path="/job-details/:jobId" element={<JobDetails />} />
-            <Route path="/advisory-report" element={<AdvisoryReport />} />
-            <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
-            <Route path="/student-dashboard" element={<StudentDashboard />} />
-            <Route path="/update-profile" element={<UpdateProfile />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+  <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/intake" element={<Intake />} />
+              <Route path="/analysis" element={<Analysis />} />
+              <Route path="/career-analysis" element={<CareerAnalysis />} />
+              <Route path="/job-scan" element={<JobScan />} />
+              <Route path="/job-application/:jobId" element={<JobApplication />} />
+              <Route path="/job-details/:jobId" element={<JobDetails />} />
+              <Route path="/advisory-report" element={<AdvisoryReport />} />
+              <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
+              <Route path="/student-dashboard" element={<StudentDashboard />} />
+              <Route path="/update-profile" element={<UpdateProfile />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  </ThemeProvider>
 );
 
 export default App;
