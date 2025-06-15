@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Brain, Sparkles, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import ThemeSwitch from "@/components/ui/ThemeSwitch";
 
 const StudentDashboard: React.FC = () => {
   const { userProfile } = useAuth();
@@ -20,9 +21,12 @@ const StudentDashboard: React.FC = () => {
             </div>
             <h1 className="text-2xl font-bold text-navy-800">Student Dashboard</h1>
           </div>
-          <Button onClick={() => navigate("/intake")} className="mt-4 md:mt-0 bg-gradient-to-r from-navy-600 to-autumn-500 text-white rounded-xl shadow hover:from-navy-700 hover:to-autumn-600">
-            Complete Intake
-          </Button>
+          <div className="flex items-center gap-4 mt-4 md:mt-0">
+            <Button onClick={() => navigate("/intake")} className="bg-gradient-to-r from-navy-600 to-autumn-500 text-white rounded-xl shadow hover:from-navy-700 hover:to-autumn-600">
+              Complete Intake
+            </Button>
+            <ThemeSwitch />
+          </div>
         </header>
         <div className="grid md:grid-cols-3 gap-8">
           <Card className="bg-white/70 shadow-md hover:shadow-xl transition hover:scale-[1.02] rounded-xl">

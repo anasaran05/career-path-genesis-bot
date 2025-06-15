@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowDown, User, Search, FileText, Sparkles, Brain, Target, LogIn, UserPlus } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import ThemeSwitch from "@/components/ui/ThemeSwitch";
 const Index = () => {
   const {
     user,
@@ -76,6 +78,7 @@ const Index = () => {
                   </Button>
                 </Link>
               </div>}
+            <ThemeSwitch />
           </nav>
         </div>
       </header>

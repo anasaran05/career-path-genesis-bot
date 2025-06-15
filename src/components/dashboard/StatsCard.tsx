@@ -2,7 +2,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LucideIcon } from "lucide-react";
-import ThemeSwitch from "@/components/ui/ThemeSwitch";
 
 interface StatsCardProps {
   title: string;
@@ -18,11 +17,8 @@ const StatsCard: React.FC<StatsCardProps> = ({ title, value, icon: Icon, change,
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-navy-800 dark:text-[#E0E0E0] text-sm font-medium">{title}</CardTitle>
-          <div className="flex items-center space-x-2">
-            <div className={`w-10 h-10 bg-gradient-to-r ${color} rounded-xl flex items-center justify-center`}>
-              <Icon className="w-5 h-5 text-white" />
-            </div>
-            <ThemeSwitch />
+          <div className={`w-10 h-10 bg-gradient-to-r ${color} rounded-xl flex items-center justify-center`}>
+            <Icon className="w-5 h-5 text-white" />
           </div>
         </div>
       </CardHeader>
