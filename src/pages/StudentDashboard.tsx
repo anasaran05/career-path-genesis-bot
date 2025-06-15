@@ -54,7 +54,7 @@ const StudentDashboard: React.FC = () => {
                 <div className="bg-gradient-to-r from-navy-500 to-autumn-500 h-3 rounded-full transition-all" style={{ width: "55%" }} />
               </div>
               <div className="text-sm text-slate-600 mb-4">55% completed</div>
-              <Button variant="outline" className="rounded-xl" onClick={() => navigate("/intake")}>
+              <Button variant="outline" className="rounded-xl" onClick={() => navigate("/update-profile")}>
                 Update Profile
               </Button>
             </CardContent>
