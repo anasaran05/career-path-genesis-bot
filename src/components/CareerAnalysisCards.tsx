@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Target, Book, Bulb } from "lucide-react";
+import { Search, Target, Book, Sparkle } from "lucide-react";
 
 // Dummy data for preview
 const analysis = {
@@ -89,7 +89,7 @@ const CareerAnalysisCards = () => {
         <Card className="bg-[#faf8fc] border-none shadow-xl rounded-2xl transition hover:shadow-2xl">
           <CardHeader className="flex flex-row items-center gap-3 border-b pb-2">
             <span className="bg-purple-100 text-purple-500 p-2 rounded-lg">
-              <Bulb className="w-6 h-6" />
+              <Sparkle className="w-6 h-6" />
             </span>
             <CardTitle className="text-lg font-bold tracking-wide text-purple-700">
               Personalized Tips
