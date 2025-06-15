@@ -11,17 +11,26 @@ const Index = () => {
     signOut
   } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect students to dashboard if already signed in (not recruiters)
+  React.useEffect(() => {
+    if (user && userProfile && userProfile.user_type === "student" && window.location.pathname === "/") {
+      navigate("/student-dashboard");
+    }
+  }, [user, userProfile, navigate]);
+
   const handleGetStarted = () => {
     if (user && userProfile) {
       if (userProfile.user_type === 'recruiter') {
         navigate('/recruiter-dashboard');
       } else {
-        navigate('/intake');
+        navigate('/student-dashboard');
       }
     } else {
       navigate('/auth');
     }
   };
+
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
@@ -40,13 +49,22 @@ const Index = () => {
             <a href="#process" className="text-slate-600 hover:text-navy-600 transition-colors">How it Works</a>
             <a href="#contact" className="text-slate-600 hover:text-navy-600 transition-colors">Contact</a>
             
+            {/* Customized for dashboard links */}
             {user ? <div className="flex items-center space-x-4">
                 <span className="text-navy-700 font-medium">
                   Welcome, {userProfile?.full_name || 'User'}
                 </span>
-                <Button onClick={handleGetStarted} className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white rounded-xl">
-                  {userProfile?.user_type === 'recruiter' ? 'Dashboard' : 'Continue Journey'}
-                </Button>
+                {userProfile?.user_type === 'recruiter' ? (
+                  <Button onClick={handleGetStarted} className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white rounded-xl">
+                    Dashboard
+                  </Button>
+                ) : (
+                  <Link to="/student-dashboard">
+                    <Button className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white rounded-xl">
+                      Dashboard
+                    </Button>
+                  </Link>
+                )}
                 <Button variant="outline" onClick={signOut} className="border-2 border-slate-200 text-navy-700 hover:bg-navy-50 rounded-xl">
                   Sign Out
                 </Button>
