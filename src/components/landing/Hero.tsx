@@ -1,15 +1,13 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Sparkles, Target, ArrowDown } from "lucide-react";
-import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface HeroProps {
     handleGetStarted: () => void;
 }
 
 const Hero: React.FC<HeroProps> = ({ handleGetStarted }) => {
-    const { user, userProfile } = useAuth();
     return (
       <section className="container mx-auto px-4 py-20 text-center">
         <div className="max-w-4xl mx-auto">
@@ -30,7 +28,7 @@ const Hero: React.FC<HeroProps> = ({ handleGetStarted }) => {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 animate-fade-in">
               <Button onClick={handleGetStarted} size="lg" className="bg-gradient-to-r from-navy-600 to-autumn-500 hover:from-navy-700 hover:to-autumn-600 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                {user ? userProfile?.user_type === 'recruiter' ? 'Go to Dashboard' : 'Continue Your Journey' : 'Start Your Career Journey'}
+                Start Your Career Journey
                 <Target className="w-5 h-5 ml-2" />
               </Button>
               <Button variant="outline" size="lg" className="border-2 border-navy-200 text-navy-700 hover:bg-navy-50 px-8 py-4 text-lg rounded-xl transition-all duration-300">

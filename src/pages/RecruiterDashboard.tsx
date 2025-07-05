@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Users, FileText, TrendingUp, Plus, Search } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import ResumeViewer from "@/components/ResumeViewer";
 import StatsCard from "@/components/dashboard/StatsCard";
@@ -15,7 +13,6 @@ import JobCard from "@/components/dashboard/JobCard";
 import ApplicationCard from "@/components/dashboard/ApplicationCard";
 
 const RecruiterDashboard = () => {
-  const { userProfile, signOut } = useAuth();
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedJob, setSelectedJob] = useState(null);
   const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null);
@@ -222,11 +219,10 @@ const RecruiterDashboard = () => {
           </div>
           <div className="flex items-center space-x-4">
             <span className="text-navy-700 font-medium">
-              {userProfile?.recruiter_profiles?.[0]?.company_name || 'Premium Healthcare Solutions'}
+              Premium Healthcare Solutions
             </span>
             <Button 
               variant="outline" 
-              onClick={signOut}
               className="border-2 border-slate-200 text-navy-700 hover:bg-navy-50 rounded-xl hover:scale-105 transition-all"
             >
               Sign Out
@@ -361,7 +357,7 @@ const RecruiterDashboard = () => {
                     <Input 
                       className="bg-slate-50 border-slate-200 rounded-xl focus:ring-2 focus:ring-navy-500 transition-all" 
                       placeholder="e.g., Pfizer India Ltd" 
-                      defaultValue={userProfile?.recruiter_profiles?.[0]?.company_name || ''}
+                      defaultValue="Premium Healthcare Solutions"
                     />
                   </div>
                 </div>

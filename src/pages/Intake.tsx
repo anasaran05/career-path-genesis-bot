@@ -1,41 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, User, BookOpen, Award, Target, Brain, ChevronRight, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { FormData } from "@/types/intake";
-import { performGeminiAnalysis } from "@/utils/geminiAnalysis";
 import { PersonalInfoStep } from "@/components/intake/PersonalInfoStep";
 import { EducationStep } from "@/components/intake/EducationStep";
 import { SkillsExperienceStep } from "@/components/intake/SkillsExperienceStep";
 import { CareerGoalsStep } from "@/components/intake/CareerGoalsStep";
 
 const Intake = () => {
-  const { user, userProfile } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Redirect if not logged in or is recruiter
-  useEffect(() => {
-    if (!user) {
-      navigate('/auth');
-      return;
-    }
-    if (userProfile?.user_type === 'recruiter') {
-      navigate('/recruiter-dashboard');
-      return;
-    }
-  }, [user, userProfile, navigate]);
-
   const [currentStep, setCurrentStep] = useState(1);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     // Personal Info
-    fullName: userProfile?.full_name || '',
-    email: userProfile?.email || '',
+    fullName: '',
+    email: '',
     phone: '',
     location: '',
     
@@ -69,22 +54,19 @@ const Intake = () => {
     setIsAnalyzing(true);
     
     try {
-      const analysis = await performGeminiAnalysis(profileData);
-      
-      // Debug logging as requested
-      console.log("Gemini Response:", analysis);
-      console.log("Result:", analysis?.result);
+      // Simulate analysis
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       toast({
         title: "Analysis Complete",
-        description: "AI Analysis complete! Go check your dashboard 🚀",
+        description: "Your career analysis is ready!",
       });
       
       // Navigate to analysis page with results
       navigate('/analysis', { 
         state: { 
           studentData: profileData,
-          analysisResult: { analysis: analysis }
+          analysisResult: { analysis: "Mock analysis completed successfully!" }
         } 
       });
 

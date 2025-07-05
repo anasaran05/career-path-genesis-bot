@@ -1,13 +1,10 @@
-
 import React from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Brain, Sparkles, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
 const StudentDashboard: React.FC = () => {
-  const { userProfile } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -28,8 +25,8 @@ const StudentDashboard: React.FC = () => {
           <Card className="bg-white/70 shadow-md hover:shadow-xl transition hover:scale-[1.02] rounded-xl">
             <CardHeader>
               <Sparkles className="w-7 h-7 text-autumn-500 mb-2" />
-              <CardTitle>Welcome, {userProfile?.full_name || "Student"}!</CardTitle>
-              <CardDescription>Let’s start your career transformation journey.</CardDescription>
+              <CardTitle>Welcome, Student!</CardTitle>
+              <CardDescription>Let's start your career transformation journey.</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="font-medium text-slate-500 mb-2">Your next steps:</div>
@@ -47,7 +44,7 @@ const StudentDashboard: React.FC = () => {
             <CardHeader>
               <Target className="w-7 h-7 text-green-500 mb-2" />
               <CardTitle>Career Progress</CardTitle>
-              <CardDescription>Track how far you’ve come!</CardDescription>
+              <CardDescription>Track how far you've come!</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="w-full bg-slate-200 rounded-full h-3 mb-2 overflow-hidden">

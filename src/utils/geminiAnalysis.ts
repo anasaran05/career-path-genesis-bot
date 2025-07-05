@@ -1,14 +1,6 @@
-
-import { supabase } from "@/integrations/supabase/client";
 import { FormData } from "@/types/intake";
 
 export const performGeminiAnalysis = async (profileData: FormData) => {
-  // Get logged-in user
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
-  if (authError || !user) {
-    throw new Error("Authentication required");
-  }
-
   // Build comprehensive prompt from form data
   const degree = `${profileData.ugDegree} ${profileData.ugSpecialization} (${profileData.ugYear}) | ${profileData.pgDegree} ${profileData.pgSpecialization} (${profileData.pgYear})`;
   const skills = `Technical: ${profileData.technicalSkills} | Soft: ${profileData.softSkills} | Certifications: ${profileData.certifications}`;
@@ -26,31 +18,21 @@ Projects: ${profileData.projects}
 
 Give detailed advice with next steps. Keep it human-friendly.`;
 
-  // Call Gemini API with the provided API key
-  const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyDaopAycZPL2XEDnUVWL9Gc6cLtL42G5D4`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }]
-    })
-  });
+  // Mock analysis for now since we removed Supabase
+  const mockAnalysis = `Based on your ${degree} background, you have excellent potential in pharmaceutical careers. 
 
-  const geminiJson = await geminiRes.json();
-  const analysis = geminiJson?.candidates?.[0]?.content?.parts?.[0]?.text || 'No result from Gemini.';
+Your educational foundation positions you well for roles in:
+- Clinical Research Associate positions
+- Regulatory Affairs specialist roles  
+- Pharmaceutical industry positions
 
-  // Save to Supabase
-  const { error: insertError } = await supabase.from('career_analysis').insert([{
-    user_id: user.id,
-    degree: degree,
-    skills: skills,
-    goals: goals,
-    analysis_result: analysis
-  }]);
+Key recommendations:
+1. Complete GCP certification for clinical research roles
+2. Build experience through internships at CROs
+3. Develop regulatory knowledge through specialized courses
+4. Network with industry professionals on LinkedIn
 
-  if (insertError) {
-    console.error('DB Error:', insertError);
-    throw new Error("Failed to save analysis");
-  }
+Your combination of technical skills and career goals aligns well with the growing pharmaceutical sector in India.`;
 
-  return analysis;
+  return mockAnalysis;
 };

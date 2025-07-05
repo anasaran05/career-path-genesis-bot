@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,8 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Brain, Loader2, Target, BookOpen, Wrench, MessageSquare, Microscope, RefreshCw, AlertCircle, ArrowLeft, Sparkles } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import CareerMatchCards from "@/components/CareerMatchCards";
 
@@ -36,7 +34,6 @@ interface AnalysisResult {
 }
 
 const CareerAnalysis = () => {
-  const { user, userProfile } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   
@@ -48,27 +45,6 @@ const CareerAnalysis = () => {
   const [userProfileData, setUserProfileData] = useState<{degree: string, skills: string, goal: string} | null>(null);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [currentPhase, setCurrentPhase] = useState('');
-
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!user) {
-      navigate('/auth');
-      return;
-    }
-    if (userProfile?.user_type === 'recruiter') {
-      navigate('/recruiter-dashboard');
-      return;
-    }
-  }, [user, userProfile, navigate]);
-
-  // Load existing profile data
-  useEffect(() => {
-    if (userProfile) {
-      setDegree(userProfile.student_profiles?.degree || '');
-      setSkills(userProfile.student_profiles?.skills?.join(', ') || '');
-      setGoal(userProfile.student_profiles?.career_interests?.join(', ') || '');
-    }
-  }, [userProfile]);
 
   const analysisPhases = [
     '🔍 Analyzing your educational background...',
@@ -110,49 +86,74 @@ const CareerAnalysis = () => {
     try {
       console.log('Analyzing profile:', { degree: degree.trim(), skills: skills.trim(), goal: goal.trim() });
 
-      const { data, error } = await supabase.functions.invoke('analysis', {
-        body: {
-          degree: degree.trim(),
-          skills: skills.trim() || undefined,
-          goal: goal.trim() || undefined
-        }
-      });
+      // Simulate analysis with mock data
+      await new Promise(resolve => setTimeout(resolve, 3000));
 
       clearInterval(progressInterval);
       setAnalysisProgress(100);
       setCurrentPhase('✅ Analysis complete!');
 
-      if (error) {
-        console.error('Supabase function error:', error);
-        throw error;
-      }
+      // Mock analysis result
+      const mockAnalysis = {
+        topRoles: [
+          {
+            title: "Clinical Research Associate",
+            description: "Monitor clinical trials and ensure protocol compliance",
+            emoji: "🔬",
+            matchScore: 92
+          },
+          {
+            title: "Regulatory Affairs Specialist", 
+            description: "Ensure compliance with pharmaceutical regulations",
+            emoji: "📋",
+            matchScore: 88
+          },
+          {
+            title: "Medical Writer",
+            description: "Create scientific documents and regulatory submissions",
+            emoji: "📝",
+            matchScore: 85
+          }
+        ],
+        roadmap: [
+          { step: "Complete GCP certification", emoji: "📘" },
+          { step: "Gain clinical research experience", emoji: "💼" },
+          { step: "Build regulatory knowledge", emoji: "🎯" },
+          { step: "Develop medical writing skills", emoji: "🚀" }
+        ],
+        skillsTodev: [
+          {
+            skill: "Good Clinical Practice (GCP)",
+            category: 'Technical' as const,
+            description: "Essential for clinical research roles"
+          },
+          {
+            skill: "Scientific Communication",
+            category: 'Soft' as const,
+            description: "Critical for medical writing and presentations"
+          },
+          {
+            skill: "Regulatory Guidelines",
+            category: 'Scientific' as const,
+            description: "Understanding of FDA and ICH guidelines"
+          }
+        ],
+        courses: [
+          { name: "ICH-GCP Certification", priority: 'High' as const },
+          { name: "Medical Writing Course", priority: 'Medium' as const },
+          { name: "Regulatory Affairs Training", priority: 'High' as const }
+        ],
+        summary: `Based on your ${degree.trim()} background, here are the career paths where you'll excel the most.`
+      };
 
-      console.log('Analysis response:', data);
+      setAnalysisResult(mockAnalysis);
+      setUserProfileData({ degree, skills, goal });
 
-      if (data.success) {
-        // Add match scores to roles
-        const rolesWithScores = data.analysis.topRoles.map((role: any, index: number) => ({
-          ...role,
-          matchScore: 95 - (index * 5) + Math.floor(Math.random() * 5)
-        }));
+      toast({
+        title: "✅ Analysis Complete",
+        description: `Personalized career analysis generated for ${degree.trim()}`,
+      });
 
-        setAnalysisResult({
-          ...data.analysis,
-          topRoles: rolesWithScores,
-          summary: `Based on your ${degree.trim()} background, here are the career paths where you'll excel the most.`
-        });
-        setUserProfileData(data.userProfile);
-
-        // Save to database
-        await saveAnalysisToDatabase(data.analysis, degree, skills, goal);
-
-        toast({
-          title: "✅ Analysis Complete",
-          description: `Personalized career analysis generated for ${degree.trim()}`,
-        });
-      } else {
-        throw new Error(data.error || 'Analysis failed');
-      }
     } catch (error) {
       clearInterval(progressInterval);
       console.error('Analysis error:', error);
@@ -163,24 +164,6 @@ const CareerAnalysis = () => {
       });
     } finally {
       setIsAnalyzing(false);
-    }
-  };
-
-  const saveAnalysisToDatabase = async (analysis: AnalysisResult, degree: string, skills: string, goal: string) => {
-    try {
-      const { error } = await supabase.from('career_analysis').insert([{
-        user_id: user?.id,
-        degree: degree,
-        skills: skills,
-        goals: goal,
-        analysis_result: JSON.stringify(analysis)
-      }]);
-
-      if (error) {
-        console.error('Error saving analysis:', error);
-      }
-    } catch (error) {
-      console.error('Database save error:', error);
     }
   };
 
@@ -246,9 +229,9 @@ const CareerAnalysis = () => {
       {/* Header */}
       <header className="border-b border-slate-200 bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <Link to="/student-dashboard" className="flex items-center space-x-2 text-navy-600 hover:text-navy-700 transition-colors">
+          <Link to="/" className="flex items-center space-x-2 text-navy-600 hover:text-navy-700 transition-colors">
             <ArrowLeft className="w-5 h-5" />
-            <span>Back to Dashboard</span>
+            <span>Back to Home</span>
           </Link>
           <div className="text-center">
             <h1 className="text-xl font-bold text-navy-800">Career Analysis</h1>
