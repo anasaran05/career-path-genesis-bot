@@ -150,7 +150,7 @@ John Doe`;
 
         {/* Job Link Section */}
         {job && <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-green-500/30 mt-6">
-            <CardContent className="p-6 bg-purple-950 rounded-sm py-[25px] px-[62px]">
+            <CardContent className="p-6 rounded-sm py-[25px] px-[62px] bg-slate-900">
               <h3 className="text-lg font-semibold text-white mb-4">Apply to This Job</h3>
               <div className="flex items-center justify-between">
                 <div>
