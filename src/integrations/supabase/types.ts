@@ -9,110 +9,212 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      career_analysis: {
+      job_applications: {
         Row: {
-          analysis_result: Json | null
-          created_at: string | null
-          degree: string | null
-          goals: string | null
+          applied_at: string
+          cover_letter: string | null
           id: string
-          skills: string | null
-          user_id: string | null
+          job_id: string
+          resume_url: string | null
+          status: string
+          student_id: string
+          updated_at: string
         }
         Insert: {
-          analysis_result?: Json | null
-          created_at?: string | null
-          degree?: string | null
-          goals?: string | null
+          applied_at?: string
+          cover_letter?: string | null
           id?: string
-          skills?: string | null
-          user_id?: string | null
+          job_id: string
+          resume_url?: string | null
+          status?: string
+          student_id: string
+          updated_at?: string
         }
         Update: {
-          analysis_result?: Json | null
-          created_at?: string | null
-          degree?: string | null
-          goals?: string | null
+          applied_at?: string
+          cover_letter?: string | null
           id?: string
-          skills?: string | null
-          user_id?: string | null
+          job_id?: string
+          resume_url?: string | null
+          status?: string
+          student_id?: string
+          updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_applications_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          benefits: string[] | null
+          company: string
+          created_at: string
+          description: string
+          experience_level: string
+          id: string
+          job_type: string
+          location: string
+          recruiter_id: string
+          requirements: string[] | null
+          salary_range: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          benefits?: string[] | null
+          company: string
+          created_at?: string
+          description: string
+          experience_level: string
+          id?: string
+          job_type: string
+          location: string
+          recruiter_id: string
+          requirements?: string[] | null
+          salary_range?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          benefits?: string[] | null
+          company?: string
+          created_at?: string
+          description?: string
+          experience_level?: string
+          id?: string
+          job_type?: string
+          location?: string
+          recruiter_id?: string
+          requirements?: string[] | null
+          salary_range?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_recruiter_id_fkey"
+            columns: ["recruiter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
-          bio: string | null
-          created_at: string | null
-          dob: string | null
+          created_at: string
+          email: string
           full_name: string | null
           id: string
-          last_profile_update: string | null
-          location: string | null
-          profile_image: string | null
-          profile_url: string | null
-          updated_at: string | null
+          updated_at: string
+          user_type: string
         }
         Insert: {
-          bio?: string | null
-          created_at?: string | null
-          dob?: string | null
+          created_at?: string
+          email: string
           full_name?: string | null
           id: string
-          last_profile_update?: string | null
-          location?: string | null
-          profile_image?: string | null
-          profile_url?: string | null
-          updated_at?: string | null
+          updated_at?: string
+          user_type: string
         }
         Update: {
-          bio?: string | null
-          created_at?: string | null
-          dob?: string | null
+          created_at?: string
+          email?: string
           full_name?: string | null
           id?: string
-          last_profile_update?: string | null
-          location?: string | null
-          profile_image?: string | null
-          profile_url?: string | null
-          updated_at?: string | null
+          updated_at?: string
+          user_type?: string
         }
         Relationships: []
       }
-      student_profiles: {
+      recruiter_profiles: {
         Row: {
-          career_goals: string | null
-          created_at: string | null
+          company_name: string
+          company_size: string | null
+          company_website: string | null
           id: string
-          pg_degree: string | null
-          skills: string[] | null
-          soft_skills: string | null
-          technical_skills: string | null
-          ug_degree: string | null
-          updated_at: string | null
+          industry: string | null
+          position: string | null
         }
         Insert: {
-          career_goals?: string | null
-          created_at?: string | null
+          company_name: string
+          company_size?: string | null
+          company_website?: string | null
           id: string
-          pg_degree?: string | null
-          skills?: string[] | null
-          soft_skills?: string | null
-          technical_skills?: string | null
-          ug_degree?: string | null
-          updated_at?: string | null
+          industry?: string | null
+          position?: string | null
         }
         Update: {
-          career_goals?: string | null
-          created_at?: string | null
+          company_name?: string
+          company_size?: string | null
+          company_website?: string | null
           id?: string
-          pg_degree?: string | null
-          skills?: string[] | null
-          soft_skills?: string | null
-          technical_skills?: string | null
-          ug_degree?: string | null
-          updated_at?: string | null
+          industry?: string | null
+          position?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "recruiter_profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_profiles: {
+        Row: {
+          career_interests: string[] | null
+          degree: string | null
+          experience_level: string | null
+          graduation_year: number | null
+          id: string
+          skills: string[] | null
+          university: string | null
+        }
+        Insert: {
+          career_interests?: string[] | null
+          degree?: string | null
+          experience_level?: string | null
+          graduation_year?: number | null
+          id: string
+          skills?: string[] | null
+          university?: string | null
+        }
+        Update: {
+          career_interests?: string[] | null
+          degree?: string | null
+          experience_level?: string | null
+          graduation_year?: number | null
+          id?: string
+          skills?: string[] | null
+          university?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
