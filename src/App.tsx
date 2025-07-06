@@ -13,6 +13,7 @@ import JobScan from "./pages/JobScan";
 import JobApplication from "./pages/JobApplication";
 import JobDetails from "./pages/JobDetails";
 import AdvisoryReport from "./pages/AdvisoryReport";
+import CoursesPage from "./pages/CoursesPage";
 import RecruiterDashboard from "./pages/RecruiterDashboard";
 import NotFound from "./pages/NotFound";
 
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/job-application/:jobId" element={<JobApplication />} />
             <Route path="/job-details/:jobId" element={<JobDetails />} />
             <Route path="/advisory-report" element={<AdvisoryReport />} />
+            <Route path="/courses" element={<CoursesPage />} />
             <Route path="/recruiter-dashboard" element={<RecruiterDashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

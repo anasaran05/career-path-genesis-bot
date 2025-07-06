@@ -4,14 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, FileText, TrendingUp, Target, Award, Book, Globe, Lightbulb, Download, BarChart3, Brain, Rocket } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import ConsultationModal from "@/components/ConsultationModal";
+
 const AdvisoryReport = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const studentData = location.state?.studentData || {};
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [currentPhase, setCurrentPhase] = useState('Analyzing your profile...');
-  const analysisPhases = ['Analyzing your profile...', 'Evaluating market trends...', 'Matching skills to opportunities...', 'Generating personalized insights...', 'Preparing recommendations...'];
+  const [showConsultationModal, setShowConsultationModal] = useState(false);
+
+  const analysisPhases = [
+    'Analyzing your profile...',
+    'Evaluating market trends...',
+    'Matching skills to opportunities...',
+    'Generating personalized insights...',
+    'Preparing recommendations...'
+  ];
+
   useEffect(() => {
     let phase = 0;
     const interval = setInterval(() => {
@@ -31,59 +43,86 @@ const AdvisoryReport = () => {
         return newProgress;
       });
     }, 150);
+
     return () => clearInterval(interval);
   }, []);
-  const insights = [{
-    icon: BarChart3,
-    title: "Career Fit Analysis",
-    score: 92,
-    description: "Your PharmD background aligns excellently with clinical and regulatory roles",
-    actionItems: ["Focus on GCP certification for clinical research", "Build regulatory knowledge through courses"],
-    color: "from-blue-500 to-blue-700"
-  }, {
-    icon: Brain,
-    title: "Skill Development Priority",
-    score: 78,
-    description: "Strong foundation with key areas for enhancement identified",
-    actionItems: ["Complete pharmacovigilance certification", "Learn healthcare data analytics tools"],
-    color: "from-purple-500 to-purple-700"
-  }, {
-    icon: Rocket,
-    title: "Growth Opportunities",
-    score: 85,
-    description: "Multiple high-growth career paths available in your field",
-    actionItems: ["Network with industry professionals", "Consider international licensing (NAPLEX/PEBC)"],
-    color: "from-green-500 to-green-700"
-  }];
-  const recommendations = [{
-    category: "📚 Immediate Learning Priorities",
-    priority: "High",
-    timeline: "2-3 months",
-    items: [{
-      title: "Good Clinical Practice (GCP) Certification",
-      description: "Essential for clinical research roles",
-      action: "Enroll in ICH-GCP course through NIDA/ACRP"
-    }, {
-      title: "Pharmacovigilance Training",
-      description: "Drug safety expertise in high demand",
-      action: "Complete PV certification from recognized institute"
-    }]
-  }, {
-    category: "🎯 Career Path Strategy",
-    priority: "Medium",
-    timeline: "6-12 months",
-    items: [{
-      title: "Start with Clinical Roles",
-      description: "Build strong foundation in hospital pharmacy",
-      action: "Apply to hospitals with structured PharmD programs"
-    }, {
-      title: "Industry Transition Plan",
-      description: "Move to pharmaceutical industry after clinical experience",
-      action: "Network with industry professionals"
-    }]
-  }];
+
+  const insights = [
+    {
+      icon: BarChart3,
+      title: "Career Fit Analysis",
+      score: 92,
+      description: "Your healthcare background aligns excellently with clinical and regulatory roles",
+      actionItems: [
+        "Focus on GCP certification for clinical research",
+        "Build regulatory knowledge through courses"
+      ],
+      color: "from-blue-500 to-blue-700"
+    },
+    {
+      icon: Brain,
+      title: "Skill Development Priority",
+      score: 78,
+      description: "Strong foundation with key areas for enhancement identified",
+      actionItems: [
+        "Complete pharmacovigilance certification",
+        "Learn healthcare data analytics tools"
+      ],
+      color: "from-purple-500 to-purple-700"
+    },
+    {
+      icon: Rocket,
+      title: "Growth Opportunities",
+      score: 85,
+      description: "Multiple high-growth career paths available in your field",
+      actionItems: [
+        "Network with industry professionals",
+        "Consider international licensing (NAPLEX/PEBC)"
+      ],
+      color: "from-green-500 to-green-700"
+    }
+  ];
+
+  const recommendations = [
+    {
+      category: "📚 Immediate Learning Priorities",
+      priority: "High",
+      timeline: "2-3 months",
+      items: [
+        {
+          title: "Good Clinical Practice (GCP) Certification",
+          description: "Essential for clinical research roles",
+          action: "Enroll in ICH-GCP course through NIDA/ACRP"
+        },
+        {
+          title: "Pharmacovigilance Training",
+          description: "Drug safety expertise in high demand",
+          action: "Complete PV certification from recognized institute"
+        }
+      ]
+    },
+    {
+      category: "🎯 Career Path Strategy",
+      priority: "Medium",
+      timeline: "6-12 months",
+      items: [
+        {
+          title: "Start with Clinical Roles",
+          description: "Build strong foundation in hospital pharmacy",
+          action: "Apply to hospitals with structured healthcare programs"
+        },
+        {
+          title: "Industry Transition Plan",
+          description: "Move to healthcare industry after clinical experience",
+          action: "Network with industry professionals"
+        }
+      ]
+    }
+  ];
+
   if (isAnalyzing) {
-    return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <Card className="bg-white/90 backdrop-blur-sm shadow-2xl border-0 max-w-lg w-full mx-4 animate-scale-in">
           <CardContent className="p-8 text-center">
             <div className="mb-6">
@@ -107,9 +146,12 @@ const AdvisoryReport = () => {
             </div>
           </CardContent>
         </Card>
-      </div>;
+      </div>
+    );
   }
-  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Header */}
       <header className="border-b border-navy-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
@@ -144,7 +186,7 @@ const AdvisoryReport = () => {
               Your Personalized Career Insights
             </h1>
             <p className="text-xl text-navy-600 mb-8 max-w-2xl mx-auto">
-              Comprehensive analysis and recommendations to accelerate your pharmaceutical career journey
+              Comprehensive analysis and recommendations to accelerate your healthcare career journey
             </p>
 
             <Button className="bg-gradient-to-r from-autumn-500 to-autumn-600 hover:from-autumn-600 hover:to-autumn-700 text-white shadow-lg">
@@ -155,9 +197,10 @@ const AdvisoryReport = () => {
 
           {/* Key Insights Dashboard */}
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {insights.map((insight, index) => <Card key={index} className="bg-white shadow-xl border-0 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 animate-fade-in" style={{
-            animationDelay: `${index * 0.1}s`
-          }}>
+            {insights.map((insight, index) => (
+              <Card key={index} className="bg-white shadow-xl border-0 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 animate-fade-in" style={{
+                animationDelay: `${index * 0.1}s`
+              }}>
                 <CardContent className="p-6">
                   <div className={`w-12 h-12 bg-gradient-to-r ${insight.color} rounded-xl flex items-center justify-center mb-4`}>
                     <insight.icon className="w-6 h-6 text-white" />
@@ -170,20 +213,24 @@ const AdvisoryReport = () => {
                   <p className="text-navy-600 mb-4">{insight.description}</p>
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-navy-700">What you should do next:</p>
-                    {insight.actionItems.map((action, idx) => <div key={idx} className="flex items-start text-sm text-navy-600">
+                    {insight.actionItems.map((action, idx) => (
+                      <div key={idx} className="flex items-start text-sm text-navy-600">
                         <div className="w-1.5 h-1.5 bg-autumn-500 rounded-full mr-2 mt-2 flex-shrink-0"></div>
                         {action}
-                      </div>)}
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
           </div>
 
           {/* Detailed Recommendations */}
           <div className="space-y-8">
-            {recommendations.map((section, sectionIndex) => <Card key={sectionIndex} className="bg-white shadow-xl border-0 animate-fade-in" style={{
-            animationDelay: `${sectionIndex * 0.2}s`
-          }}>
+            {recommendations.map((section, sectionIndex) => (
+              <Card key={sectionIndex} className="bg-white shadow-xl border-0 animate-fade-in" style={{
+                animationDelay: `${sectionIndex * 0.2}s`
+              }}>
                 <CardHeader>
                   <CardTitle className="text-navy-900 flex items-center text-2xl">
                     {section.category}
@@ -199,7 +246,8 @@ const AdvisoryReport = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-6">
-                    {section.items.map((item, itemIndex) => <div key={itemIndex} className="border border-navy-100 rounded-xl p-6 hover:bg-navy-50 transition-colors">
+                    {section.items.map((item, itemIndex) => (
+                      <div key={itemIndex} className="border border-navy-100 rounded-xl p-6 hover:bg-navy-50 transition-colors">
                         <h4 className="text-lg font-semibold text-navy-900 mb-2">{item.title}</h4>
                         <p className="text-navy-600 mb-3">{item.description}</p>
                         
@@ -212,10 +260,12 @@ const AdvisoryReport = () => {
                             </div>
                           </div>
                         </div>
-                      </div>)}
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
           </div>
 
           {/* Next Steps CTA */}
@@ -227,11 +277,20 @@ const AdvisoryReport = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-autumn-500 hover:bg-autumn-600 text-white px-8 shadow-lg">
+                <Button 
+                  size="lg" 
+                  className="bg-autumn-500 hover:bg-autumn-600 text-white px-8 shadow-lg"
+                  onClick={() => setShowConsultationModal(true)}
+                >
                   Schedule Free Consultation
                 </Button>
                 
-                <Button variant="outline" size="lg" className="border-white text-white hover:text-navy-800 px-8 bg-autumn-500 hover:bg-autumn-400">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="border-white text-white hover:text-navy-800 px-8 bg-autumn-500 hover:bg-autumn-400"
+                  onClick={() => navigate('/courses')}
+                >
                   Explore Learning Paths
                 </Button>
               </div>
@@ -246,10 +305,18 @@ const AdvisoryReport = () => {
               </div>
               <span className="text-navy-600 font-semibold">ZaneProEd</span>
             </div>
-            <p className="text-navy-500 text-sm">Smart Career Mapping for Pharm.D & B.Pharm Graduates</p>
+            <p className="text-navy-500 text-sm">Smart Career Mapping for Healthcare Graduates</p>
           </div>
         </div>
       </div>
-    </div>;
+
+      {/* Consultation Modal */}
+      <ConsultationModal 
+        isOpen={showConsultationModal} 
+        onClose={() => setShowConsultationModal(false)} 
+      />
+    </div>
+  );
 };
+
 export default AdvisoryReport;

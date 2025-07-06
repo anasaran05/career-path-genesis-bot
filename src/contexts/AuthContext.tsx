@@ -20,7 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [userProfile, setUserProfile] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Changed to false by default since auth is optional
   const { toast } = useToast();
 
   useEffect(() => {
@@ -31,12 +31,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Fetch user profile
+          // Fetch user profile only if logged in
           setTimeout(async () => {
             try {
               const { data: profile } = await supabase
                 .from('profiles')
-                .select('*, student_profiles(*), recruiter_profiles(*)')
+                .select('*, student_profiles(*)')
                 .eq('id', session.user.id)
                 .single();
               setUserProfile(profile);
