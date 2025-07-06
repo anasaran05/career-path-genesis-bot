@@ -1,19 +1,18 @@
-
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Check, Crown, Zap } from "lucide-react";
-
 interface PremiumModalProps {
   open: boolean;
   onClose: () => void;
 }
-
-const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose }) => {
-  return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border-white/10 text-white">
+const PremiumModal: React.FC<PremiumModalProps> = ({
+  open,
+  onClose
+}) => {
+  return <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md bg-gradient-to-br from-slate-900 via-fuchsia-900 border-white/10 text-white bg-red-950">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-2xl">
             <Crown className="w-6 h-6 text-yellow-400" />
@@ -23,9 +22,7 @@ const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose }) => {
         
         <div className="space-y-6">
           <div className="text-center">
-            <p className="text-white/70 mb-4">
-              Let us apply to jobs for you using our advanced 60:40 system
-            </p>
+            <p className="text-white/70 mb-4">Let us apply to jobs for you using our advanced system</p>
             <div className="bg-white/5 rounded-lg p-4 mb-4">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
@@ -104,8 +101,6 @@ const PremiumModal: React.FC<PremiumModalProps> = ({ open, onClose }) => {
           </div>
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
-
 export default PremiumModal;
