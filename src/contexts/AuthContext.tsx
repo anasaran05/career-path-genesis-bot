@@ -19,7 +19,7 @@ interface UserProfile {
     technical_skills: string | null;
     soft_skills: string | null;
     career_goals: string | null;
-  };
+  } | null;
 }
 
 interface AuthContextType {
@@ -51,19 +51,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      // First fetch the main profile
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select(`
-          *,
-          student_profiles (
-            skills,
-            ug_degree,
-            pg_degree,
-            technical_skills,
-            soft_skills,
-            career_goals
-          )
-        `)
+        .select('*')
         .eq('id', userId)
         .single();
 
@@ -72,7 +63,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      setUserProfile(profile);
+      // Then fetch the student profile separately
+      const { data: studentProfile, error: studentError } = await supabase
+        .from('student_profiles')
+        .select('skills, ug_degree, pg_degree, technical_skills, soft_skills, career_goals')
+        .eq('id', userId)
+        .single();
+
+      if (studentError) {
+        console.error('Error fetching student profile:', studentError);
+        // Set profile without student data if student profile fails
+        setUserProfile({
+          ...profile,
+          student_profiles: null
+        });
+        return;
+      }
+
+      // Combine the data
+      setUserProfile({
+        ...profile,
+        student_profiles: studentProfile
+      });
     } catch (error) {
       console.error('Error in fetchUserProfile:', error);
     }
