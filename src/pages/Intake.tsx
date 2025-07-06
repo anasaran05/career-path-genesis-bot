@@ -8,29 +8,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, User, BookOpen, Award, Target, Brain, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
 
 const Intake = () => {
-  const { user, userProfile } = useAuth();
   const navigate = useNavigate();
   
-  // Redirect if not logged in or is recruiter
-  useEffect(() => {
-    if (!user) {
-      navigate('/auth');
-      return;
-    }
-    if (userProfile?.user_type === 'recruiter') {
-      navigate('/recruiter-dashboard');
-      return;
-    }
-  }, [user, userProfile, navigate]);
-
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     // Personal Info
-    fullName: userProfile?.full_name || '',
-    email: userProfile?.email || '',
+    fullName: '',
+    email: '',
     phone: '',
     location: '',
     
@@ -268,7 +254,7 @@ const EducationStep = ({ formData, updateFormData }: any) => (
         <BookOpen className="w-8 h-8 text-white" />
       </div>
       <h2 className="text-2xl font-bold text-navy-800 mb-2">Education Background</h2>
-      <p className="text-slate-600">🎓 Tell me about your academic journey in pharmacy</p>
+      <p className="text-slate-600">🎓 Tell me about your academic journey in healthcare</p>
     </div>
     
     <div className="bg-slate-50 rounded-xl p-6 border-l-4 border-navy-400">
@@ -379,7 +365,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
         <Award className="w-8 h-8 text-white" />
       </div>
       <h2 className="text-2xl font-bold text-navy-800 mb-2">Skills & Experience</h2>
-      <p className="text-slate-600">💡 Share your pharmaceutical skills, projects, and experiences</p>
+      <p className="text-slate-600">💡 Share your healthcare skills, projects, and experiences</p>
     </div>
     
     <div className="space-y-6">
@@ -389,7 +375,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
           value={formData.technicalSkills}
           onChange={(e) => updateFormData('technicalSkills', e.target.value)}
           className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="e.g., Clinical data analysis, Pharmaceutical software, Laboratory techniques, Patient care protocols, Drug information systems..."
+          placeholder="e.g., Clinical data analysis, Healthcare software, Laboratory techniques, Patient care protocols, Drug information systems..."
           rows={3}
         />
       </div>
@@ -411,7 +397,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
           value={formData.internships}
           onChange={(e) => updateFormData('internships', e.target.value)}
           className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="Describe your pharmacy internships, hospital rotations, clinical experience, or part-time pharmaceutical work..."
+          placeholder="Describe your healthcare internships, hospital rotations, clinical experience, or part-time healthcare work..."
           rows={3}
         />
       </div>
@@ -422,7 +408,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
           value={formData.projects}
           onChange={(e) => updateFormData('projects', e.target.value)}
           className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="Describe your pharmaceutical research projects, case studies, drug analysis, or clinical projects..."
+          placeholder="Describe your healthcare research projects, case studies, clinical projects, or research work..."
           rows={3}
         />
       </div>
@@ -433,7 +419,7 @@ const SkillsExperienceStep = ({ formData, updateFormData }: any) => (
           value={formData.certifications}
           onChange={(e) => updateFormData('certifications', e.target.value)}
           className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="List any pharmaceutical certifications, GCP training, drug safety courses, or specialized learning..."
+          placeholder="List any healthcare certifications, GCP training, clinical courses, or specialized learning..."
           rows={2}
         />
       </div>
@@ -448,7 +434,7 @@ const CareerGoalsStep = ({ formData, updateFormData }: any) => (
         <Target className="w-8 h-8 text-white" />
       </div>
       <h2 className="text-2xl font-bold text-navy-800 mb-2">Career Goals & Preferences</h2>
-      <p className="text-slate-600">🎯 Help me understand your pharmaceutical career aspirations</p>
+      <p className="text-slate-600">🎯 Help me understand your healthcare career aspirations</p>
     </div>
     
     <div className="space-y-6">
@@ -456,19 +442,19 @@ const CareerGoalsStep = ({ formData, updateFormData }: any) => (
         <Label className="text-navy-700 font-medium">Preferred Industry *</Label>
         <Select value={formData.preferredIndustry} onValueChange={(value) => updateFormData('preferredIndustry', value)}>
           <SelectTrigger className="bg-slate-50 border-slate-200 text-navy-800 focus:border-navy-400 focus:bg-white rounded-lg">
-            <SelectValue placeholder="Select your preferred pharmaceutical industry" />
+            <SelectValue placeholder="Select your preferred healthcare industry" />
           </SelectTrigger>
           <SelectContent className="bg-white border-slate-200 rounded-lg">
             <SelectItem value="clinical-pharmacy">🏥 Clinical Pharmacy & Hospitals</SelectItem>
-            <SelectItem value="pharma-industry">🧪 Pharmaceutical Industry</SelectItem>
+            <SelectItem value="pharma-industry">🧪 Healthcare Industry</SelectItem>
             <SelectItem value="clinical-research">🔬 Clinical Research & CROs</SelectItem>
             <SelectItem value="regulatory">📋 Regulatory Affairs</SelectItem>
-            <SelectItem value="pharma-tech">💻 Pharmaceutical Technology</SelectItem>
+            <SelectItem value="pharma-tech">💻 Healthcare Technology</SelectItem>
             <SelectItem value="academic">🎓 Academia & Teaching</SelectItem>
             <SelectItem value="medical-writing">📝 Medical Writing</SelectItem>
-            <SelectItem value="consulting">💼 Pharmaceutical Consulting</SelectItem>
+            <SelectItem value="consulting">💼 Healthcare Consulting</SelectItem>
             <SelectItem value="international">🌍 International Opportunities</SelectItem>
-            <SelectItem value="entrepreneurship">🚀 Pharmaceutical Entrepreneurship</SelectItem>
+            <SelectItem value="entrepreneurship">🚀 Healthcare Entrepreneurship</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -479,7 +465,7 @@ const CareerGoalsStep = ({ formData, updateFormData }: any) => (
           value={formData.careerGoals}
           onChange={(e) => updateFormData('careerGoals', e.target.value)}
           className="bg-slate-50 border-slate-200 text-navy-800 placeholder:text-slate-400 focus:border-navy-400 focus:bg-white transition-all duration-300 rounded-lg"
-          placeholder="Describe your pharmaceutical career goals, dream job, or what you want to achieve in the next 2-5 years in the pharmacy field..."
+          placeholder="Describe your healthcare career goals, dream job, or what you want to achieve in the next 2-5 years in the healthcare field..."
           rows={4}
         />
       </div>
