@@ -91,7 +91,7 @@ John Doe`;
     URL.revokeObjectURL(url);
   };
   return <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-4xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border-white/10 text-white max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-4xl bg-gradient-to-br from-slate-900 via- whitespace-normal to-slate-900 border-white/10 text-white max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl mb-4">Manual Application Package</DialogTitle>
           {job && <div className="flex items-center gap-4 mb-4">
