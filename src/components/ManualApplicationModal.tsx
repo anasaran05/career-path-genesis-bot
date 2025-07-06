@@ -1,21 +1,21 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Download, ExternalLink, Copy, CheckCircle } from "lucide-react";
-
 interface ManualApplicationModalProps {
   open: boolean;
   onClose: () => void;
   job?: any;
 }
-
-const ManualApplicationModal: React.FC<ManualApplicationModalProps> = ({ open, onClose, job }) => {
+const ManualApplicationModal: React.FC<ManualApplicationModalProps> = ({
+  open,
+  onClose,
+  job
+}) => {
   const [resumeCopied, setResumeCopied] = useState(false);
   const [coverLetterCopied, setCoverLetterCopied] = useState(false);
-
   const sampleResume = `JOHN DOE
 Healthcare Professional | Clinical Research Specialist
 📧 john.doe@email.com | 📱 (555) 123-4567 | 🔗 linkedin.com/in/johndoe
@@ -37,7 +37,6 @@ Clinical Research Associate | MedTech Solutions (2022-Present)
 SKILLS
 • Clinical Trial Management  • GCP Certification  • Data Analysis
 • Patient Care  • Regulatory Affairs  • Medical Writing`;
-
   const sampleCoverLetter = `Dear Hiring Manager,
 
 I am writing to express my strong interest in the ${job?.title || 'Clinical Research'} position at ${job?.company || 'your organization'}. 
@@ -55,21 +54,20 @@ Thank you for considering my application. I look forward to discussing how my sk
 
 Best regards,
 John Doe`;
-
   const handleCopyResume = () => {
     navigator.clipboard.writeText(sampleResume);
     setResumeCopied(true);
     setTimeout(() => setResumeCopied(false), 2000);
   };
-
   const handleCopyCoverLetter = () => {
     navigator.clipboard.writeText(sampleCoverLetter);
     setCoverLetterCopied(true);
     setTimeout(() => setCoverLetterCopied(false), 2000);
   };
-
   const handleDownloadResume = () => {
-    const blob = new Blob([sampleResume], { type: 'text/plain' });
+    const blob = new Blob([sampleResume], {
+      type: 'text/plain'
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -79,9 +77,10 @@ John Doe`;
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
   const handleDownloadCoverLetter = () => {
-    const blob = new Blob([sampleCoverLetter], { type: 'text/plain' });
+    const blob = new Blob([sampleCoverLetter], {
+      type: 'text/plain'
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -91,14 +90,11 @@ John Doe`;
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-
-  return (
-    <Dialog open={open} onOpenChange={onClose}>
+  return <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-4xl bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 border-white/10 text-white max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl mb-4">Manual Application Package</DialogTitle>
-          {job && (
-            <div className="flex items-center gap-4 mb-4">
+          {job && <div className="flex items-center gap-4 mb-4">
               <div>
                 <h3 className="text-lg font-semibold text-white">{job.title}</h3>
                 <p className="text-white/70">{job.company} • {job.location}</p>
@@ -107,8 +103,7 @@ John Doe`;
                 <Badge variant="secondary" className="bg-blue-500/20 text-blue-300">{job.type}</Badge>
                 <Badge variant="secondary" className="bg-green-500/20 text-green-300">{job.salary}</Badge>
               </div>
-            </div>
-          )}
+            </div>}
         </DialogHeader>
         
         <div className="grid md:grid-cols-2 gap-6">
@@ -118,7 +113,7 @@ John Doe`;
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-white">Generated Resume</h3>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={handleCopyResume} className="border-white/30 text-white">
+                  <Button size="sm" variant="outline" onClick={handleCopyResume} className="border-white/30 text-white bg-zinc-950 hover:bg-zinc-800">
                     {resumeCopied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                   </Button>
                   <Button size="sm" onClick={handleDownloadResume} className="bg-blue-600 hover:bg-blue-700">
@@ -138,7 +133,7 @@ John Doe`;
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-lg font-semibold text-white">Cover Letter</h3>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={handleCopyCoverLetter} className="border-white/30 text-white">
+                  <Button size="sm" variant="outline" onClick={handleCopyCoverLetter} className="border-white/30 text-white bg-zinc-950 hover:bg-zinc-800">
                     {coverLetterCopied ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                   </Button>
                   <Button size="sm" onClick={handleDownloadCoverLetter} className="bg-purple-600 hover:bg-purple-700">
@@ -154,33 +149,26 @@ John Doe`;
         </div>
 
         {/* Job Link Section */}
-        {job && (
-          <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-green-500/30 mt-6">
-            <CardContent className="p-6">
+        {job && <Card className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-green-500/30 mt-6">
+            <CardContent className="p-6 bg-purple-950 rounded-sm py-[25px] px-[62px]">
               <h3 className="text-lg font-semibold text-white mb-4">Apply to This Job</h3>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-white/70 mb-2">Ready to submit your application?</p>
                   <p className="text-sm text-white/60">Click below to open the job posting and apply manually</p>
                 </div>
-                <Button 
-                  className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
-                  onClick={() => window.open(job.link || '#', '_blank')}
-                >
+                <Button className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700" onClick={() => window.open(job.link || '#', '_blank')}>
                   Apply Now
                   <ExternalLink className="w-4 h-4 ml-2" />
                 </Button>
               </div>
             </CardContent>
-          </Card>
-        )}
+          </Card>}
 
         <div className="text-center text-sm text-white/60 mt-4">
           <p>💡 Tip: Copy the resume and cover letter, then paste them into the job application form</p>
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
-
 export default ManualApplicationModal;
