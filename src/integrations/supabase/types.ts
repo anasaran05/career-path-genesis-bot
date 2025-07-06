@@ -9,7 +9,111 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      career_analysis: {
+        Row: {
+          analysis_result: Json | null
+          created_at: string | null
+          degree: string | null
+          goals: string | null
+          id: string
+          skills: string | null
+          user_id: string | null
+        }
+        Insert: {
+          analysis_result?: Json | null
+          created_at?: string | null
+          degree?: string | null
+          goals?: string | null
+          id?: string
+          skills?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          analysis_result?: Json | null
+          created_at?: string | null
+          degree?: string | null
+          goals?: string | null
+          id?: string
+          skills?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          dob: string | null
+          full_name: string | null
+          id: string
+          last_profile_update: string | null
+          location: string | null
+          profile_image: string | null
+          profile_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          dob?: string | null
+          full_name?: string | null
+          id: string
+          last_profile_update?: string | null
+          location?: string | null
+          profile_image?: string | null
+          profile_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          dob?: string | null
+          full_name?: string | null
+          id?: string
+          last_profile_update?: string | null
+          location?: string | null
+          profile_image?: string | null
+          profile_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      student_profiles: {
+        Row: {
+          career_goals: string | null
+          created_at: string | null
+          id: string
+          pg_degree: string | null
+          skills: string[] | null
+          soft_skills: string | null
+          technical_skills: string | null
+          ug_degree: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          career_goals?: string | null
+          created_at?: string | null
+          id: string
+          pg_degree?: string | null
+          skills?: string[] | null
+          soft_skills?: string | null
+          technical_skills?: string | null
+          ug_degree?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          career_goals?: string | null
+          created_at?: string | null
+          id?: string
+          pg_degree?: string | null
+          skills?: string[] | null
+          soft_skills?: string | null
+          technical_skills?: string | null
+          ug_degree?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

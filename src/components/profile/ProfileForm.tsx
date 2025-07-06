@@ -54,6 +54,15 @@ const ProfileForm: React.FC = () => {
   const onProfileImgUpload = async (file: File) => {
     if (!user) return;
     setSaving(true);
+    
+    // Create avatars bucket if it doesn't exist
+    const { data: buckets } = await supabase.storage.listBuckets();
+    const avatarBucket = buckets?.find(bucket => bucket.name === 'avatars');
+    
+    if (!avatarBucket) {
+      await supabase.storage.createBucket('avatars', { public: true });
+    }
+    
     const filePath = `avatars/${user.id}.${file.name.split(".").pop()}`;
     const { data, error } = await supabase.storage.from("avatars").upload(filePath, file, { upsert: true });
     if (!error && data) {
@@ -138,6 +147,14 @@ const ProfileForm: React.FC = () => {
         </div>
       </div>
       <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        {/* Profile Image Upload */}
+        <DetailsSection title="Profile Picture">
+          <ProfileUpload 
+            imgUrl={imgUrl || watchAll.profile_image} 
+            onUpload={onProfileImgUpload} 
+          />
+        </DetailsSection>
+        
         {/* Collapsible: Personal */}
         <DetailsSection title="Personal Info">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
